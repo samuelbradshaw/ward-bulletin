@@ -1,0 +1,48 @@
+.bulletin {
+  padding: 56px 20px;
+  min-height: 100%;
+  width: 100%;
+}
+
+.entry {
+  width: 100%;
+  padding: 3px 0px;
+}
+
+.line {
+  display: flex;
+}
+
+.line .left,
+.line .right {
+  flex: 1 0 auto;
+}
+.line .right {
+  text-align: right;
+}
+.line .dots {
+  flex: 0 1 auto;
+}
+.dots::before {
+  display: inline-block;
+  height: 1em;
+  overflow: hidden;
+  padding: 0 3px;
+  text-overflow: clip;
+  content: ". . . . . . . . . . . . . . . . . . . . "
+    ". . . . . . . . . . . . . . . . . . . . "
+    ". . . . . . . . . . . . . . . . . . . . "
+    ". . . . . . . . . . . . . . . . . . . . ";
+}
+
+.entry .center {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+}
+
+.heading {
+  font-weight: 700;
+  text-decoration-line: underline;
+  margin-top: 15px;
+}

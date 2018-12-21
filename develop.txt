@@ -1,0 +1,19 @@
+Home
+	display information about the ward bulletin app
+	select ward by location
+	select ward by search
+	go editor
+
+Bulletin (goes here automatically if a ward is set)
+	display bulletin
+	home button
+
+Editor (goes here automatically if logged in)
+	create account for a ward
+	login to ward
+	edit bulletin (auto saves to local database)
+	publish to server
+	save to PDF
+	save components to local library
+	home button
+
