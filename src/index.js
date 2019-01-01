@@ -1,4 +1,6 @@
-import './style';
-import App from './components/app';
+import "./style/w3";
+import "./style/w3-theme-blue";
+import "./style";
+import App from "./components/app";
 
 export default App;

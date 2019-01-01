@@ -2,6 +2,7 @@ import { Component } from "preact";
 import style from "./style";
 import BulletinData from "../../data/bulletindata";
 import Header from "../../components/header";
+import { presentLoading } from "../../components/helper";
 
 export default class Bulletin extends Component {
   state = {
@@ -11,7 +12,9 @@ export default class Bulletin extends Component {
   // gets called when this route is navigated to
   async componentDidMount() {
     // get data
+    // let loader = await presentLoading({ message: "Loading..." });
     let data = await BulletinData.getBulletinData(this.props.unit);
+    // loader.dismiss();
     this.setState({ data });
   }
 
@@ -24,12 +27,12 @@ export default class Bulletin extends Component {
       return (
         <div>
           <Header title={data.unit} />
-          <div class={style.bulletin}> {lines}</div>
+          <div class={style.bulletin}>{lines}</div>
         </div>
       );
     } else {
       // no data yet, show loader
-      return <Header title="The Ward Bulletin" />;
+      return <Header title="Ward Bulletin" />;
     }
   }
 }

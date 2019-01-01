@@ -17,3 +17,70 @@ Editor (goes here automatically if logged in)
 	save components to local library
 	home button
 
+
+Toolbars
+	Selection
+		Add - add row below
+		Delete - delete row
+		Undo
+		Redo
+		Type - hymn, person, musical number, 2-column, 3-column
+
+	Global
+		Section - popup menu to select section (program, announcements, leadership, missionaries, etc)
+		Preview - toggle preview mode
+		Print - print bulletin
+
+Undo
+	Anytime there is a change (add, delete, edit) push entire data onto undo stack. Undo pops entire data.
+
+
+Misc Suggestions
+1. missionary addresses (those away from home)
+2. military member addresses
+3. ward goals
+4. stake goals
+5. music for the next week or two (so converts & families w/young children can practice them)
+6. SS lesson assignments
+7. Priesthood & RS lesson assignments
+8. ward leadership lists w/phone #
+9. ward / stake theme
+10. temple & storehouse assignments
+11. firesides
+12. YW & YM activities
+13. scout activities
+14. activity days girls
+15. FH hours & classes
+16. Sunday classroom assignments
+17. ward missionary address & phone #
+18. people in hospitals or nursing homes that need visits
+19. contact info for new ward members (and maybe a little intro info)
+20. FH websites
+21. SA events
+22. YSA events
+23. choir practice
+24. baptisms (convert & member of record)
+25. EQ activities
+26. HP activities
+27. courts of honor / pack meeting
+28. emergency prep info
+29. welcome to visitors w/invitation to attend & room #
+30. ward socials
+31. stake conf
+32. ward conf
+33. birthdays
+34. time & place for temple recommend interviews
+35. songs & scriptures the Primary children are learning
+36. info on how & where to watch general conference (think about info converts need)
+37. contact for appointments with the bishopric
+38. contact for appointments with the stake presidency
+39. contacts for other ward bulletins in the stake
+40. contacts for building schedules within the stake
+41. scripture mastery verses (seminary students memorize these)
+42. phone # & address of missionaries serving locally
+43. ward & stake service project info
+
+
+Links:
+
+Printing: https://flaviocopes.com/css-printing/

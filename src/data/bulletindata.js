@@ -7,7 +7,7 @@ const testData = {
   leaderchar: ".",
   sections: {
     program: [
-      { center: "Penasquitos 3rd Ward", centerStyle: "bold" },
+      { center: "Sacrament Meeting", centerStyle: "bold" },
       { center: "July 21", centerStyle: "italic" },
       { left: "Presiding", right: "Bishop Dave Stratham", gap: 1 },
       { left: "Music Director", right: "Debbie Hanes" },
@@ -63,6 +63,6 @@ const testData = {
 
 export default class BulletinData {
   static async getBulletinData(unit) {
-    return testData;
+    return new Promise(resolve => setTimeout(resolve, 1000, testData));
   }
 }

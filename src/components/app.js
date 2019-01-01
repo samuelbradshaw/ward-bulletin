@@ -19,22 +19,7 @@ export default class App extends Component {
   render() {
     return (
       <div id="app">
-        <Helmet
-          title="Ward Bulletin"
-          link={[
-            {
-              rel: "stylesheet",
-              href:
-                "https://unpkg.com/@ionic/core@4.0.0-rc.0/css/ionic.bundle.css"
-            }
-          ]}
-          script={[
-            {
-              src: "https://unpkg.com/@ionic/core@4.0.0-rc.0/dist/ionic.js",
-              type: "text/javascript"
-            }
-          ]}
-        />
+        <Helmet title="Ward Bulletin" />
         <Router onChange={this.handleRoute}>
           <Home path="/" />
           <Editor path="/editor/" />
