@@ -21,13 +21,23 @@ export default class Bulletin extends Component {
   // Note: `user` comes from the URL, courtesy of our router
   render({ unit }, { data }) {
     if (data) {
-      let lines = addSection(data.sections.program);
-      lines.push(divider());
-      lines = lines.concat(addSection(data.sections.announcements));
+      let sections = [];
+      for (let sectionid of data.sectionOrder) {
+        let sectionData = data.sections[sectionid];
+        if (sectionData) {
+          if (sections.length) {
+            sections.push(divider());
+          }
+          sections.push(addSection(sectionData));
+        }
+      }
+
       return (
         <div>
           <Header title={data.unit} />
-          <div class={style.bulletin}>{lines}</div>
+          <div class={style.bulletin + " pagecontent + w3-content"}>
+            {sections}
+          </div>
         </div>
       );
     } else {
@@ -37,11 +47,11 @@ export default class Bulletin extends Component {
   }
 }
 
-let divider = () => <hr style={{ marginTop: 32, marginBottom: 32 }} />;
+let divider = () => <hr class="w3-border w3-border-blue" />;
 
 let addSection = data => {
-  let lines = data.map(dataitem => createLine(dataitem));
-  return lines;
+  let sections = data.map(dataitem => createLine(dataitem));
+  return sections;
 };
 
 let createLine = dataitem => {
@@ -62,15 +72,15 @@ let createLine = dataitem => {
       line1 = <div class={style.line}>{content}</div>;
     }
     if (center) {
-      let lineStyle = {};
+      let sectionstyle = {};
       if (centerStyle == "bold") {
-        lineStyle.fontWeight = "bold";
+        sectionstyle.fontWeight = "bold";
       } else if (centerStyle == "italic") {
-        lineStyle.fontStyle = "italic";
+        sectionstyle.fontStyle = "italic";
       }
 
       line2 = (
-        <div class={style.center} style={lineStyle}>
+        <div class={style.center} style={sectionstyle}>
           <span>{center}</span>
         </div>
       );

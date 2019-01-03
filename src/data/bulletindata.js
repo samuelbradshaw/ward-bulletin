@@ -5,6 +5,7 @@ const testData = {
   unit: "Penasquitos 3rd Ward",
   desc: "",
   leaderchar: ".",
+  sectionOrder: ["program", "announcements", "leaders", "missionaries"],
   sections: {
     program: [
       { center: "Sacrament Meeting", centerStyle: "bold" },
@@ -57,12 +58,18 @@ const testData = {
         heading: "Christmas Activity",
         text: "Breakfast as the church at 9:00 am."
       }
+    ],
+    leaders: [
+      { center: "Ward Leaders", centerStyle: "bold" },
+      { left: "Bishop Dave Stratham", right: "bishop_stratham@mymail.com" },
+      { left: "1st Counselor Larry Jones", right: "ljonesm@mymail.com" },
+      { left: "2nd Counselor Mike Davis", right: "mike_davis@mymail.com" }
     ]
   }
 };
 
 export default class BulletinData {
   static async getBulletinData(unit) {
-    return new Promise(resolve => setTimeout(resolve, 1000, testData));
+    return new Promise(resolve => setTimeout(resolve, 100, testData));
   }
 }

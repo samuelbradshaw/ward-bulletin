@@ -1,6 +1,6 @@
 {
-  "name": "bulletin",
-  "short_name": "bulletin",
+  "name": "Ward Bulletin",
+  "short_name": "Ward Bulletin",
   "start_url": "/",
   "display": "standalone",
   "orientation": "portrait",
