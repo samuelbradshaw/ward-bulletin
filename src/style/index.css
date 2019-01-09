@@ -24,6 +24,10 @@ body {
   margin-top: 56px;
 }
 
+.fullheight {
+  height: 100%;
+}
+
 /*
 	Print styles
 */

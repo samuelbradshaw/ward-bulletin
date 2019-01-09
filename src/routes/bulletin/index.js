@@ -35,14 +35,14 @@ export default class Bulletin extends Component {
       return (
         <div>
           <Header title={data.unit} />
-          <div class={style.bulletin + " pagecontent + w3-content"}>
+          <div class={style.bulletin + " pagecontent w3-content"}>
             {sections}
           </div>
         </div>
       );
     } else {
       // no data yet, show loader
-      return <Header title="Ward Bulletin" />;
+      return <Header title="Ward Bulletin" back="/" />;
     }
   }
 }

@@ -6,6 +6,8 @@ import Helmet from "preact-helmet";
 import Home from "../routes/home";
 import Bulletin from "../routes/bulletin";
 import Editor from "../routes/editor";
+import Locate from "../routes/locate";
+import Search from "../routes/search";
 
 export default class App extends Component {
   /** Gets fired when the route changes.
@@ -18,11 +20,13 @@ export default class App extends Component {
 
   render() {
     return (
-      <div id="app">
+      <div id="app" class="fullheight">
         <Helmet title="Ward Bulletin" />
         <Router onChange={this.handleRoute}>
           <Home path="/" />
           <Editor path="/editor/" />
+          <Locate path="/locate/" />
+          <Search path="/search/" />
           <Bulletin path="/bulletin/" />
           <Bulletin path="/bulletin/:unit" />
         </Router>
