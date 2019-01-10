@@ -1,30 +1,27 @@
 import { h } from "preact";
 import style from "./style";
-import Header from "../../components/header";
+import { Page } from "../../components";
 
 const Home = () => (
-  <div class="fullheight">
-    <Header title="Ward Bulletin App" />
-    <div class={"pagecontent w3-content fullheight"}>
-      <div class="w3-container w3-light-grey fullheight">
-        <Card
-          text='Find your ward bulletin based on your current location. Tap the "Locate" button if you are at your church building.'
-          button="Locate"
-          action="/locate"
-        />
-        <Card
-          text='Find your ward bulletin by searching for your ward by name. Tap the "Search" button to enter your ward name.'
-          button="Search"
-          action="/search"
-        />
-        <Card
-          text='If you are your ward bulletin editor, tap the "Edit" button to edit your ward bulletin or to create a new account for your ward.'
-          button="Edit"
-          action="/editor"
-        />
-      </div>
+  <Page title="Ward Bulletin App">
+    <div class="w3-container w3-light-grey fullheight">
+      <Card
+        text='Find your ward bulletin based on your current location. Tap the "Locate" button if you are at your church building.'
+        button="Locate"
+        action="/locate"
+      />
+      <Card
+        text='Find your ward bulletin by searching for your ward by name. Tap the "Search" button to enter your ward name.'
+        button="Search"
+        action="/search"
+      />
+      <Card
+        text='If you are your ward bulletin editor, tap the "Edit" button to edit your ward bulletin or to create a new account for your ward.'
+        button="Edit"
+        action="/editor"
+      />
     </div>
-  </div>
+  </Page>
 );
 
 const Card = ({ text, button, action }) => (

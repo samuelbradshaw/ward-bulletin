@@ -68,8 +68,38 @@ const testData = {
   }
 };
 
+const locations = [
+  { id: "ds", name: "Del Sur Ward" },
+  { id: "lh", name: "Lake Hodges Ward" },
+  { id: "mm2", name: "Mira Mesa 2nd Ward" },
+  { id: "mm3", name: "Mira Mesa 3rd Ward" },
+  { id: "pq1", name: "Penasquitos 1st Ward" },
+  { id: "pq2", name: "Penasquitos 2nd Ward" },
+  { id: "pq3", name: "Penasquitos 3rd Ward" },
+  { id: "rb", name: "Rancho Bernardo Ward" },
+  { id: "sr1", name: "Scripps Ranch 1st Ward" },
+  { id: "sr2", name: "Scripps Ranch 2nd Ward" }
+];
+
 export default class BulletinData {
   static async getBulletinData(unit) {
-    return new Promise(resolve => setTimeout(resolve, 100, testData));
+    return new Promise(resolve => setTimeout(resolve, 700, testData));
+  }
+
+  static async getBulletinsAtLocation(long, lat) {
+    return new Promise(resolve =>
+      setTimeout(resolve, 700, [locations[4], locations[5], locations[9]])
+    );
+  }
+
+  static async searchBulletins(searchTerm) {
+    let wards = [];
+    searchTerm = searchTerm.toLowerCase();
+    for (let ward of locations) {
+      if (ward.name.toLowerCase().startsWith(searchTerm)) {
+        wards.push(ward);
+      }
+    }
+    return wards;
   }
 }
