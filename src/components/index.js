@@ -1,13 +1,28 @@
 import { h } from "preact";
 
 const Loader = () => (
-  <div class="fullheight w3-black w3-display-container w3-opacity-max">
-    <div class="w3-display-middle">
-      <i
-        class="icon-spin4 w3-xxlarge animate-spin"
-        style={{ lineHeight: "default" }}
-      />
+  <div
+    class="fullheight  w3-display-container"
+    style={{
+      display: "flex",
+      flexDirection: "column",
+      justifyContent: "space-around"
+    }}
+  >
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "center"
+      }}
+    >
+      <span class="w3-dark-grey w3-opacity-min w3-padding w3-round">
+        <i
+          class="icon-spin4 w3-xxlarge animate-spin"
+          style={{ lineHeight: "default" }}
+        />
+      </span>
     </div>
+    <div />
   </div>
 );
 
@@ -32,4 +47,10 @@ const Page = ({ title, children }) => (
   </div>
 );
 
-export { Loader, Header, Page };
+const Alert = ({ text }) => (
+  <div class="w3-padding-large">
+    <div class="w3-panel w3-pale-yellow w3-padding-large">{text}</div>
+  </div>
+);
+
+export { Loader, Header, Page, Alert };
