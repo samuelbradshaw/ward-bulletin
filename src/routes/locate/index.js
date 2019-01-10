@@ -1,64 +1,63 @@
 import { h, Component } from "preact";
-import style from "./style";
 import BulletinData from "../../data/bulletindata";
-import { Loader, Page } from "../../components";
+import { Loader, Page, Alert } from "../../components";
+import WardList from "../../components/wardlist";
 
 export default class Locate extends Component {
   state = {
-    wards: null
+    wards: null,
+    geoLocationError: false
   };
 
   // gets called when this route is navigated to
-  async componentDidMount() {
-    // get data
-    const long = 0;
-    const lat = 0;
-    let wards = await BulletinData.getBulletinsAtLocation(long, lat);
-    this.setState({ wards });
+  componentDidMount() {
+    if ("geolocation" in navigator) {
+      /* geolocation is available */
+
+      // get location
+      this.state.geoLocationError = false;
+      navigator.geolocation.getCurrentPosition(
+        position => {
+          // get data
+          console.log("Location:", position.coords);
+          this.getLocationData(
+            position.coords.latitude,
+            position.coords.longitude
+          );
+        },
+        // error
+        error => {
+          this.setState({ geoLocationError: true });
+        }
+      );
+    }
+  }
+
+  getLocationData(lat, long) {
+    let wards = BulletinData.getBulletinsAtLocation(lat, long).then(wards =>
+      this.setState({ wards })
+    );
   }
 
   render({}, { wards }) {
     let content;
 
-    if (wards != undefined) {
+    if (this.state.geoLocationError || !("geolocation" in navigator)) {
+      /* geolocation IS NOT available */
+      content = <Alert text="Unable to get current location" />;
+    } else if (wards != undefined) {
       if (wards.length) {
-        content = (
-          <div class="pagecontent w3-container">
-            <p class="w3-text-grey">Ward bulletins at this location</p>
-            <ul class="w3-ul">
-              {wards.map(ward => (
-                <li class="w3-white w3-ripple" onClick={() => selectWard(ward)}>
-                  {ward.name}
-                </li>
-              ))}
-            </ul>
-          </div>
-        );
+        content = <WardList wards={wards} />;
       } else {
         // no wards
         content = (
-          <div class="w3-display-middle w3-white w3-card w3-container">
-            <p>
-              There are no ward bulletins available at your current location.
-            </p>
-          </div>
+          <Alert text="There are no ward bulletins available at your current location." />
         );
       }
     } else {
       // no data yet, show loader
       content = <Loader />;
     }
-    return (
-      <Page title="Locate">
-        <div class="fullheight w3-display-container w3-content w3-light-gray">
-          {content}
-        </div>
-      </Page>
-    );
+    return <Page title="Locate">{content}</Page>;
   }
-}
-
-function selectWard(ward) {
-  console.log("Selected ward: ", ward);
-  window.location.href = `/bulletin/${ward.id}`;
 }

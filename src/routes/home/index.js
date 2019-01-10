@@ -1,5 +1,4 @@
 import { h } from "preact";
-import style from "./style";
 import { Page } from "../../components";
 
 const Home = () => (

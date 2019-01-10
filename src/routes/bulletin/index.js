@@ -1,4 +1,4 @@
-import { Component } from "preact";
+import { h, Component } from "preact";
 import style from "./style";
 import BulletinData from "../../data/bulletindata";
 import { Page, Loader } from "../../components";
@@ -9,10 +9,11 @@ export default class Bulletin extends Component {
   };
 
   // gets called when this route is navigated to
-  async componentDidMount() {
+  componentDidMount() {
     // get data
-    let data = await BulletinData.getBulletinData(this.props.unit);
-    this.setState({ data });
+    let data = BulletinData.getBulletinData(this.props.unit).then(data =>
+      this.setState({ data })
+    );
   }
 
   // Note: `user` comes from the URL, courtesy of our router

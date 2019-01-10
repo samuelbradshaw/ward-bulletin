@@ -81,18 +81,18 @@ const locations = [
   { id: "sr2", name: "Scripps Ranch 2nd Ward" }
 ];
 
-export default class BulletinData {
-  static async getBulletinData(unit) {
+let BulletinData = {
+  getBulletinData: function(unit) {
     return new Promise(resolve => setTimeout(resolve, 700, testData));
-  }
+  },
 
-  static async getBulletinsAtLocation(long, lat) {
+  getBulletinsAtLocation: function(lat, long) {
     return new Promise(resolve =>
       setTimeout(resolve, 700, [locations[4], locations[5], locations[9]])
     );
-  }
+  },
 
-  static async searchBulletins(searchTerm) {
+  searchBulletins: function(searchTerm) {
     let wards = [];
     searchTerm = searchTerm.toLowerCase();
     for (let ward of locations) {
@@ -100,6 +100,8 @@ export default class BulletinData {
         wards.push(ward);
       }
     }
-    return wards;
+    return new Promise(resolve => setTimeout(resolve, 700, wards));
   }
-}
+};
+
+export default BulletinData;
