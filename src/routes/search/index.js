@@ -1,16 +1,69 @@
 import { h, Component } from "preact";
-import style from "./style";
-import { Page } from "../../components";
+import BulletinData from "../../data/bulletindata";
+import { Loader, Page, Alert } from "../../components";
+import WardList from "../../components/wardlist";
 
 export default class Search extends Component {
-  state = {};
+  state = {
+    wards: null,
+    searchWards: null,
+    searchTerm: null,
+    complete: false
+  };
 
-  render() {
-    return (
-      <Page title="Search">
-        <h1>Search</h1>
-        <p>Search for ward bulletin.</p>
-      </Page>
+  getSearchData(searchTerm) {
+    let wards = BulletinData.searchBulletins(searchTerm).then(wards =>
+      this.setState({ wards })
     );
+  }
+
+  render({}, { wards }) {
+    let content = (
+      <div class="fullheight w3-light-grey">
+        <div class="w3-padding">
+          <p class="w3-text-grey">Enter ward name:</p>
+          <input
+            class="w3-input w3-border w3-round"
+            type="text"
+            placeholder="Ward Name"
+            onInput={event => this.updateSearch(event.target)}
+          />
+        </div>
+        {this.state.wards && (
+          <WardList wards={wards} message="Ward bulletins" />
+        )}
+      </div>
+    );
+
+    return <Page title="Search">{content}</Page>;
+  }
+
+  updateSearch(target) {
+    let value = target.value.toLowerCase();
+    let { searchWards, searchTerm, complete } = this.state;
+    if (value.length >= 3) {
+      if (searchWards && complete && value.startsWith(searchTerm)) {
+        // filter existing wards
+        console.log("Filter:", value);
+        let wards = searchWards.filter(ward =>
+          ward.name.toLowerCase().startsWith(value)
+        );
+        this.setState({ wards });
+      } else {
+        // need to search for ward list
+        console.log("Search:", value);
+        BulletinData.searchBulletins(value).then(({ wards, complete }) =>
+          this.setState({
+            wards,
+            searchWards: wards,
+            searchTerm: value,
+            complete
+          })
+        );
+      }
+    } else {
+      // wait for at least 3 characters
+      this.setState({ wards: null, searchWards: null, searchTerm: null });
+    }
   }
 }

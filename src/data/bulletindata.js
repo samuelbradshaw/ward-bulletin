@@ -100,7 +100,9 @@ let BulletinData = {
         wards.push(ward);
       }
     }
-    return new Promise(resolve => setTimeout(resolve, 700, wards));
+    return new Promise(resolve =>
+      setTimeout(resolve, 700, { wards, complete: true })
+    );
   }
 };
 

@@ -47,7 +47,9 @@ export default class Locate extends Component {
       content = <Alert text="Unable to get current location" />;
     } else if (wards != undefined) {
       if (wards.length) {
-        content = <WardList wards={wards} />;
+        content = (
+          <WardList wards={wards} message="Ward bulletins at this location" />
+        );
       } else {
         // no wards
         content = (
