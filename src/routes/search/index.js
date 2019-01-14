@@ -21,7 +21,7 @@ export default class Search extends Component {
     let content = (
       <div class="fullheight w3-light-grey">
         <div class="w3-padding">
-          <p class="w3-text-grey">Enter ward name:</p>
+          <p class="w3-text-grey">Ward name:</p>
           <input
             class="w3-input w3-border w3-round"
             type="text"
@@ -44,14 +44,12 @@ export default class Search extends Component {
     if (value.length >= 3) {
       if (searchWards && complete && value.startsWith(searchTerm)) {
         // filter existing wards
-        console.log("Filter:", value);
         let wards = searchWards.filter(ward =>
           ward.name.toLowerCase().startsWith(value)
         );
         this.setState({ wards });
       } else {
         // need to search for ward list
-        console.log("Search:", value);
         BulletinData.searchBulletins(value).then(({ wards, complete }) =>
           this.setState({
             wards,

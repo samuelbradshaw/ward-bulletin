@@ -19,7 +19,6 @@ export default class Locate extends Component {
       navigator.geolocation.getCurrentPosition(
         position => {
           // get data
-          console.log("Location:", position.coords);
           this.getLocationData(
             position.coords.latitude,
             position.coords.longitude

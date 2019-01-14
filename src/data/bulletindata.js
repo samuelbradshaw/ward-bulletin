@@ -7,64 +7,98 @@ const testData = {
   leaderchar: ".",
   sectionOrder: ["program", "announcements", "leaders", "missionaries"],
   sections: {
-    program: [
-      { center: "Sacrament Meeting", centerStyle: "bold" },
-      { center: "July 21", centerStyle: "italic" },
-      { left: "Presiding", right: "Bishop Dave Stratham", gap: 1 },
-      { left: "Music Director", right: "Debbie Hanes" },
-      { left: "Organist", right: "Tom Webster" },
-      {
-        left: "Opening Hymn",
-        right: "#67",
-        center: "Glory to God on High",
-        centerStyle: "italic",
-        gap: 1
-      },
-      { left: "Opening Prayer", right: "Tyrone Williams" },
-      {
-        left: "Sacrament Hymn",
-        right: "#181",
-        center: "Jesus of Nazareth, Savior and King",
-        centerStyle: "italic",
-        gap: 1
-      },
-      { center: "The Sacrament", centerStyle: "bold", gap: 1 },
-      { left: "Youth Speaker", right: "Anita Martinez", gap: 1 },
-      { left: "Youth Speaker", right: "Jeff Taylor" },
-      {
-        left: "Musical Number",
-        right: "Ward Choir",
-        center: "Glory to God on High",
-        centerStyle: "italic",
-        gap: 1
-      },
-      { left: "Speaker", right: "Jason Garner", gap: 1 },
-      { left: "Speaker", right: "Jessica Marshfield" },
-      {
-        left: "Closing Hymn",
-        right: "#86",
-        center: "How Great Thou Art",
-        gap: 1
-      },
-      { left: "Closing Prayer", right: "Saul Davidson" }
-    ],
-    announcements: [
-      { center: "Announcements", centerStyle: "bold" },
-      {
-        heading: "Christmas Program",
-        text: "The Christmas program is on December 9 at 7:00 pm."
-      },
-      {
-        heading: "Christmas Activity",
-        text: "Breakfast as the church at 9:00 am."
-      }
-    ],
-    leaders: [
-      { center: "Ward Leaders", centerStyle: "bold" },
-      { left: "Bishop Dave Stratham", right: "bishop_stratham@mymail.com" },
-      { left: "1st Counselor Larry Jones", right: "ljonesm@mymail.com" },
-      { left: "2nd Counselor Mike Davis", right: "mike_davis@mymail.com" }
-    ]
+    program: {
+      title: "Program",
+      data: [
+        { type: "title", title: "Sacrament Meeting", style: "bold" },
+        { type: "title", title: "July 21", style: "italic" },
+        {
+          type: "name",
+          label: "Presiding",
+          name: "Bishop Dave Stratham"
+        },
+        { type: "gap" },
+        { type: "name", label: "Music Director", name: "Debbie Hanes" },
+        { type: "name", label: "Organist", name: "Tom Webster" },
+        {
+          type: "hymn",
+          label: "Opening Hymn",
+          hymn: "67",
+          title: "Glory to God on High"
+        },
+        { type: "gap" },
+        { type: "name", label: "Opening Prayer", name: "Tyrone Williams" },
+        {
+          type: "hymn",
+          label: "Sacrament Hymn",
+          hymn: "181",
+          title: "Jesus of Nazareth, Savior and King"
+        },
+        { type: "gap" },
+        { type: "title", title: "The Sacrament", style: "bold" },
+        {
+          type: "name",
+          label: "Youth Speaker",
+          name: "Anita Martinez"
+        },
+        { type: "gap" },
+        { type: "name", label: "Youth Speaker", name: "Jeff Taylor" },
+        {
+          type: "music",
+          label: "Musical Number",
+          name: "Ward Choir",
+          title: "Glory to God on High"
+        },
+        { type: "gap" },
+        { type: "name", label: "Speaker", name: "Jason Garner" },
+        { type: "name", label: "Speaker", name: "Jessica Marshfield" },
+        {
+          type: "hymn",
+          label: "Closing Hymn",
+          hymn: "86",
+          title: "How Great Thou Art"
+        },
+        { type: "gap" },
+        { type: "name", label: "Closing Prayer", name: "Saul Davidson" }
+      ]
+    },
+    announcements: {
+      title: "Announcements",
+      data: [
+        { type: "title", title: "Announcements", style: "bold" },
+        {
+          type: "article",
+          heading: "Christmas Program",
+          body: "The Christmas program is on December 9 at 7:00 pm."
+        },
+        {
+          type: "article",
+          heading: "Christmas Activity",
+          body: "Breakfast as the church at 9:00 am."
+        }
+      ]
+    },
+    leaders: {
+      title: "Leaders",
+      data: [
+        { type: "title", title: "Ward Leaders", style: "bold" },
+        {
+          type: "name",
+          label: "Bishop",
+          name: "Dave Stratham"
+        },
+        {
+          type: "name",
+          label: "1st Counselor",
+          name: "Larry Jones"
+        },
+        {
+          type: "name",
+          label: "2nd Counselor",
+          name: "Mike Davis"
+        }
+      ]
+    }
   }
 };
 
@@ -83,7 +117,7 @@ const locations = [
 
 let BulletinData = {
   getBulletinData: function(unit) {
-    return new Promise(resolve => setTimeout(resolve, 700, testData));
+    return new Promise(resolve => setTimeout(resolve, 200, testData));
   },
 
   getBulletinsAtLocation: function(lat, long) {

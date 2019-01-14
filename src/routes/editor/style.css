@@ -3,3 +3,17 @@
   min-height: 100%;
   width: 100%;
 }
+
+.label {
+  font-weight: bold;
+}
+
+.textinput {
+  padding: 4px;
+  display: block;
+  width: 100%;
+}
+
+.separator {
+  margin-bottom: 8px;
+}
