@@ -65,7 +65,7 @@ let createLine = item => {
 
     case "gap":
       let gap = item.gap || 1.0;
-      gapStyle = { marginTop: `${gap}em` };
+      gapStyle = { marginTop: `${gap / 4.0}em` };
       break;
   }
 

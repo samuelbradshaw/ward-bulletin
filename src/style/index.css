@@ -28,6 +28,22 @@ body {
   height: 100%;
 }
 
+.bottommargin {
+  margin-bottom: 8px;
+}
+
+.leftpadding {
+  padding-left: 8px;
+}
+
+.leftmargin {
+  margin-left: 8px;
+}
+
+.topmargin {
+  margin-top: 4px;
+}
+
 /*
 	Print styles
 */
@@ -51,6 +67,10 @@ body {
   hr {
     page-break-before: always;
     visibility: hidden;
+  }
+
+  .pagebreak {
+    page-break-before: always;
   }
 
   .pagecontent {
