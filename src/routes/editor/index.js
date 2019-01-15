@@ -12,9 +12,16 @@ export default class Editor extends Component {
   // gets called when this route is navigated to
   componentDidMount() {
     // get data
-    BulletinData.getBulletinData(this.unit).then(data =>
-      this.setState({ data })
-    );
+    let data = localStorage.getItem("current-draft");
+    if (data) {
+      // use current draft
+      this.setState({ data: JSON.parse(data) });
+    } else {
+      BulletinData.getBulletinData(this.unit).then(data => {
+        this.setState({ data });
+        localStorage.setItem("current-draft", JSON.stringify(data));
+      });
+    }
   }
 
   render({}, { data }) {
@@ -25,10 +32,19 @@ export default class Editor extends Component {
             <div class="w3-half fullheight" style={{ overflow: "scroll" }}>
               <EditorView
                 data={data}
-                update={data => this.setState({ data })}
+                update={data => {
+                  this.setState({
+                    data
+                  });
+                  // save in local storage
+                  localStorage.setItem("current-draft", JSON.stringify(data));
+                }}
               />
             </div>
-            <div class="w3-half fullheight" style={{ overflow: "scroll" }}>
+            <div
+              class="w3-hide-small w3-half fullheight"
+              style={{ overflow: "scroll" }}
+            >
               <div class="w3-padding w3-white">
                 <BulletinView data={data} />
               </div>
