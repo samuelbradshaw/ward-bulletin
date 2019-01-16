@@ -18,7 +18,7 @@ export default class BulletinView extends Component {
   }
 }
 
-let divider = () => <hr class="w3-border w3-border-blue" />;
+let divider = () => <hr class="w3-border w3-border-theme" />;
 
 let addSection = data => {
   let sections = data.map(item => createLine(item));

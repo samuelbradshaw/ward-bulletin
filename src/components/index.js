@@ -27,7 +27,15 @@ const Loader = () => (
 );
 
 const Header = ({ title }) => (
-  <header class="w3-top" style={{ opacity: 0.9 }}>
+  <header
+    class=""
+    style={{
+      opacity: 0.9,
+      position: "fixed",
+      top: "0px",
+      width: "100%"
+    }}
+  >
     <div class="w3-bar w3-content w3-theme-d2 w3-display-container">
       {location.pathname != "/" && (
         <button
@@ -41,9 +49,9 @@ const Header = ({ title }) => (
 );
 
 const Page = ({ title, children }) => (
-  <div class="fullheight">
+  <div style={{ paddingTop: "56px" }}>
     <Header title={title} />
-    <div class={"pagecontent w3-content fullheight"}>{children}</div>
+    <div class={"w3-content"}>{children}</div>
   </div>
 );
 

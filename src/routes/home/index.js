@@ -3,7 +3,7 @@ import { Page } from "../../components";
 
 const Home = () => (
   <Page title="Ward Bulletin App">
-    <div class="w3-container w3-light-grey fullheight">
+    <div class="w3-container">
       <Card
         text='Find your ward bulletin based on your current location. Tap the "Locate" button if you are at your church building.'
         button="Locate"

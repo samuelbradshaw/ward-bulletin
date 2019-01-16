@@ -20,7 +20,7 @@ export default class App extends Component {
 
   render() {
     return (
-      <div id="app" class="fullheight">
+      <div id="app">
         <Helmet title="Ward Bulletin" />
         <Router onChange={this.handleRoute}>
           <Home path="/" />

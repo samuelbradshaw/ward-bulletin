@@ -19,7 +19,7 @@ export default class Search extends Component {
 
   render({}, { wards }) {
     let content = (
-      <div class="fullheight w3-light-grey">
+      <div>
         <div class="w3-padding">
           <p class="w3-text-grey">Ward name:</p>
           <input

@@ -2,7 +2,7 @@ import { h, Component } from "preact";
 
 export default function WardList({ wards, message }) {
   return (
-    <div class="w3-container w3-light-gray fullheight">
+    <div class="w3-container w3-light-gray">
       <p class="w3-text-grey">{message}</p>
       <ul class="w3-ul">
         {wards.map(ward => (

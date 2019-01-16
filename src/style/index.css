@@ -4,7 +4,7 @@ body {
   width: 100%;
   padding: 0;
   margin: 0;
-  background: #fafafa;
+  background: #f1f1f1;
   font-family: "Helvetica Neue", arial, sans-serif;
   font-weight: 400;
   color: #444;
@@ -21,7 +21,7 @@ body {
 }
 
 .pagecontent {
-  margin-top: 56px;
+  margin-top: 0px;
 }
 
 .fullheight {
