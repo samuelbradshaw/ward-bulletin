@@ -30,10 +30,13 @@ export default class Editor extends Component {
       return (
         <Page title="Editor">
           <div
-            class="w3-row-padding w3-light-grey w3-border fullheight"
+            class="w3-light-grey fullheight"
             style={{ paddingBottom: "44px" }}
           >
-            <div class="w3-half fullheight" style={{ overflow: "auto" }}>
+            <div
+              class="w3-row-padding w3-half fullheight"
+              style={{ overflow: "auto" }}
+            >
               <EditorView
                 data={data}
                 update={request => {
@@ -105,7 +108,7 @@ export default class Editor extends Component {
   }
 
   update(request, undo = false) {
-    if (request.length) {
+    if (Array.isArray(request)) {
       for (let thisRequest of request) {
         // multiple requests
         this.updateRequest(thisRequest, undo);

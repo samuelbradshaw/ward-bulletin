@@ -34,7 +34,7 @@ export default class EditorView extends Component {
     }
     return (
       <div>
-        <div class="w3-content w3-border">{sections}</div>
+        <div class="w3-content">{sections}</div>
       </div>
     );
   }
