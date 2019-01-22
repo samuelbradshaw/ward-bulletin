@@ -29,10 +29,7 @@ export default class Editor extends Component {
     if (data) {
       return (
         <Page title="Editor">
-          <div
-            class="w3-light-grey fullheight"
-            style={{ paddingBottom: "44px" }}
-          >
+          <div class="fullheight" style={{ paddingBottom: "44px" }}>
             <div
               class="w3-row-padding w3-half fullheight"
               style={{ overflow: "auto" }}
@@ -46,55 +43,46 @@ export default class Editor extends Component {
               />
             </div>
             <div
-              class="w3-hide-small w3-half fullheight"
+              class="w3-hide-small w3-half w3-white fullheight"
               style={{ overflow: "auto" }}
             >
               <div class="w3-padding w3-white fullheight">
                 <BulletinView data={data} />
               </div>
             </div>
+            <Footer>
+              <button
+                onClick={e => {
+                  this.undo();
+                  e.stopPropagation();
+                }}
+                class={`w3-bar-item w3-button ${
+                  this.undoStack.length ? "" : "w3-disabled"
+                }`}
+              >
+                <i class="icon-ccw" />
+                Undo
+              </button>
+              <button
+                onClick={e => {
+                  e.stopPropagation();
+                }}
+                class="w3-bar-item w3-button"
+              >
+                <i class="icon-upload-cloud" />
+                Publish
+              </button>
+              <button
+                onClick={e => {
+                  e.stopPropagation();
+                }}
+                class="w3-bar-item w3-button"
+              >
+                <i class="icon-help-circled" />
+                Help
+              </button>
+            </Footer>
           </div>
-          <div
-            class="footer w3-bar w3-theme-d1  w3-half"
-            style={{
-              display: "flex",
-              justifyContent: "space-around",
-              position: "fixed",
-              bottom: "0",
-              opacity: ".9"
-            }}
-          >
-            <button
-              onClick={e => {
-                this.undo();
-                e.stopPropagation();
-              }}
-              class={`w3-bar-item w3-button ${
-                this.undoStack.length ? "" : "w3-disabled"
-              }`}
-            >
-              <i class="icon-ccw" />
-              Undo
-            </button>
-            <button
-              onClick={e => {
-                e.stopPropagation();
-              }}
-              class="w3-bar-item w3-button"
-            >
-              <i class="icon-upload-cloud" />
-              Publish
-            </button>
-            <button
-              onClick={e => {
-                e.stopPropagation();
-              }}
-              class="w3-bar-item w3-button"
-            >
-              <i class="icon-help-circled" />
-              Help
-            </button>
-          </div>{" "}
         </Page>
       );
     } else {
@@ -175,3 +163,27 @@ export default class Editor extends Component {
     this.update(request, true);
   }
 }
+
+const Footer = ({ children }) => (
+  <header
+    class=""
+    style={{
+      opacity: 0.9,
+      position: "fixed",
+      bottom: "0px",
+      width: "100%",
+      opacity: ".9",
+      left: "0px"
+    }}
+  >
+    <div
+      class="w3-bar w3-content w3-theme-d2 w3-display-container"
+      style={{
+        display: "flex",
+        justifyContent: "space-around"
+      }}
+    >
+      {children}
+    </div>
+  </header>
+);

@@ -49,9 +49,9 @@ const Header = ({ title }) => (
 );
 
 const Page = ({ title, children }) => (
-  <div style={{ paddingTop: "56px" }}>
+  <div class="fullheight" style={{ paddingTop: "56px" }}>
     <Header title={title} />
-    <div class={"w3-content"}>{children}</div>
+    <div class="w3-content fullheight">{children}</div>
   </div>
 );
 
