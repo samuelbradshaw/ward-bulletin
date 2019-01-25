@@ -4,6 +4,7 @@ import BulletinData from "../../data/bulletindata";
 import { Page, Loader } from "../../components";
 import BulletinView from "../bulletin/bulletin-view";
 import EditorView from "./editor-view";
+import prefs from "../../data/prefs";
 
 export default class Editor extends Component {
   unit = "pq3";
@@ -13,14 +14,14 @@ export default class Editor extends Component {
   // gets called when this route is navigated to
   componentDidMount() {
     // get data
-    let data = localStorage.getItem("current-draft");
+    let data = prefs.get(prefs.currentDraft);
     if (data) {
       // use current draft
-      this.setState({ data: JSON.parse(data) });
+      this.setState({ data });
     } else {
       BulletinData.getBulletinData(this.unit).then(data => {
         this.setState({ data });
-        localStorage.setItem("current-draft", JSON.stringify(data));
+        prefs.set(prefs.currentDraft, data);
       });
     }
   }
@@ -152,7 +153,7 @@ export default class Editor extends Component {
     this.setState(data);
 
     // save in local storage
-    localStorage.setItem("current-draft", JSON.stringify(data));
+    prefs.set(prefs.currentDraft, data);
   }
 
   undo() {

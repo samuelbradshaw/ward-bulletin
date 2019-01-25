@@ -28,7 +28,7 @@ export default class App extends Component {
           <Locate path="/locate/" />
           <Search path="/search/" />
           <Bulletin path="/bulletin/" />
-          <Bulletin path="/bulletin/:unit" />
+          <Bulletin path="/:unit" />
         </Router>
       </div>
     );

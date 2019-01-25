@@ -16,5 +16,5 @@ export default function WardList({ wards, message }) {
 }
 
 function selectWard(ward) {
-  window.location.href = `/bulletin/${ward.id}`;
+  window.location.replace(`/${ward.id}`);
 }
