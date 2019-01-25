@@ -1,8 +1,8 @@
 // BulletinData
 // Test data
 const testData = {
-  unitid: 12345,
-  unit: "Penasquitos 3rd Ward",
+  id: "pq3",
+  name: "Penasquitos 3rd Ward",
   desc: "",
   leaderchar: ".",
   sectionOrder: ["program", "announcements", "leaders", "missionaries"],
@@ -117,12 +117,16 @@ const locations = [
 
 let BulletinData = {
   getBulletinData: function(unit) {
-    return new Promise(resolve => setTimeout(resolve, 200, testData));
+    let location = locations.find(loc => loc.id === unit);
+    let data = { ...testData };
+    data.id = unit;
+    data.name = location.name;
+    return new Promise(resolve => setTimeout(resolve, 200, data));
   },
 
   getBulletinsAtLocation: function(lat, long) {
     return new Promise(resolve =>
-      setTimeout(resolve, 700, [locations[4], locations[5], locations[9]])
+      setTimeout(resolve, 200, [locations[4], locations[5], locations[9]])
     );
   },
 
