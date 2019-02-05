@@ -8,7 +8,7 @@ export default class EditorView extends Component {
     this.handleInputChange = this.handleInputChange.bind(this);
     // create hymns list
     this.hymns = { ...hymnList };
-    this.state = { selectedItem: null };
+    this.state = { selectedItem: null, sectionId: null };
   }
 
   render({ data }) {
@@ -33,10 +33,40 @@ export default class EditorView extends Component {
       }
     }
     return (
-      <div>
+      <div
+        id="keyhandler"
+        onKeyDown={event => this.handleKeyEvent(event)}
+        tabIndex="-1"
+        style={{ outline: "none" }}
+      >
         <div class="w3-content">{sections}</div>
       </div>
     );
+  }
+
+  handleKeyEvent(event) {
+    if (event.target.id == "keyhandler") {
+      let item = this.state.selectedItem;
+      if (item) {
+        const updateMap = {
+          ArrowUp: "moveUp",
+          ArrowDown: "moveDown",
+          Backspace: "delete"
+        };
+        const action = updateMap[event.key];
+        if (action) {
+          const sectionId = this.state.sectionId;
+          const section = this.props.data.sections[sectionId];
+          const index = section.data.indexOf(item);
+          this.props.update({
+            type: action,
+            index,
+            sectionId
+          });
+          event.stopPropagation();
+        }
+      }
+    }
   }
 
   handleInputChange(event, index, sectionId, attr) {
@@ -309,11 +339,19 @@ export default class EditorView extends Component {
           const tag = event.target.tagName.toLowerCase();
           if (tag != "input" && tag != "select") {
             const selectedItem = this.state.selectedItem == item ? null : item; // Toggle selected item
-            this.setState({ selectedItem });
+            this.setState({ selectedItem, sectionId });
           }
         }}
       >
-        {content}
+        <div style={{ display: "flex", justifyContent: "space-between" }}>
+          <div style={{ flexGrow: 1 }}>{content}</div>
+          <i
+            class={`icon-menu w3-margin-left${
+              this.state.selectedItem == item ? " w3-text-theme" : ""
+            }`}
+            style={{ alignSelf: "center" }}
+          />
+        </div>
       </li>
     );
   }
@@ -382,7 +420,6 @@ export default class EditorView extends Component {
           <i class="icon-down-circled" />
           Down
         </button>
-        <span class="w3-button w3-transparent">&times;</span>
       </div>
     );
     return toolbar;
