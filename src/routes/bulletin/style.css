@@ -36,10 +36,9 @@
     ". . . . . . . . . . . . . . . . . . . . ";
 }
 
-.entry .center {
+.align {
   display: flex;
   width: 100%;
-  justify-content: center;
 }
 
 .heading {

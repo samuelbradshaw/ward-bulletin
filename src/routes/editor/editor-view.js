@@ -121,9 +121,25 @@ export default class EditorView extends Component {
         content = (
           <div class="w3-row">
             <div class="w3-col w3-right leftmargin" style="width:72px">
+              <label class={`${style.label} w3-block`}>Align</label>
+              <select
+                class="topmargin w3-select"
+                onChange={event =>
+                  this.handleInputChange(event, index, sectionId, "align")
+                }
+                value={item.align}
+              >
+                <option class="icon-menu" value="left">
+                  Left
+                </option>
+                <option value="">Center</option>
+                <option value="right">Right</option>
+              </select>
+            </div>
+            <div class="w3-col w3-right leftmargin" style="width:72px">
               <label class={`${style.label} w3-block`}>Style</label>
               <select
-                class="topmargin"
+                class="topmargin w3-select"
                 onChange={event =>
                   this.handleInputChange(event, index, sectionId, "style")
                 }

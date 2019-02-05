@@ -33,7 +33,7 @@ let createLine = item => {
 
   switch (type) {
     case "title":
-      line1 = centerLine(title, item.style);
+      line1 = alignLine(title, item.style, item.align);
       break;
 
     case "name":
@@ -77,18 +77,28 @@ let createLine = item => {
   );
 };
 
-function centerLine(title, styleType) {
+function alignLine(title, styleType, alignType) {
   let lineStyle = {};
   if (styleType == "bold") {
     lineStyle.fontWeight = "bold";
   } else if (styleType == "italic") {
     lineStyle.fontStyle = "italic";
   }
+  const justify =
+    alignType === "left"
+      ? "flex-start"
+      : alignType === "right"
+      ? "flex-end"
+      : "center";
   return (
-    <div class={style.center} style={lineStyle}>
+    <div class={style.align} style={{ ...lineStyle, justifyContent: justify }}>
       <span>{title}</span>
     </div>
   );
+}
+
+function centerLine(title, styleType) {
+  return alignLine(title, styleType, "center");
 }
 
 function nameLine(label, name) {
