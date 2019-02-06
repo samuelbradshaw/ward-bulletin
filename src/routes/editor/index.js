@@ -41,6 +41,9 @@ export default class Editor extends Component {
                   this.update(request);
                   this.undoStack.push(request);
                 }}
+                change={request => {
+                  this.update(request);
+                }}
               />
             </div>
             <div

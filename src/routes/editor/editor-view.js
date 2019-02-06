@@ -9,6 +9,7 @@ export default class EditorView extends Component {
     this.handleInputChange = this.handleInputChange.bind(this);
     // create hymns list
     this.hymns = { ...hymnList };
+    this.startGap = null;
     this.state = {
       selectedItem: null,
       sectionId: null
@@ -73,20 +74,25 @@ export default class EditorView extends Component {
     }
   }
 
-  handleInputChange(event, index, sectionId, attr) {
+  handleInputChange(event, index, sectionId, attr, noUndo) {
     const target = event.target;
     const value =
       target.type === "checkbox" || target.type === "radio"
         ? target.checked
         : target.value;
 
-    this.props.update({
+    let props = {
       type: "update",
       value,
       attr,
       index,
       sectionId
-    });
+    };
+    if (noUndo) {
+      this.props.change(props);
+    } else {
+      this.props.update(props);
+    }
   }
 
   handleHymnChange(event, index, sectionId) {
@@ -314,17 +320,28 @@ export default class EditorView extends Component {
 
       case "gap":
         const gap = item.gap >= 1 ? item.gap : 1;
+        if (!this.startGap) {
+          this.startGap = gap; // save for undo
+        }
         content = (
           <div>
             <label class={`${style.label}`}>Gap</label>
             <input
-              class={`w3-border w3-round leftmargin ${style.numberinput}`}
-              type="number"
-              placeholder="Gap"
+              type="range"
               value={gap}
-              onInput={event =>
-                this.handleInputChange(event, index, sectionId, "gap")
-              }
+              min="1"
+              max="10"
+              onChange={event => {
+                // final update
+                item.gap = this.startGap;
+                this.startGap = null;
+                this.handleInputChange(event, index, sectionId, "gap");
+              }}
+              onInput={event => {
+                // continuous updates
+                this.handleInputChange(event, index, sectionId, "gap", true);
+              }}
+              class="slider w3-margin-left w3-cell-middle"
             />
           </div>
         );
