@@ -61,4 +61,50 @@ const Alert = ({ text }) => (
   </div>
 );
 
-export { Loader, Header, Page, Alert };
+function PopupMenu({ title, menuId, items, handler, isButton }) {
+  return (
+    <div class="w3-dropdown-click">
+      <div
+        onClick={e => {
+          toggleMenu(menuId);
+          e.stopPropagation();
+        }}
+        class={isButton && "w3-bar-item w3-button"}
+      >
+        {title}
+        <i class="icon-down-dir" />
+      </div>
+      <div
+        id={menuId}
+        class="w3-dropdown-content w3-bar-block w3-border"
+        style={{ minWidth: 0 }}
+      >
+        {items.map(([title, value]) => {
+          return (
+            <a
+              class="w3-bar-item w3-button"
+              onClick={e => {
+                e.stopPropagation();
+                handler(value);
+                toggleMenu(menuId);
+              }}
+            >
+              {title}
+            </a>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+function toggleMenu(menuId) {
+  var addMenu = document.getElementById(menuId);
+  if (addMenu.className.indexOf("w3-show") == -1) {
+    addMenu.className += " w3-show";
+  } else {
+    addMenu.className = addMenu.className.replace(" w3-show", "");
+  }
+}
+
+export { Loader, Header, Page, Alert, PopupMenu };

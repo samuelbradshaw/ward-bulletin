@@ -1,6 +1,7 @@
 import { h, Component } from "preact";
 import style from "./style";
 import hymnList from "../../assets/hymns";
+import { PopupMenu } from "../../components";
 
 export default class EditorView extends Component {
   constructor(props) {
@@ -446,12 +447,14 @@ export default class EditorView extends Component {
         Add
       </span>
     );
-    return this.popupMenu(
-      title,
-      "add-menu",
-      items,
-      value => this.addItem(value, index, sectionId),
-      true
+    return (
+      <PopupMenu
+        title={title}
+        menuId="add-menu"
+        items={items}
+        handler={value => this.addItem(value, index, sectionId)}
+        isButton
+      />
     );
   }
 
@@ -461,14 +464,21 @@ export default class EditorView extends Component {
       [this.styleTitle("bold"), "bold"],
       [this.styleTitle("italic"), "italic"]
     ];
-    return this.popupMenu(this.styleTitle(style), "style-menu", items, value =>
-      this.props.update({
-        type: "update",
-        value,
-        attr: "style",
-        index,
-        sectionId
-      })
+    return (
+      <PopupMenu
+        title={this.styleTitle(style)}
+        menuId="style-menu"
+        items={items}
+        handler={value =>
+          this.props.update({
+            type: "update",
+            value,
+            attr: "style",
+            index,
+            sectionId
+          })
+        }
+      />
     );
   }
 
@@ -485,17 +495,24 @@ export default class EditorView extends Component {
   alignMenu(align, index, sectionId) {
     let items = [
       [this.alignTitle("left"), "left"],
-      [this.alignTitle(""), , ""],
-      [this.alignTitle("right"), , "right"]
+      [this.alignTitle(""), ""],
+      [this.alignTitle("right"), "right"]
     ];
-    return this.popupMenu(this.alignTitle(align), "align-menu", items, value =>
-      this.props.update({
-        type: "update",
-        value,
-        attr: "align",
-        index,
-        sectionId
-      })
+    return (
+      <PopupMenu
+        title={this.alignTitle(align)}
+        menuId="align-menu"
+        items={items}
+        handler={value =>
+          this.props.update({
+            type: "update",
+            value,
+            attr: "align",
+            index,
+            sectionId
+          })
+        }
+      />
     );
   }
 
@@ -507,52 +524,6 @@ export default class EditorView extends Component {
       alignTitle = <i class="icon-align-right" />;
     }
     return alignTitle;
-  }
-
-  popupMenu(title, menuId, items, handler, isButton) {
-    return (
-      <div class="w3-dropdown-click">
-        <div
-          onClick={e => {
-            this.toggleMenu(menuId);
-            e.stopPropagation();
-          }}
-          class={isButton && "w3-bar-item w3-button"}
-        >
-          {title}
-          <i class="icon-down-dir" />
-        </div>
-        <div
-          id={menuId}
-          class="w3-dropdown-content w3-bar-block w3-border"
-          style={{ minWidth: 0 }}
-        >
-          {items.map(([title, value]) => {
-            return (
-              <a
-                class="w3-bar-item w3-button"
-                onClick={e => {
-                  e.stopPropagation();
-                  handler(value);
-                  this.toggleMenu(menuId);
-                }}
-              >
-                {title}
-              </a>
-            );
-          })}
-        </div>
-      </div>
-    );
-  }
-
-  toggleMenu(menuId) {
-    var addMenu = document.getElementById(menuId);
-    if (addMenu.className.indexOf("w3-show") == -1) {
-      addMenu.className += " w3-show";
-    } else {
-      addMenu.className = addMenu.className.replace(" w3-show", "");
-    }
   }
 
   sectionTitle(title) {
