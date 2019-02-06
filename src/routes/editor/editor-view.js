@@ -1,7 +1,6 @@
 import { h, Component } from "preact";
 import style from "./style";
 import hymnList from "../../assets/hymns";
-import Dropdown from "../../components/Dropdown/Dropdown";
 
 export default class EditorView extends Component {
   constructor(props) {
@@ -9,7 +8,10 @@ export default class EditorView extends Component {
     this.handleInputChange = this.handleInputChange.bind(this);
     // create hymns list
     this.hymns = { ...hymnList };
-    this.state = { selectedItem: null, sectionId: null };
+    this.state = {
+      selectedItem: null,
+      sectionId: null
+    };
   }
 
   render({ data }) {
@@ -21,13 +23,13 @@ export default class EditorView extends Component {
         let rows = [];
         for (let item of section.data) {
           const selected = item === this.state.selectedItem;
+          const index = section.data.indexOf(item);
+          rows.push(this.createLine(item, index, sectionId, selected));
           if (selected) {
             // this row is selected
             let toolbar = this.itemToolBar(item, section, sectionId);
             rows.push(toolbar);
           }
-          const index = section.data.indexOf(item);
-          rows.push(this.createLine(item, index, sectionId, selected));
         }
 
         sections.push(<ul class="w3-ul">{rows}</ul>);
@@ -121,36 +123,16 @@ export default class EditorView extends Component {
       case "title":
         content = (
           <div class="w3-row">
-            <div class="w3-col w3-right leftmargin" style="width:72px">
+            <div class="w3-col w3-right leftmargin" style="width:44px">
               <label class={`${style.label} w3-block`}>Align</label>
-              <select
-                class="topmargin w3-select"
-                onChange={event =>
-                  this.handleInputChange(event, index, sectionId, "align")
-                }
-                value={item.align}
-              >
-                <option class="icon-menu" value="left">
-                  Left
-                </option>
-                <option value="">Center</option>
-                <option value="right">Right</option>
-              </select>
+              {this.alignMenu(item.align, index, sectionId)}
             </div>
-            <div class="w3-col w3-right leftmargin" style="width:72px">
+
+            <div class="w3-col w3-right leftmargin" style="width:54px">
               <label class={`${style.label} w3-block`}>Style</label>
-              <select
-                class="topmargin w3-select"
-                onChange={event =>
-                  this.handleInputChange(event, index, sectionId, "style")
-                }
-                value={item.style}
-              >
-                <option value="">Normal</option>
-                <option value="bold">Bold</option>
-                <option value="italic">Italic</option>
-              </select>
+              {this.styleMenu(item.style, index, sectionId)}
             </div>
+
             <div class="w3-rest">
               <label class={`${style.label}`}>Title</label>
               <input
@@ -351,16 +333,25 @@ export default class EditorView extends Component {
     const selectedStyle = selected ? "w3-border-theme w3-border" : "";
     return (
       <li
-        class={`w3-white bottommargin ${selectedStyle}`}
+        class={`w3-white topmargin ${selectedStyle}`}
         onClick={event => {
           const tag = event.target.tagName.toLowerCase();
           if (tag != "input" && tag != "select") {
             const selectedItem = this.state.selectedItem == item ? null : item; // Toggle selected item
-            this.setState({ selectedItem, sectionId });
+            this.setState({
+              selectedItem,
+              sectionId
+            });
           }
         }}
+        style={{ padding: "8px 8px" }}
       >
-        <div style={{ display: "flex", justifyContent: "space-between" }}>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between"
+          }}
+        >
           <div style={{ flexGrow: 1 }}>{content}</div>
           <i
             class={`icon-menu w3-margin-left${
@@ -379,7 +370,10 @@ export default class EditorView extends Component {
     const toolbar = (
       <div
         class="w3-bar w3-theme-d1"
-        style={{ display: "flex", justifyContent: "space-around" }}
+        style={{
+          display: "flex",
+          justifyContent: "space-around"
+        }}
         onClick={event => {
           const selectedItem = this.state.selectedItem == item ? null : item; // Toggle selected item
           this.setState({ selectedItem });
@@ -446,27 +440,101 @@ export default class EditorView extends Component {
       ["Pagebreak", "pagebreak"],
       ["Gap", "gap"]
     ];
+    let title = (
+      <span>
+        <i class="icon-plus-circled" />
+        Add
+      </span>
+    );
+    return this.popupMenu(
+      title,
+      "add-menu",
+      items,
+      value => this.addItem(value, index, sectionId),
+      true
+    );
+  }
+
+  styleMenu(style, index, sectionId) {
+    let items = [
+      ["Normal", ""],
+      [this.styleTitle("bold"), "bold"],
+      [this.styleTitle("italic"), "italic"]
+    ];
+    return this.popupMenu(this.styleTitle(style), "style-menu", items, value =>
+      this.props.update({
+        type: "update",
+        value,
+        attr: "style",
+        index,
+        sectionId
+      })
+    );
+  }
+
+  styleTitle(style) {
+    let styleTitle = "Normal";
+    if (style === "bold") {
+      styleTitle = <span style={{ fontWeight: "bold" }}>Bold</span>;
+    } else if (style === "italic") {
+      styleTitle = <span style={{ fontStyle: "italic" }}>Italic</span>;
+    }
+    return styleTitle;
+  }
+
+  alignMenu(align, index, sectionId) {
+    let items = [
+      [this.alignTitle("left"), "left"],
+      [this.alignTitle(""), , ""],
+      [this.alignTitle("right"), , "right"]
+    ];
+    return this.popupMenu(this.alignTitle(align), "align-menu", items, value =>
+      this.props.update({
+        type: "update",
+        value,
+        attr: "align",
+        index,
+        sectionId
+      })
+    );
+  }
+
+  alignTitle(align) {
+    let alignTitle = <i class="icon-align-center" />;
+    if (align === "left") {
+      alignTitle = <i class="icon-align-left" />;
+    } else if (align === "right") {
+      alignTitle = <i class="icon-align-right" />;
+    }
+    return alignTitle;
+  }
+
+  popupMenu(title, menuId, items, handler, isButton) {
     return (
       <div class="w3-dropdown-click">
-        <button
+        <div
           onClick={e => {
-            this.toggleAddMenu();
+            this.toggleMenu(menuId);
             e.stopPropagation();
           }}
-          class="w3-bar-item w3-button"
+          class={isButton && "w3-bar-item w3-button"}
         >
-          <i class="icon-plus-circled" />
-          Add
-        </button>
-        <div id="add-menu" class="w3-dropdown-content w3-bar-block w3-border">
+          {title}
+          <i class="icon-down-dir" />
+        </div>
+        <div
+          id={menuId}
+          class="w3-dropdown-content w3-bar-block w3-border"
+          style={{ minWidth: 0 }}
+        >
           {items.map(([title, value]) => {
             return (
               <a
                 class="w3-bar-item w3-button"
                 onClick={e => {
-                  this.addItem(value, index, sectionId);
-                  this.toggleAddMenu();
                   e.stopPropagation();
+                  handler(value);
+                  this.toggleMenu(menuId);
                 }}
               >
                 {title}
@@ -478,8 +546,8 @@ export default class EditorView extends Component {
     );
   }
 
-  toggleAddMenu() {
-    var addMenu = document.getElementById("add-menu");
+  toggleMenu(menuId) {
+    var addMenu = document.getElementById(menuId);
     if (addMenu.className.indexOf("w3-show") == -1) {
       addMenu.className += " w3-show";
     } else {
@@ -488,7 +556,7 @@ export default class EditorView extends Component {
   }
 
   sectionTitle(title) {
-    return <div class="w3-text-dark-grey w3-padding-16 w3-large">{title}</div>;
+    return <div class="w3-text-white w3-padding-8 w3-xlarge">{title}</div>;
   }
 
   addItem(type, index, sectionId) {
@@ -524,7 +592,10 @@ export default class EditorView extends Component {
       index: index + 1,
       sectionId
     });
-    this.setState({ selectedItem: item, sectionId });
+    this.setState({
+      selectedItem: item,
+      sectionId
+    });
     console.log("Add item:", type);
   }
 }

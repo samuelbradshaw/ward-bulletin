@@ -32,7 +32,7 @@ export default class Editor extends Component {
         <Page title="Editor">
           <div class="fullheight" style={{ paddingBottom: "44px" }}>
             <div
-              class="w3-row-padding w3-half fullheight"
+              class="w3-row-padding w3-half fullheight w3-theme-d5"
               style={{ overflow: "auto" }}
             >
               <EditorView
