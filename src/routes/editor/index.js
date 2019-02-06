@@ -112,6 +112,14 @@ export default class Editor extends Component {
     let data = this.state.data.sections[sectionId].data;
 
     switch (type) {
+      case "add":
+        if (undo) {
+          data.splice(index, 1);
+        } else {
+          data.splice(index, 0, request.item);
+        }
+        break;
+
       case "update":
         const item = data[index];
         if (undo) {

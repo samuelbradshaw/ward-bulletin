@@ -1,6 +1,7 @@
 import { h, Component } from "preact";
 import style from "./style";
 import hymnList from "../../assets/hymns";
+import Dropdown from "../../components/Dropdown/Dropdown";
 
 export default class EditorView extends Component {
   constructor(props) {
@@ -384,15 +385,8 @@ export default class EditorView extends Component {
           this.setState({ selectedItem });
         }}
       >
-        <button
-          onClick={e => {
-            e.stopPropagation();
-          }}
-          class="w3-bar-item w3-button"
-        >
-          <i class="icon-plus-circled" />
-          Add
-        </button>
+        {this.addMenu(index, sectionId)}
+
         <button
           onClick={e => {
             this.state.selectedItem = null;
@@ -441,7 +435,96 @@ export default class EditorView extends Component {
     return toolbar;
   }
 
+  addMenu(index, sectionId) {
+    let items = [
+      ["Person", "name"],
+      ["Hymn", "hymn"],
+      ["Music", "music"],
+      ["Title", "title"],
+      ["Columns", "columns"],
+      ["Announcement", "article"],
+      ["Pagebreak", "pagebreak"],
+      ["Gap", "gap"]
+    ];
+    return (
+      <div class="w3-dropdown-click">
+        <button
+          onClick={e => {
+            this.toggleAddMenu();
+            e.stopPropagation();
+          }}
+          class="w3-bar-item w3-button"
+        >
+          <i class="icon-plus-circled" />
+          Add
+        </button>
+        <div id="add-menu" class="w3-dropdown-content w3-bar-block w3-border">
+          {items.map(([title, value]) => {
+            return (
+              <a
+                class="w3-bar-item w3-button"
+                onClick={e => {
+                  this.addItem(value, index, sectionId);
+                  this.toggleAddMenu();
+                  e.stopPropagation();
+                }}
+              >
+                {title}
+              </a>
+            );
+          })}
+        </div>
+      </div>
+    );
+  }
+
+  toggleAddMenu() {
+    var addMenu = document.getElementById("add-menu");
+    if (addMenu.className.indexOf("w3-show") == -1) {
+      addMenu.className += " w3-show";
+    } else {
+      addMenu.className = addMenu.className.replace(" w3-show", "");
+    }
+  }
+
   sectionTitle(title) {
     return <div class="w3-text-dark-grey w3-padding-16 w3-large">{title}</div>;
+  }
+
+  addItem(type, index, sectionId) {
+    let item = {};
+    switch (type) {
+      case "title":
+        item = { style: "bold", title: "" };
+        break;
+
+      case "name":
+        item = { label: "", name: "" };
+        break;
+
+      case "hymn":
+        item = { label: "", hymn: "", title: "" };
+        break;
+
+      case "music":
+        item = { label: "", name: "", title: "" };
+        break;
+
+      case "columns":
+        break;
+
+      case "article":
+        item = { heading: "", name: "" };
+        break;
+    }
+    item.type = type;
+    this.props.update({
+      type: "add",
+      item,
+      index: index + 1,
+      sectionId
+    });
+    this.setState({ selectedItem: item, sectionId });
+    console.log("Add item:", type);
   }
 }
