@@ -11,6 +11,7 @@
 .icon-align-left:before { content: '\e809'; } /* '' */
 .icon-align-right:before { content: '\e80a'; } /* '' */
 .icon-th:before { content: '\e80b'; } /* '' */
+.icon-ok:before { content: '\e80c'; } /* '' */
 .icon-spin4:before { content: '\e834'; } /* '' */
 .icon-spin5:before { content: '\e838'; } /* '' */
 .icon-spin6:before { content: '\e839'; } /* '' */
@@ -19,4 +20,6 @@
 .icon-menu:before { content: '\f0c9'; } /* '' */
 .icon-upload-cloud:before { content: '\f0ee'; } /* '' */
 .icon-doc-text:before { content: '\f0f6'; } /* '' */
+.icon-angle-up:before { content: '\f106'; } /* '' */
+.icon-angle-down:before { content: '\f107'; } /* '' */
 .icon-help:before { content: '\f128'; } /* '' */
