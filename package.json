@@ -29,6 +29,8 @@
     "preact-render-spy": "^1.2.1"
   },
   "dependencies": {
+    "firebase": "^5.8.2",
+    "firebaseui": "^3.5.2",
     "mini-platform-detect": "^0.1.0",
     "preact": "^8.2.6",
     "preact-compat": "^3.17.0",
