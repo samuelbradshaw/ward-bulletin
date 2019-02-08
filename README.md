@@ -15,8 +15,11 @@ npm run build
 # test the production build locally
 npm run serve
 
-# deploy to Firebase (after build)
+# deploy website to Firebase (after build)
 firebase deploy
+
+# deploy functions (from "functions" folder)
+firebase deploy --only functions
 
 # run tests with jest and preact-render-spy
 npm run test

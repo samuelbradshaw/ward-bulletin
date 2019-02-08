@@ -1,0 +1,30 @@
+[debug] [2019-02-08T21:42:42.444Z] ----------------------------------------------------------------------
+[debug] [2019-02-08T21:42:42.446Z] Command:       /usr/local/bin/node /Users/abird/.npm-global/bin/firebase serve --only functions
+[debug] [2019-02-08T21:42:42.446Z] CLI Version:   6.3.1
+[debug] [2019-02-08T21:42:42.446Z] Platform:      darwin
+[debug] [2019-02-08T21:42:42.446Z] Node Version:  v10.10.0
+[debug] [2019-02-08T21:42:42.447Z] Time:          Fri Feb 08 2019 13:42:42 GMT-0800 (Pacific Standard Time)
+[debug] [2019-02-08T21:42:42.447Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2019-02-08T21:42:42.458Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2019-02-08T21:42:42.458Z] > authorizing via signed-in user
+[debug] [2019-02-08T21:42:42.458Z] [iam] checking project ward-bulletin-9b31d for permissions ["firebase.projects.get"]
+[debug] [2019-02-08T21:42:42.460Z] >>> HTTP REQUEST POST https://cloudresourcemanager.googleapis.com/v1/projects/ward-bulletin-9b31d:testIamPermissions  
+
+[debug] [2019-02-08T21:42:42.824Z] <<< HTTP RESPONSE 200
+[debug] [2019-02-08T21:42:42.826Z] >>> HTTP REQUEST GET https://cloudresourcemanager.googleapis.com/v1/projects/ward-bulletin-9b31d  
+ 
+[debug] [2019-02-08T21:42:43.322Z] <<< HTTP RESPONSE 200
+[info] 
+[info] === Serving from '/Users/abird/Documents/Projects/WardBulletin'...
+[info] 
+[info] i  functions: Preparing to emulate functions.
+[debug] [2019-02-08T21:42:43.901Z] Fetching environment
+[debug] [2019-02-08T21:42:43.903Z] >>> HTTP REQUEST GET https://mobilesdk-pa.googleapis.com/v1/projects/861011314549:getServerAppConfig  
+ 
+[debug] [2019-02-08T21:42:44.203Z] <<< HTTP RESPONSE 200
+[debug] [2019-02-08T21:42:44.203Z] Starting @google-cloud/functions-emulator
+[debug] [2019-02-08T21:42:45.284Z] Parsing function triggers
+[info] ✔  functions: helloWorld: http://localhost:5000/ward-bulletin-9b31d/us-central1/helloWorld
+[info] ✔  functions: setBulletin: http://localhost:5000/ward-bulletin-9b31d/us-central1/setBulletin
+[info] ✔  functions: getBulletin: http://localhost:5000/ward-bulletin-9b31d/us-central1/getBulletin
