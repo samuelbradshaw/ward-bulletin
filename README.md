@@ -15,6 +15,10 @@ npm run build
 # test the production build locally
 npm run serve
 
+# serve functions locally
+cd functions
+firebase serve --only functions
+
 # deploy website to Firebase (after build)
 firebase deploy
 

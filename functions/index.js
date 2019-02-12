@@ -12,6 +12,7 @@ exports.getBulletin = functions.https.onRequest((req, res) => {
     res.status(400).send("Missing unit id");
     return;
   }
+  setupCORS(res);
   let db = getFirestore();
   var docRef = db.collection("bulletins").doc(id);
   return docRef
@@ -42,6 +43,8 @@ exports.setBulletin = functions.https.onRequest((req, res) => {
   }
   let db = getFirestore();
   var docRef = db.collection("bulletins").doc(id);
+  setupCORS(res);
+
   return docRef
     .set(body)
     .then(function(doc) {
@@ -72,4 +75,12 @@ function getFirebase() {
 // get firebase database
 function getFirestore() {
   return getFirebase().firestore();
+}
+
+function setupCORS(res) {
+  res.set("Access-Control-Allow-Origin", "*");
+  res.set(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept"
+  );
 }
