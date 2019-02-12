@@ -45,6 +45,7 @@ function startAuthUI(container) {
       signInSuccessWithAuthResult: function(authResult, redirectUrl) {
         // Process result. This will not trigger on merge conflicts.
         // On success redirect to signInSuccessUrl.
+        // var isNewUser = authResult.additionalUserInfo.isNewUser;
         setTimeout(() => {
           ui.reset();
         }, 500);
@@ -72,5 +73,9 @@ function logout() {
   firebase.auth().signOut();
 }
 
+function currentUser() {
+  return firebase.auth().currentUser;
+}
+
 export default firebase;
-export { startAuthUI, logout };
+export { startAuthUI, logout, currentUser };

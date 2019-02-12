@@ -12,31 +12,29 @@ export default class EditorView extends Component {
     this.startGap = null;
     this.state = {
       selectedItem: null,
-      sectionId: null
+      section: null
     };
   }
 
   render({ data }) {
     let sections = [];
-    for (let sectionId of data.sectionOrder) {
-      let section = data.sections[sectionId];
-      if (section) {
-        sections.push(this.sectionTitle(section.title));
-        let rows = [];
-        for (let item of section.data) {
-          const selected = item === this.state.selectedItem;
-          const index = section.data.indexOf(item);
-          rows.push(this.createLine(item, index, sectionId, selected));
-          if (selected) {
-            // this row is selected
-            let toolbar = this.itemToolBar(item, section, sectionId);
-            rows.push(toolbar);
-          }
+    for (let section of data.sections) {
+      sections.push(this.sectionTitle(section.title));
+      let rows = [];
+      for (let item of section.data) {
+        const selected = item === this.state.selectedItem;
+        const index = section.data.indexOf(item);
+        rows.push(this.createLine(item, index, section, selected));
+        if (selected) {
+          // this row is selected
+          let toolbar = this.itemToolBar(item, section);
+          rows.push(toolbar);
         }
-
-        sections.push(<ul class="w3-ul">{rows}</ul>);
       }
+
+      sections.push(<ul class="w3-ul">{rows}</ul>);
     }
+
     return (
       <div
         id="keyhandler"
@@ -60,13 +58,12 @@ export default class EditorView extends Component {
         };
         const action = updateMap[event.key];
         if (action) {
-          const sectionId = this.state.sectionId;
-          const section = this.props.data.sections[sectionId];
+          const section = this.state.section;
           const index = section.data.indexOf(item);
           this.props.update({
             type: action,
             index,
-            sectionId
+            section
           });
           event.stopPropagation();
         }
@@ -74,7 +71,7 @@ export default class EditorView extends Component {
     }
   }
 
-  handleInputChange(event, index, sectionId, attr, noUndo) {
+  handleInputChange(event, index, section, attr, noUndo) {
     const target = event.target;
     const value =
       target.type === "checkbox" || target.type === "radio"
@@ -86,7 +83,7 @@ export default class EditorView extends Component {
       value,
       attr,
       index,
-      sectionId
+      section
     };
     if (noUndo) {
       this.props.change(props);
@@ -95,7 +92,7 @@ export default class EditorView extends Component {
     }
   }
 
-  handleHymnChange(event, index, sectionId) {
+  handleHymnChange(event, index, section) {
     let value = parseInt(event.target.value);
     if (value < 1) {
       value = 1;
@@ -109,21 +106,21 @@ export default class EditorView extends Component {
         value,
         attr: "hymn",
         index,
-        sectionId
+        section
       },
       {
         type: "update",
         value: title,
         attr: "title",
         index,
-        sectionId
+        section
       }
     ];
     // update hymn no. and update title
     this.props.update(requests);
   }
 
-  createLine(item, index, sectionId, selected) {
+  createLine(item, index, section, selected) {
     let { type, label, name, title } = item;
     let content = label || title || name || type;
     switch (type) {
@@ -132,12 +129,12 @@ export default class EditorView extends Component {
           <div class="w3-row">
             <div class="w3-col w3-right leftmargin" style="width:44px">
               <label class={`${style.label} w3-block`}>Align</label>
-              {this.alignMenu(item.align, index, sectionId)}
+              {this.alignMenu(item.align, index, section)}
             </div>
 
             <div class="w3-col w3-right leftmargin" style="width:54px">
               <label class={`${style.label} w3-block`}>Style</label>
-              {this.styleMenu(item.style, index, sectionId)}
+              {this.styleMenu(item.style, index, section)}
             </div>
 
             <div class="w3-rest">
@@ -148,7 +145,7 @@ export default class EditorView extends Component {
                 placeholder="Title"
                 value={title}
                 onChange={event =>
-                  this.handleInputChange(event, index, sectionId, "title")
+                  this.handleInputChange(event, index, section, "title")
                 }
               />
             </div>
@@ -167,7 +164,7 @@ export default class EditorView extends Component {
                 placeholder="Label"
                 value={label}
                 onChange={event =>
-                  this.handleInputChange(event, index, sectionId, "label")
+                  this.handleInputChange(event, index, section, "label")
                 }
               />
             </div>
@@ -179,7 +176,7 @@ export default class EditorView extends Component {
                 placeholder="Name"
                 value={name}
                 onChange={event =>
-                  this.handleInputChange(event, index, sectionId, "name")
+                  this.handleInputChange(event, index, section, "name")
                 }
               />
             </div>
@@ -199,7 +196,7 @@ export default class EditorView extends Component {
                   placeholder="Hymn Number"
                   value={item.hymn}
                   onInput={event =>
-                    this.handleHymnChange(event, index, sectionId)
+                    this.handleHymnChange(event, index, section)
                   }
                 />
               </div>
@@ -211,7 +208,7 @@ export default class EditorView extends Component {
                   placeholder="Label"
                   value={label}
                   onChange={event =>
-                    this.handleInputChange(event, index, sectionId, "label")
+                    this.handleInputChange(event, index, section, "label")
                   }
                 />
               </div>
@@ -225,7 +222,7 @@ export default class EditorView extends Component {
                   placeholder="Title"
                   value={title}
                   onChange={event =>
-                    this.handleInputChange(event, index, sectionId, "title")
+                    this.handleInputChange(event, index, section, "title")
                   }
                 />
               </div>
@@ -246,7 +243,7 @@ export default class EditorView extends Component {
                   placeholder="Label"
                   value={label}
                   onChange={event =>
-                    this.handleInputChange(event, index, sectionId, "label")
+                    this.handleInputChange(event, index, section, "label")
                   }
                 />
               </div>
@@ -258,7 +255,7 @@ export default class EditorView extends Component {
                   placeholder="Name"
                   value={name}
                   onChange={event =>
-                    this.handleInputChange(event, index, sectionId, "name")
+                    this.handleInputChange(event, index, section, "name")
                   }
                 />
               </div>
@@ -272,7 +269,7 @@ export default class EditorView extends Component {
                   placeholder="Title"
                   value={title}
                   onChange={event =>
-                    this.handleInputChange(event, index, sectionId, "title")
+                    this.handleInputChange(event, index, section, "title")
                   }
                 />
               </div>
@@ -296,7 +293,7 @@ export default class EditorView extends Component {
                 placeholder="Heading"
                 value={heading}
                 onChange={event =>
-                  this.handleInputChange(event, index, sectionId, "heading")
+                  this.handleInputChange(event, index, section, "heading")
                 }
               />
             </div>
@@ -306,7 +303,7 @@ export default class EditorView extends Component {
               rows={4}
               value={body}
               onChange={event =>
-                this.handleInputChange(event, index, sectionId, "body")
+                this.handleInputChange(event, index, section, "body")
               }
             />
           </div>
@@ -335,11 +332,11 @@ export default class EditorView extends Component {
                 // final update
                 item.gap = this.startGap;
                 this.startGap = null;
-                this.handleInputChange(event, index, sectionId, "gap");
+                this.handleInputChange(event, index, section, "gap");
               }}
               onInput={event => {
                 // continuous updates
-                this.handleInputChange(event, index, sectionId, "gap", true);
+                this.handleInputChange(event, index, section, "gap", true);
               }}
               class="slider w3-margin-left w3-cell-middle"
             />
@@ -358,7 +355,7 @@ export default class EditorView extends Component {
             const selectedItem = this.state.selectedItem == item ? null : item; // Toggle selected item
             this.setState({
               selectedItem,
-              sectionId
+              section
             });
           }
         }}
@@ -382,7 +379,7 @@ export default class EditorView extends Component {
     );
   }
 
-  itemToolBar(item, section, sectionId) {
+  itemToolBar(item, section) {
     const data = section.data;
     const index = data.indexOf(item);
     const toolbar = (
@@ -397,7 +394,7 @@ export default class EditorView extends Component {
           this.setState({ selectedItem });
         }}
       >
-        {this.addMenu(index, sectionId)}
+        {this.addMenu(index, section)}
 
         <button
           onClick={e => {
@@ -405,7 +402,7 @@ export default class EditorView extends Component {
             this.props.update({
               type: "delete",
               index,
-              sectionId
+              section
             });
             e.stopPropagation();
           }}
@@ -419,7 +416,7 @@ export default class EditorView extends Component {
             this.props.update({
               type: "moveUp",
               index,
-              sectionId
+              section
             });
             e.stopPropagation();
           }}
@@ -433,7 +430,7 @@ export default class EditorView extends Component {
             this.props.update({
               type: "moveDown",
               index,
-              sectionId
+              section
             });
             e.stopPropagation();
           }}
@@ -447,7 +444,7 @@ export default class EditorView extends Component {
     return toolbar;
   }
 
-  addMenu(index, sectionId) {
+  addMenu(index, section) {
     let items = [
       ["Person", "name"],
       ["Hymn", "hymn"],
@@ -469,13 +466,13 @@ export default class EditorView extends Component {
         title={title}
         menuId="add-menu"
         items={items}
-        handler={value => this.addItem(value, index, sectionId)}
+        handler={value => this.addItem(value, index, section)}
         isButton
       />
     );
   }
 
-  styleMenu(style, index, sectionId) {
+  styleMenu(style, index, section) {
     let items = [
       ["Normal", ""],
       [this.styleTitle("bold"), "bold"],
@@ -492,7 +489,7 @@ export default class EditorView extends Component {
             value,
             attr: "style",
             index,
-            sectionId
+            section
           })
         }
       />
@@ -509,7 +506,7 @@ export default class EditorView extends Component {
     return styleTitle;
   }
 
-  alignMenu(align, index, sectionId) {
+  alignMenu(align, index, section) {
     let items = [
       [this.alignTitle("left"), "left"],
       [this.alignTitle(""), ""],
@@ -526,7 +523,7 @@ export default class EditorView extends Component {
             value,
             attr: "align",
             index,
-            sectionId
+            section
           })
         }
       />
@@ -547,7 +544,7 @@ export default class EditorView extends Component {
     return <div class="w3-text-white w3-padding-8 w3-xlarge">{title}</div>;
   }
 
-  addItem(type, index, sectionId) {
+  addItem(type, index, section) {
     let item = {};
     switch (type) {
       case "title":
@@ -578,11 +575,11 @@ export default class EditorView extends Component {
       type: "add",
       item,
       index: index + 1,
-      sectionId
+      section
     });
     this.setState({
       selectedItem: item,
-      sectionId
+      section
     });
     console.log("Add item:", type);
   }

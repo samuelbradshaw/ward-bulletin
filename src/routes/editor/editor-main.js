@@ -7,7 +7,6 @@ import prefs from "../../data/prefs";
 import { logout } from "../../data/firebase";
 
 export default class EditorMain extends Component {
-  unit = "pq3";
   state = { data: null };
   undoStack = [];
 
@@ -19,10 +18,18 @@ export default class EditorMain extends Component {
       // use current draft
       this.setState({ data });
     } else {
-      BulletinData.getBulletinData(this.unit).then(data => {
-        this.setState({ data });
-        prefs.set(prefs.currentDraft, data);
-      });
+      BulletinData.getBulletin(this.props.unit)
+        .then(data => {
+          if (data.status) {
+            // an error happened. return initial data
+            data = BulletinData.getInitialData();
+          }
+          this.setState({ data });
+          prefs.set(prefs.currentDraft, data);
+        })
+        .catch(function(error) {
+          console.log("error:", error);
+        });
     }
   }
 
@@ -69,6 +76,7 @@ export default class EditorMain extends Component {
               </button>
               <button
                 onClick={e => {
+                  this.publish();
                   e.stopPropagation();
                 }}
                 class="w3-bar-item w3-button"
@@ -121,8 +129,8 @@ export default class EditorMain extends Component {
   }
 
   updateRequest(request, undo = false) {
-    const { type, index, sectionId, attr } = request;
-    let data = this.state.data.sections[sectionId].data;
+    const { type, index, section, attr } = request;
+    let data = section.data;
 
     switch (type) {
       case "add":
@@ -183,6 +191,10 @@ export default class EditorMain extends Component {
       return;
     }
     this.update(request, true);
+  }
+
+  publish() {
+    BulletinData.saveBulletin(this.props.unit, this.state.data);
   }
 }
 

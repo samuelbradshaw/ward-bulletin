@@ -4,17 +4,15 @@ import style from "./style";
 export default class BulletinView extends Component {
   render({ data }) {
     let sections = [];
-    for (let sectionid of data.sectionOrder) {
-      let section = data.sections[sectionid];
-      if (section) {
-        if (sections.length) {
-          sections.push(divider());
-        }
-        sections.push(addSection(section.data));
+    for (let section of data.sections) {
+      if (sections.length) {
+        sections.push(divider());
       }
+      sections.push(addSection(section.data));
     }
-
-    return <div class={style.bulletin + "w3-content"}>{sections}</div>;
+    return (
+      <div class={style.bulletin + " w3-container w3-white"}>{sections}</div>
+    );
   }
 }
 

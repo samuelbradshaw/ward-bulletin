@@ -14,7 +14,7 @@ export default class Bulletin extends Component {
   componentDidMount() {
     let unit = this.props.unit;
     // get data
-    BulletinData.getBulletinData(unit).then(data => {
+    BulletinData.getBulletin(unit).then(data => {
       this.addRecent(data);
       this.setState({ data });
     });
@@ -24,7 +24,7 @@ export default class Bulletin extends Component {
   render({ unit }, { data }) {
     if (data) {
       return (
-        <Page title={data.name}>
+        <Page title={data.settings.name}>
           <BulletinView data={data} />
         </Page>
       );
