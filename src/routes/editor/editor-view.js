@@ -123,6 +123,7 @@ export default class EditorView extends Component {
   createLine(item, index, section, selected) {
     let { type, label, name, title } = item;
     let content = label || title || name || type;
+    let color = "w3-white";
     switch (type) {
       case "title":
         content = (
@@ -151,6 +152,7 @@ export default class EditorView extends Component {
             </div>
           </div>
         );
+        color = "w3-pale-green";
         break;
 
       case "name":
@@ -182,6 +184,7 @@ export default class EditorView extends Component {
             </div>
           </div>
         );
+        color = "w3-pale-blue";
         break;
 
       case "hymn":
@@ -229,6 +232,7 @@ export default class EditorView extends Component {
             </div>
           </div>
         );
+        color = "w3-pale-red";
         break;
 
       case "music":
@@ -276,6 +280,7 @@ export default class EditorView extends Component {
             </div>
           </div>
         );
+        color = "w3-pale-yellow";
         break;
 
       case "columns":
@@ -308,11 +313,12 @@ export default class EditorView extends Component {
             />
           </div>
         );
-
+        color = "w3-light-grey";
         break;
 
       case "pagebreak":
         content = <label class={`${style.label}`}>Print Page Break</label>;
+        color = "w3-blue-grey";
         break;
 
       case "gap":
@@ -342,13 +348,14 @@ export default class EditorView extends Component {
             />
           </div>
         );
+        // color = "w3-pale-green";
         break;
     }
 
     const selectedStyle = selected ? "w3-border-theme w3-border" : "";
     return (
       <li
-        class={`w3-white topmargin ${selectedStyle}`}
+        class={`topmargin ${selectedStyle} ${color}`}
         onClick={event => {
           const tag = event.target.tagName.toLowerCase();
           if (tag != "input" && tag != "select") {
