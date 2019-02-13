@@ -1,5 +1,5 @@
 import { h, Component } from "preact";
-import { Page, Loader } from "../../components";
+import { Page } from "../../components";
 import prefs from "../../data/prefs";
 import firebase, { startAuthUI, currentUser } from "../../data/firebase";
 import "../../style/login-style.css";
@@ -11,6 +11,7 @@ let containerId = "firebaseui-auth-container";
 let pageTitle = "Sign In";
 
 export default class Editor extends Component {
+  message = null;
   state = { status: "checking" };
 
   componentDidMount() {
@@ -69,9 +70,7 @@ export default class Editor extends Component {
       default:
         // checking...
         return (
-          <Page title={pageTitle}>
-            <Loader />
-          </Page>
+          <Page title={pageTitle} showLoader={true} message={this.message} />
         );
     }
   }
@@ -106,6 +105,7 @@ export default class Editor extends Component {
         this.setState({ status: "error" });
         console.log(error);
       });
+    this.message = "Setting Up Account";
     this.setState({ status: "checking" });
   }
 }

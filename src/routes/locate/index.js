@@ -1,6 +1,6 @@
 import { h, Component } from "preact";
 import BulletinData from "../../data/bulletindata";
-import { Loader, Page, Alert } from "../../components";
+import { Page, Alert } from "../../components";
 import WardList from "../../components/wardlist";
 
 export default class Locate extends Component {
@@ -40,6 +40,7 @@ export default class Locate extends Component {
 
   render({}, { wards }) {
     let content;
+    let showLoader = false;
 
     if (this.state.geoLocationError || !("geolocation" in navigator)) {
       /* geolocation IS NOT available */
@@ -57,8 +58,12 @@ export default class Locate extends Component {
       }
     } else {
       // no data yet, show loader
-      content = <Loader />;
+      showLoader = true;
     }
-    return <Page title="Locate">{content}</Page>;
+    return (
+      <Page title="Locate" showLoader={showLoader} message="Locating Bulletin">
+        {content}
+      </Page>
+    );
   }
 }

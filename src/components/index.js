@@ -1,30 +1,26 @@
 import { h } from "preact";
 
-const Loader = () => (
-  <div
-    class="fullheight  w3-display-container"
-    style={{
-      display: "flex",
-      flexDirection: "column",
-      justifyContent: "space-around"
-    }}
-  >
-    <div
-      style={{
-        display: "flex",
-        justifyContent: "center"
-      }}
-    >
-      <span class="w3-dark-grey w3-opacity-min w3-padding w3-round">
-        <i
-          class="icon-spin4 w3-xxlarge animate-spin"
-          style={{ lineHeight: "default" }}
-        />
-      </span>
+const Loader = ({ showLoader, message }) => {
+  return (
+    <div id="page-loader" class={"w3-modal" + (showLoader ? " w3-show" : "")}>
+      <div class="w3-modal-content w3-transparent">
+        <div
+          id="loader-message-container"
+          class="w3-center w3-margin-bottom w3-padding-32"
+          style={{ display: message ? "block" : "none" }}
+        >
+          <span
+            id="loader-message"
+            class="w3-large w3-white w3-padding w3-opacity-min w3-round"
+          >
+            {message}
+          </span>
+        </div>
+        <div class="loader w3-auto" />
+      </div>
     </div>
-    <div />
-  </div>
-);
+  );
+};
 
 const Header = ({ title }) => (
   <header
@@ -48,10 +44,11 @@ const Header = ({ title }) => (
   </header>
 );
 
-const Page = ({ title, children }) => (
+const Page = ({ title, children, showLoader, message }) => (
   <div class="fullheight" style={{ paddingTop: "56px" }}>
     <Header title={title} />
     <div class="w3-content fullheight">{children}</div>
+    <Loader showLoader={showLoader} message={message} />
   </div>
 );
 
@@ -107,4 +104,17 @@ function toggleMenu(menuId) {
   }
 }
 
-export { Loader, Header, Page, Alert, PopupMenu };
+function showLoader(display, text) {
+  document.getElementById("page-loader").style.display = display;
+  document.getElementById("loader-message-container").style.display = text
+    ? "block"
+    : "none";
+  document.getElementById("loader-message").textContent = text;
+}
+
+let loader = {
+  show: text => showLoader("block", text),
+  hide: () => showLoader("none")
+};
+
+export { Header, Page, Alert, PopupMenu, loader };

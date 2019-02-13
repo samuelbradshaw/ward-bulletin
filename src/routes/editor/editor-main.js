@@ -1,6 +1,6 @@
 import { h, Component } from "preact";
 import BulletinData from "../../data/bulletindata";
-import { Page, Loader } from "../../components";
+import { Page, loader } from "../../components";
 import BulletinView from "../bulletin/bulletin-view";
 import EditorView from "./editor-view";
 import prefs from "../../data/prefs";
@@ -110,9 +110,7 @@ export default class EditorMain extends Component {
     } else {
       // no data yet, show loader
       return (
-        <Page title="Editor">
-          <Loader />
-        </Page>
+        <Page title="Editor" showLoader={true} message="Downloading Bulletin" />
       );
     }
   }
@@ -194,7 +192,14 @@ export default class EditorMain extends Component {
   }
 
   publish() {
-    BulletinData.saveBulletin(this.props.unit, this.state.data);
+    loader.show("Publishing Bulletin");
+    BulletinData.saveBulletin(this.props.unit, this.state.data)
+      .then(response => {
+        loader.hide();
+      })
+      .catch(error => {
+        loader.hide();
+      });
   }
 }
 

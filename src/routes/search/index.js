@@ -1,6 +1,6 @@
 import { h, Component } from "preact";
 import BulletinData from "../../data/bulletindata";
-import { Loader, Page, Alert } from "../../components";
+import { Page, Alert } from "../../components";
 import WardList from "../../components/wardlist";
 
 export default class Search extends Component {

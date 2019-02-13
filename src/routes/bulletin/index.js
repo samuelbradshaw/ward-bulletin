@@ -1,7 +1,7 @@
 import { h, Component } from "preact";
 import style from "./style";
 import BulletinData from "../../data/bulletindata";
-import { Page, Loader } from "../../components";
+import { Page } from "../../components";
 import BulletinView from "./bulletin-view";
 import prefs from "../../data/prefs";
 
@@ -15,7 +15,7 @@ export default class Bulletin extends Component {
     let unit = this.props.unit;
     // get data
     BulletinData.getBulletin(unit).then(data => {
-      this.addRecent(data);
+      this.addRecent(unit, data);
       this.setState({ data });
     });
   }
@@ -31,20 +31,21 @@ export default class Bulletin extends Component {
     } else {
       // no data yet, show loader
       return (
-        <Page title="Ward Bulletin">
-          <Loader />
-        </Page>
+        <Page
+          title="Ward Bulletin"
+          showLoader={true}
+          message="Downloading Bulletin"
+        />
       );
     }
   }
 
-  addRecent(data) {
+  addRecent(unit, data) {
     // add unit to recents
     let recents = prefs.get(prefs.recents) || [];
     // filter out this unit
     recents = recents.filter(unit => unit.id !== data.id);
-    let { id, name } = data;
-    recents.unshift({ id, name });
+    recents.unshift({ id: unit, name: data.settings.name });
     prefs.set(prefs.recents, recents);
   }
 }
