@@ -155,6 +155,12 @@
       "css": "down-dir",
       "code": 59405,
       "src": "fontawesome"
+    },
+    {
+      "uid": "0d20938846444af8deb1920dc85a29fb",
+      "css": "logout",
+      "code": 59406,
+      "src": "fontawesome"
     }
   ]
 }

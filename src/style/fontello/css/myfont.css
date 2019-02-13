@@ -1,11 +1,11 @@
 @font-face {
   font-family: 'myfont';
-  src: url('../font/myfont.eot?28156476');
-  src: url('../font/myfont.eot?28156476#iefix') format('embedded-opentype'),
-       url('../font/myfont.woff2?28156476') format('woff2'),
-       url('../font/myfont.woff?28156476') format('woff'),
-       url('../font/myfont.ttf?28156476') format('truetype'),
-       url('../font/myfont.svg?28156476#myfont') format('svg');
+  src: url('../font/myfont.eot?94898719');
+  src: url('../font/myfont.eot?94898719#iefix') format('embedded-opentype'),
+       url('../font/myfont.woff2?94898719') format('woff2'),
+       url('../font/myfont.woff?94898719') format('woff'),
+       url('../font/myfont.ttf?94898719') format('truetype'),
+       url('../font/myfont.svg?94898719#myfont') format('svg');
   font-weight: normal;
   font-style: normal;
 }
@@ -15,7 +15,7 @@
 @media screen and (-webkit-min-device-pixel-ratio:0) {
   @font-face {
     font-family: 'myfont';
-    src: url('../font/myfont.svg?28156476#myfont') format('svg');
+    src: url('../font/myfont.svg?94898719#myfont') format('svg');
   }
 }
 */
@@ -69,6 +69,7 @@
 .icon-th:before { content: '\e80b'; } /* '' */
 .icon-ok:before { content: '\e80c'; } /* '' */
 .icon-down-dir:before { content: '\e80d'; } /* '' */
+.icon-logout:before { content: '\e80e'; } /* '' */
 .icon-spin4:before { content: '\e834'; } /* '' */
 .icon-spin5:before { content: '\e838'; } /* '' */
 .icon-spin6:before { content: '\e839'; } /* '' */

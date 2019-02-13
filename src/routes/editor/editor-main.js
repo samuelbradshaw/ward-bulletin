@@ -91,7 +91,7 @@ export default class EditorMain extends Component {
                 }}
                 class="w3-bar-item w3-button"
               >
-                <i class="icon-help-circled" />
+                <i class="icon-logout" />
                 Logout
               </button>
               <button
