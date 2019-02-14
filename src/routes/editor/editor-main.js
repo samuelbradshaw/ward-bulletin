@@ -39,7 +39,7 @@ export default class EditorMain extends Component {
         <Page title="Editor">
           <div class="fullheight" style={{ paddingBottom: "44px" }}>
             <div
-              class="w3-row-padding w3-half fullheight w3-theme-d5"
+              class="w3-row-padding w3-half fullheight w3-border"
               style={{ overflow: "auto" }}
             >
               <EditorView
@@ -67,7 +67,7 @@ export default class EditorMain extends Component {
                   this.undo();
                   e.stopPropagation();
                 }}
-                class={`w3-bar-item w3-button ${
+                class={`w3-bar-item w3-btn ${
                   this.undoStack.length ? "" : "w3-disabled"
                 }`}
               >
@@ -79,7 +79,7 @@ export default class EditorMain extends Component {
                   this.publish();
                   e.stopPropagation();
                 }}
-                class="w3-bar-item w3-button"
+                class="w3-bar-item w3-btn"
               >
                 <i class="icon-upload-cloud" />
                 Publish
@@ -89,7 +89,7 @@ export default class EditorMain extends Component {
                   logout();
                   e.stopPropagation();
                 }}
-                class="w3-bar-item w3-button"
+                class="w3-bar-item w3-btn"
               >
                 <i class="icon-logout" />
                 Logout
@@ -98,7 +98,7 @@ export default class EditorMain extends Component {
                 onClick={e => {
                   e.stopPropagation();
                 }}
-                class="w3-bar-item w3-button"
+                class="w3-bar-item w3-btn"
               >
                 <i class="icon-help-circled" />
                 Help
@@ -127,8 +127,8 @@ export default class EditorMain extends Component {
   }
 
   updateRequest(request, undo = false) {
-    const { type, index, section, attr } = request;
-    let data = section.data;
+    const { type, index, section, attr, isSection } = request;
+    let data = isSection ? this.state.data.sections : section.data;
 
     switch (type) {
       case "add":

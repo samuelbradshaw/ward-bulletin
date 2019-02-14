@@ -9,7 +9,8 @@
 
 */
 
-const baseURL = "http://localhost:5000/ward-bulletin-9b31d/us-central1";
+const baseURL = "https://us-central1-ward-bulletin-9b31d.cloudfunctions.net"; // production
+// const baseURL = "http://localhost:5000/ward-bulletin-9b31d/us-central1";  // development
 
 const initialBulletinData = {
   settings: {
@@ -76,6 +77,7 @@ const initialBulletinData = {
     },
     {
       title: "Announcements",
+      type: "announcements",
       data: [
         { type: "title", title: "Announcements", style: "bold" },
         {

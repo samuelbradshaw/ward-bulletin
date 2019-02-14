@@ -58,7 +58,8 @@ const Alert = ({ text }) => (
   </div>
 );
 
-function PopupMenu({ title, menuId, items, handler, isButton }) {
+function PopupMenu({ title, items, handler, isButton }) {
+  const menuId = "menu" + Math.floor(Math.random() * 1000000);
   return (
     <div class="w3-dropdown-click">
       <div
@@ -66,7 +67,7 @@ function PopupMenu({ title, menuId, items, handler, isButton }) {
           toggleMenu(menuId);
           e.stopPropagation();
         }}
-        class={isButton && "w3-bar-item w3-button"}
+        class={isButton && "w3-bar-item w3-btn"}
       >
         {title}
         <i class="icon-down-dir" />
@@ -79,10 +80,10 @@ function PopupMenu({ title, menuId, items, handler, isButton }) {
         {items.map(([title, value]) => {
           return (
             <a
-              class="w3-bar-item w3-button"
+              class="w3-bar-item w3-btn"
               onClick={e => {
                 e.stopPropagation();
-                handler(value);
+                handler(value, title);
                 toggleMenu(menuId);
               }}
             >
@@ -92,6 +93,16 @@ function PopupMenu({ title, menuId, items, handler, isButton }) {
         })}
       </div>
     </div>
+  );
+}
+
+function ToolbarButton({ title, icon, onClick, disabled }) {
+  const classText = "w3-bar-item w3-btn" + (disabled ? " w3-disabled" : "");
+  return (
+    <button onClick={disabled ? null : onClick} class={classText}>
+      <i class={icon} />
+      {title}
+    </button>
   );
 }
 
@@ -117,4 +128,4 @@ let loader = {
   hide: () => showLoader("none")
 };
 
-export { Header, Page, Alert, PopupMenu, loader };
+export { Header, Page, Alert, PopupMenu, ToolbarButton, loader };

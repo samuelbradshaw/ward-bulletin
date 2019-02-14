@@ -44,7 +44,7 @@ export default class Bulletin extends Component {
     // add unit to recents
     let recents = prefs.get(prefs.recents) || [];
     // filter out this unit
-    recents = recents.filter(unit => unit.id !== data.id);
+    recents = recents.filter(item => item.id !== unit);
     recents.unshift({ id: unit, name: data.settings.name });
     prefs.set(prefs.recents, recents);
   }

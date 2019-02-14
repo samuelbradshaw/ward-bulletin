@@ -152,7 +152,7 @@ class UnitForm extends Component {
 
         <button
           class={
-            "w3-button w3-theme w3-section" +
+            "w3-btn w3-theme w3-section" +
             (this.state.enableButton ? "" : " w3-disabled")
           }
           onClick={() => {

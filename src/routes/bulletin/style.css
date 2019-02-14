@@ -43,11 +43,5 @@
 .heading {
   font-weight: 700;
   text-decoration-line: underline;
-  margin-top: 15px;
-}
-
-hr {
-  /* border: 1px solid; */
-  margin-top: 32px;
-  margin-bottom: 32px;
+  margin-top: 4px;
 }
