@@ -9,11 +9,21 @@ import Editor from "../routes/editor";
 import Locate from "../routes/locate";
 import Search from "../routes/search";
 
+import prefs from "../data/prefs";
+import { setThemeColor } from "../components";
+
 export default class App extends Component {
   /** Gets fired when the route changes.
    *	@param {Object} event		"change" event from [preact-router](http://git.io/preact-router)
    *	@param {string} event.url	The newly routed URL
    */
+  componentWillMount() {
+    let color = prefs.get(prefs.themeColor);
+    if (color && color !== "blue") {
+      setThemeColor(color);
+    }
+  }
+
   handleRoute = e => {
     this.currentUrl = e.url;
   };

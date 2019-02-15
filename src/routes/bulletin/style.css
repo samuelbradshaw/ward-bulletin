@@ -24,15 +24,11 @@
 }
 .dots::before {
   display: inline-block;
-  height: 1em;
+  height: 1.2em;
   overflow: hidden;
   padding: 0 3px;
   text-overflow: clip;
-  content: ". . . . . . . . . . . . . . . . . . . . "
-    ". . . . . . . . . . . . . . . . . . . . "
-    ". . . . . . . . . . . . . . . . . . . . "
-    ". . . . . . . . . . . . . . . . . . . . "
-    ". . . . . . . . . . . . . . . . . . . . ";
+  content: attr(leader);
 }
 
 .align {

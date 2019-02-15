@@ -1,5 +1,6 @@
 import { h, Component } from "preact";
 import style from "./style";
+import prefs from "../../data/prefs";
 
 export default class BulletinView extends Component {
   render({ data }) {
@@ -100,10 +101,11 @@ function centerLine(title, styleType) {
 }
 
 function nameLine(label, name) {
+  let leader = (prefs.get(prefs.leaderChar) || " .").repeat(100);
   return (
     <div class={style.line}>
       <span class={style.left}>{label}</span>
-      <span class={style.dots} />
+      <span leader={leader} class={style.dots} />
       <span class={style.right}>{name}</span>
     </div>
   );

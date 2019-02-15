@@ -1,6 +1,8 @@
 var prefs = {
   currentDraft: "current-draft",
   recents: "recents",
+  leaderChar: "leader-char",
+  themeColor: "theme-color",
 
   get: function(key) {
     let dataString;

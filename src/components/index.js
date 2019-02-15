@@ -58,8 +58,8 @@ const Alert = ({ text }) => (
   </div>
 );
 
-function PopupMenu({ title, items, handler, isButton }) {
-  const menuId = "menu" + Math.floor(Math.random() * 1000000);
+function PopupMenu({ title, items, menuId, handler, isButton }) {
+  menuId = menuId || "menu" + Math.floor(Math.random() * 1000000);
   return (
     <div class="w3-dropdown-click">
       <div
@@ -128,4 +128,29 @@ let loader = {
   hide: () => showLoader("none")
 };
 
-export { Header, Page, Alert, PopupMenu, ToolbarButton, loader };
+function setThemeColor(color) {
+  let href = `https://www.w3schools.com/lib/w3-theme-${color}.css`;
+  let cssId = "myCss";
+  let link = document.getElementById(cssId);
+  if (!link) {
+    let head = document.getElementsByTagName("head")[0];
+    link = document.createElement("link");
+    link.id = cssId;
+    link.rel = "stylesheet";
+    link.type = "text/css";
+    link.media = "all";
+    head.appendChild(link);
+  }
+  link.href = href;
+}
+
+export {
+  Header,
+  Page,
+  Alert,
+  PopupMenu,
+  ToolbarButton,
+  loader,
+  toggleMenu,
+  setThemeColor
+};

@@ -430,7 +430,7 @@ export default class EditorView extends Component {
     const index = data.indexOf(item);
     const toolbar = (
       <div
-        class="w3-theme-d1 w3-margin-top"
+        class="w3-theme-d1 w3-margin-top w3-round w3-card-2"
         style={{
           display: "flex",
           justifyContent: "space-around"
@@ -494,7 +494,7 @@ export default class EditorView extends Component {
     const isSection = true;
     const toolbar = (
       <div
-        class="w3-theme-d1 w3-margin-top"
+        class="w3-theme-d1 w3-margin-top w3-round w3-card"
         style={{
           display: "flex",
           justifyContent: "space-around"
