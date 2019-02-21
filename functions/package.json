@@ -9,9 +9,11 @@
     "logs": "firebase functions:log"
   },
   "dependencies": {
+    "@google/maps": "^0.5.5",
     "firebase": "^5.8.2",
     "firebase-admin": "~7.0.0",
-    "firebase-functions": "^2.2.0"
+    "firebase-functions": "^2.2.0",
+    "geofire": "^4.1.2"
   },
   "private": true
 }

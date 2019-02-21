@@ -33,7 +33,7 @@ const Header = ({ title }) => (
     }}
   >
     <div class="w3-bar w3-content w3-theme-d2 w3-display-container">
-      {location.pathname != "/" && (
+      {(location.pathname != "/" || location.hash) && (
         <button
           class="icon-left-open w3-display-left w3-btn"
           onClick={() => history.back()}

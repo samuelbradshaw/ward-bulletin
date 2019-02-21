@@ -1,5 +1,6 @@
 import { h, Component } from "preact";
 import { Router } from "preact-router";
+import Match from "preact-router/match";
 import Helmet from "preact-helmet";
 
 // Code-splitting is automated for routes
@@ -37,8 +38,7 @@ export default class App extends Component {
           <Editor path="/editor/" />
           <Locate path="/locate/" />
           <Search path="/search/" />
-          <Bulletin path="/bulletin/" />
-          <Bulletin path="/:unit" />
+          <Bulletin path="/#/:unit" />
         </Router>
       </div>
     );

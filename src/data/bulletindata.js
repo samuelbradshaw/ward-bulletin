@@ -9,8 +9,9 @@
 
 */
 
-const baseURL = "https://us-central1-ward-bulletin-9b31d.cloudfunctions.net"; // production
-// const baseURL = "http://localhost:5000/ward-bulletin-9b31d/us-central1";  // development
+// const baseURL = "https://us-central1-ward-bulletin-9b31d.cloudfunctions.net"; // production
+const baseURL = "http://localhost:5000/ward-bulletin-9b31d/us-central1"; // development
+const LOC_RADIUS = 3; // in kms
 
 const initialBulletinData = {
   settings: {
@@ -202,6 +203,25 @@ const locations = [
   { id: "greenward", name: "Green Ward" }
 ];
 
+// convert ward list into {id, name} format
+function wardList(data, extra) {
+  let wards = [];
+  Object.keys(data).map(key => {
+    let ward = {
+      id: key,
+      name: data[key].name
+    };
+    if (extra) ward[extra] = data[key][extra];
+    wards.push(ward);
+  });
+  return wards;
+}
+
+// get firebase database url
+function getFirebaseURL() {
+  return "https://ward-bulletin-9b31d.firebaseio.com";
+}
+
 let BulletinData = {
   // get initial bulletin data for new account
   getInitialData: function() {
@@ -231,24 +251,27 @@ let BulletinData = {
   },
 
   // find bulletins at location
-  getBulletinsAtLocation: function(lat, long) {
-    return new Promise(resolve =>
-      setTimeout(resolve, 200, [{ id: "greenward", name: "Green Ward" }])
-    );
+  getBulletinsAtLocation: function(lat, lng) {
+    let geospatial = require("./geospatial");
+    return geospatial.getWardsAtLocation([lat, lng], LOC_RADIUS).then(data => {
+      let wards = wardList(data, "l");
+      let center = [lat, lng];
+      // sort by distance
+      wards.sort(
+        (a, b) =>
+          geospatial.distance(center, a.l) - geospatial.distance(center, b.l)
+      );
+      return wards;
+    });
   },
 
   // search for bulletins by name
-  searchBulletins: function(searchTerm) {
-    let wards = [];
-    searchTerm = searchTerm.toLowerCase();
-    for (let ward of locations) {
-      if (ward.name.toLowerCase().startsWith(searchTerm)) {
-        wards.push(ward);
-      }
-    }
-    return new Promise(resolve =>
-      setTimeout(resolve, 700, { wards, complete: true })
-    );
+  searchBulletins: function(search, limit) {
+    let url = `${getFirebaseURL()}/units.json?orderBy="searchname"&startAt="${search}"&endAt="${search}z"&limitToFirst=${limit}`;
+    return fetch(url).then(response => {
+      // console.log("Response", response.json());
+      return response.json().then(data => wardList(data, "searchname"));
+    });
   }
 };
 

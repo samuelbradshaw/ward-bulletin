@@ -1,4 +1,5 @@
 import { h, Component } from "preact";
+import { route } from "preact-router";
 import { Page } from "../../components";
 import prefs from "../../data/prefs";
 import {
@@ -7,33 +8,43 @@ import {
   toggleMenu,
   setThemeColor
 } from "../../components";
+import Bulletin from "../bulletin";
 
 const Home = () => {
+  let hash = location.hash;
+  if (hash.startsWith("#")) {
+    // if url path is /#/:unit, show bulletin
+    let unit = hash.replace("#/", "");
+    return <Bulletin unit={unit} />;
+  }
+
   let recents = prefs.get(prefs.recents);
   return (
     <Page title="Ward Bulletin App">
-      <div class="fullheight w3-white w3-container">
+      <div class="w3-white w3-container" style={{ paddingBottom: "300px" }}>
         <h5>Find Ward Bulletin</h5>
         <div class="w3-card w3-container">
           <p>
             View your bulletin by using your current location to find the
             closest bulletins or search using the name of your ward.
           </p>
-          <div class="w3-margin">
-            <button
-              class="w3-btn w3-theme-d2 w3-round"
-              onClick={() => (location.href = "/locate")}
-            >
-              Find by Location
-            </button>
-          </div>
-          <div class="w3-margin">
-            <button
-              class="w3-btn w3-theme-d2 w3-round"
-              onClick={() => (location.href = "/search")}
-            >
-              Search by Name
-            </button>
+          <div class="w3-row">
+            <div class="w3-quarter w3-section w3-center">
+              <button
+                class="w3-btn w3-theme-d2 w3-round"
+                onClick={() => route("/locate")}
+              >
+                Find by Location
+              </button>
+            </div>
+            <div class="w3-quarter w3-section w3-center">
+              <button
+                class="w3-btn w3-theme-d2 w3-round"
+                onClick={() => route("/search")}
+              >
+                Search by Name
+              </button>
+            </div>
           </div>
         </div>
 
@@ -43,12 +54,14 @@ const Home = () => {
             <div class="w3-card w3-container">
               <ul class="w3-ul w3-margin-bottom">
                 {recents.map(ward => (
-                  <li
-                    class="w3-white w3-btn w3-round"
-                    onClick={() => (location.href = `/${ward.id}`)}
-                  >
-                    {ward.name}
-                  </li>
+                  <div class="w3-quarter w3-section w3-center">
+                    <button
+                      class="w3-btn w3-theme-d2 w3-round"
+                      onClick={() => route(`/#/${ward.id}`)}
+                    >
+                      {ward.name}
+                    </button>
+                  </div>
                 ))}
               </ul>
             </div>
@@ -61,10 +74,10 @@ const Home = () => {
             If you are a bulletin editor for your ward, login or create a new
             account to edit your ward bulletin.
           </p>
-          <div class="w3-margin">
+          <div class="w3-quarter w3-section w3-center">
             <button
               class="w3-btn w3-theme-d2 w3-round"
-              onClick={() => (location.href = "/editor")}
+              onClick={() => route("/editor")}
             >
               Edit Bulletin
             </button>
@@ -115,9 +128,9 @@ class LeaderMenu extends Component {
 
 const ColorMenu = () => {
   const colorsArray = [
+    ["blue", "#2196F3"],
     ["amber", "#ffc107"],
     // ["aqua", "#00ffff"],
-    ["blue", "#2196F3"],
     ["light-blue", "#87CEEB"],
     ["brown", "#795548"],
     ["cyan", "#00bcd4"],

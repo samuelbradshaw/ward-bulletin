@@ -11,12 +11,6 @@ export default class Search extends Component {
     complete: false
   };
 
-  getSearchData(searchTerm) {
-    let wards = BulletinData.searchBulletins(searchTerm).then(wards =>
-      this.setState({ wards })
-    );
-  }
-
   render({}, { wards }) {
     let content = (
       <div>
@@ -45,19 +39,25 @@ export default class Search extends Component {
       if (searchWards && complete && value.startsWith(searchTerm)) {
         // filter existing wards
         let wards = searchWards.filter(ward =>
-          ward.name.toLowerCase().startsWith(value)
+          ward.searchname.startsWith(value)
         );
         this.setState({ wards });
       } else {
         // need to search for ward list
-        BulletinData.searchBulletins(value).then(({ wards, complete }) =>
-          this.setState({
-            wards,
-            searchWards: wards,
-            searchTerm: value,
-            complete
+        const limit = 20;
+        BulletinData.searchBulletins(value, limit)
+          .then(wards => {
+            const complete = wards.length < limit;
+            this.setState({
+              wards,
+              searchWards: wards,
+              searchTerm: value,
+              complete
+            });
           })
-        );
+          .catch(error => {
+            console.log("Search error:", error);
+          });
       }
     } else {
       // wait for at least 3 characters

@@ -7,25 +7,39 @@ import prefs from "../../data/prefs";
 
 export default class Bulletin extends Component {
   state = {
-    data: null
+    data: null,
+    error: null
   };
 
   // gets called when this route is navigated to
   componentDidMount() {
     let unit = this.props.unit;
     // get data
-    BulletinData.getBulletin(unit).then(data => {
-      this.addRecent(unit, data);
-      this.setState({ data });
-    });
+    BulletinData.getBulletin(unit)
+      .then(data => {
+        this.addRecent(unit, data);
+        this.setState({ data });
+      })
+      .catch(error => {
+        this.setState({ error });
+      });
   }
 
   // Note: `user` comes from the URL, courtesy of our router
-  render({ unit }, { data }) {
+  render({ unit }, { data, error }) {
     if (data) {
       return (
         <Page title={data.settings.name}>
           <BulletinView data={data} />
+        </Page>
+      );
+    } else if (error) {
+      return (
+        <Page title="Ward Bulletin">
+          <div class="w3-panel w3-pale-red">
+            <h4>Error</h4>
+            <p>{error.toString()}</p>
+          </div>
         </Page>
       );
     } else {
