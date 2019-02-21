@@ -161,6 +161,12 @@
       "css": "logout",
       "code": 59406,
       "src": "fontawesome"
+    },
+    {
+      "uid": "a73c5deb486c8d66249811642e5d719a",
+      "css": "arrows-cw",
+      "code": 59407,
+      "src": "fontawesome"
     }
   ]
 }

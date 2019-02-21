@@ -1,5 +1,9 @@
 var prefs = {
-  currentDraft: "current-draft",
+  cacheBulletin: "cache-bulletin",
+  cacheDate: "cache-date",
+  cacheId: "cache-id",
+  draftBulletin: "draft-bulletin",
+  draftId: "draft-id",
   recents: "recents",
   leaderChar: "leader-char",
   themeColor: "theme-color",

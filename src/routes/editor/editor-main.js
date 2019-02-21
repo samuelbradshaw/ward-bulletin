@@ -13,19 +13,24 @@ export default class EditorMain extends Component {
   // gets called when this route is navigated to
   componentDidMount() {
     // get data
-    let data = prefs.get(prefs.currentDraft);
-    if (data) {
-      // use current draft
+    let unit = this.props.unit;
+
+    // look for cached draft
+    let data = prefs.get(prefs.draftBulletin);
+    if (data && prefs.get(prefs.draftId === unit)) {
+      // use cached draft
       this.setState({ data });
     } else {
-      BulletinData.getBulletin(this.props.unit)
+      // download bulletin
+      BulletinData.getBulletin(unit)
         .then(data => {
           if (data.status) {
             // an error happened. return initial data
             data = BulletinData.getInitialData();
           }
           this.setState({ data });
-          prefs.set(prefs.currentDraft, data);
+          prefs.set(prefs.draftBulletin, data);
+          prefs.set(prefs.draftId, unit);
         })
         .catch(function(error) {
           console.log("error:", error);
@@ -180,7 +185,7 @@ export default class EditorMain extends Component {
     this.setState(data);
 
     // save in local storage
-    prefs.set(prefs.currentDraft, data);
+    prefs.set(prefs.draftBulletin, data);
   }
 
   undo() {

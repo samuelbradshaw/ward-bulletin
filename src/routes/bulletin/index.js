@@ -14,22 +14,38 @@ export default class Bulletin extends Component {
   // gets called when this route is navigated to
   componentDidMount() {
     let unit = this.props.unit;
-    // get data
-    BulletinData.getBulletin(unit)
-      .then(data => {
-        this.addRecent(unit, data);
-        this.setState({ data });
-      })
-      .catch(error => {
-        this.setState({ error });
-      });
+
+    // try for cached bulletin
+    let data = prefs.get(prefs.cacheBulletin);
+    let today = new Date().toLocaleDateString();
+    if (
+      data &&
+      today === prefs.get(prefs.cacheDate) &&
+      unit === prefs.get(prefs.cacheId)
+    ) {
+      // use cache
+      this.setState({ data });
+    } else {
+      // get data
+      this.reload(unit);
+    }
   }
 
   // Note: `user` comes from the URL, courtesy of our router
   render({ unit }, { data, error }) {
     if (data) {
+      let rightControl = (
+        <button
+          class="icon-arrows-cw w3-display-right w3-btn"
+          onClick={e => {
+            this.setState({ data: null });
+            this.reload(unit);
+            e.stopPropagation();
+          }}
+        />
+      );
       return (
-        <Page title={data.settings.name}>
+        <Page title={data.settings.name} rightControl={rightControl}>
           <BulletinView data={data} />
         </Page>
       );
@@ -61,5 +77,21 @@ export default class Bulletin extends Component {
     recents = recents.filter(item => item.id !== unit);
     recents.unshift({ id: unit, name: data.settings.name });
     prefs.set(prefs.recents, recents);
+  }
+
+  reload(unit) {
+    let today = new Date().toLocaleDateString();
+    BulletinData.getBulletin(unit)
+      .then(data => {
+        this.addRecent(unit, data);
+        this.setState({ data });
+        // cache
+        prefs.set(prefs.cacheBulletin, data);
+        prefs.set(prefs.cacheDate, today);
+        prefs.set(prefs.cacheId, unit);
+      })
+      .catch(error => {
+        this.setState({ error });
+      });
   }
 }

@@ -22,7 +22,7 @@ const Loader = ({ showLoader, message }) => {
   );
 };
 
-const Header = ({ title }) => (
+const Header = ({ title, rightControl }) => (
   <header
     class=""
     style={{
@@ -40,13 +40,14 @@ const Header = ({ title }) => (
         />
       )}
       <h3 class="w3-center">{title}</h3>
+      {rightControl && <div class="w3-right">{rightControl}</div>}
     </div>
   </header>
 );
 
-const Page = ({ title, children, showLoader, message }) => (
+const Page = ({ title, children, showLoader, message, rightControl }) => (
   <div class="fullheight" style={{ paddingTop: "56px" }}>
-    <Header title={title} />
+    <Header title={title} rightControl={rightControl} />
     <div class="w3-content fullheight">{children}</div>
     <Loader showLoader={showLoader} message={message} />
   </div>
