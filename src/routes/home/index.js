@@ -55,12 +55,12 @@ const Home = () => {
               <ul class="w3-ul w3-margin-bottom">
                 {recents.map(ward => (
                   <div class="w3-quarter w3-section w3-center">
-                    <button
-                      class="w3-btn w3-theme-d2 w3-round"
+                    <span
+                      class="w3-btn w3-border-bottom w3-border-theme w3-padding"
                       onClick={() => route(`/#/${ward.id}`)}
                     >
                       {ward.name}
-                    </button>
+                    </span>
                   </div>
                 ))}
               </ul>
@@ -108,20 +108,17 @@ class LeaderMenu extends Component {
   };
 
   render({}, { leaderChar }) {
-    let title = `Dots (${leaderChar.trim() ? leaderChar.repeat(4) : "None"})`;
+    let title = `Dots ${leaderChar.trim() ? leaderChar.repeat(3) : ""}`;
     let items = [[".", " ."], ["-", " -"], ["None", "  "]];
     return (
-      <div class="w3-margin-left">
-        <PopupMenu
-          title={title}
-          items={items}
-          handler={leaderChar => {
-            prefs.set(prefs.leaderChar, leaderChar);
-            this.setState({ leaderChar });
-          }}
-          isButton
-        />
-      </div>
+      <PopupMenu
+        title={title}
+        items={items}
+        handler={leaderChar => {
+          prefs.set(prefs.leaderChar, leaderChar);
+          this.setState({ leaderChar });
+        }}
+      />
     );
   }
 }

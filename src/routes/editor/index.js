@@ -45,7 +45,9 @@ export default class Editor extends Component {
           return (
             <Page title="Create New Account">
               <UnitForm
-                done={(wardName, wardId) => this.newAccount(wardName, wardId)}
+                done={(wardName, wardAddress, wardId) =>
+                  this.newAccount(wardName, wardAddress, wardId)
+                }
               />
             </Page>
           );
@@ -75,22 +77,33 @@ export default class Editor extends Component {
     }
   }
 
-  newAccount(wardName, wardId) {
-    // get initial data and publish it
-    let data = BulletinData.getInitialData();
-    data.settings.name = wardName;
-    BulletinData.saveBulletin(wardId, data)
+  newAccount(wardName, wardAddress, wardId) {
+    // save new user
+    BulletinData.addUnit(wardId, wardName, wardAddress)
       .then(() => {
-        // set ward id as user display name
-        var user = firebase.auth().currentUser;
-        user
-          .updateProfile({
-            displayName: wardId
-          })
+        // get initial data and publish it
+        let data = BulletinData.getInitialData();
+        data.settings.name = wardName;
+        data.settings.address = wardAddress;
+        BulletinData.saveBulletin(wardId, data)
           .then(() => {
-            // Ready!
-            prefs.set(prefs.currentDraft, data);
-            this.setState({ status: "loggedin" });
+            // set ward id as user display name
+            var user = firebase.auth().currentUser;
+            user
+              .updateProfile({
+                displayName: wardId
+              })
+              .then(() => {
+                // Ready!
+                prefs.set(prefs.currentDraft, data);
+                this.setState({ status: "loggedin" });
+              })
+              .catch(error => {
+                // An error happened.
+                this.error = error;
+                this.setState({ status: "error" });
+                console.log(error);
+              });
           })
           .catch(error => {
             // An error happened.
@@ -100,10 +113,8 @@ export default class Editor extends Component {
           });
       })
       .catch(error => {
-        // An error happened.
         this.error = error;
         this.setState({ status: "error" });
-        console.log(error);
       });
     this.message = "Setting Up Account";
     this.setState({ status: "checking" });
@@ -112,25 +123,25 @@ export default class Editor extends Component {
 
 class UnitForm extends Component {
   wardName = "";
+  wardAddress = "";
   wardId = "";
   state = { enableButton: false };
 
   render() {
     return (
-      <form class="w3-container w3-card-4 w3-light-grey">
+      <div class="w3-container w3-card-4 w3-light-grey">
         <h3>Create Ward Bulletin Account</h3>
         <p>
-          Enter the name of the ward and a ward ID to identify this ward. The ID
-          must be at least 6 characters and may consist of letters and numbers
-          with no spaces. Ward ID examples: pv23ward, biglake, east-side
+          Enter the name and address of the ward and a ward ID to identify this
+          ward. The ID must be at least 6 characters and may consist of letters
+          and numbers with no spaces. Ward ID examples: pv23ward, biglake,
+          east-side
         </p>
 
         <p>
           <label>Ward Name</label>
           <input
-            id="ward-name-input"
             class="w3-input w3-border"
-            name="ward-name"
             type="text"
             onInput={e => {
               this.wardName = e.target.value;
@@ -140,11 +151,21 @@ class UnitForm extends Component {
         </p>
 
         <p>
+          <label>Church Address</label>
+          <input
+            class="w3-input w3-border"
+            type="text"
+            onInput={e => {
+              this.wardAddress = e.target.value;
+              this.setButtonStatus();
+            }}
+          />
+        </p>
+
+        <p>
           <label>Ward ID</label>
           <input
-            id="ward-name-input"
             class="w3-input w3-border"
-            name="ward-id"
             type="text"
             onInput={e => this.validateId(e.target)}
           />
@@ -155,14 +176,14 @@ class UnitForm extends Component {
             "w3-btn w3-theme w3-section" +
             (this.state.enableButton ? "" : " w3-disabled")
           }
-          onClick={() => {
-            this.props.done(this.wardName, this.wardId);
-            return;
+          onClick={e => {
+            e.stopPropagation();
+            this.props.done(this.wardName, this.wardAddress, this.wardId);
           }}
         >
           Done
         </button>
-      </form>
+      </div>
     );
   }
 
@@ -177,7 +198,10 @@ class UnitForm extends Component {
   }
 
   setButtonStatus() {
-    let enableButton = this.wardId.length >= 6 && this.wardName.length;
+    let enableButton =
+      this.wardId.length >= 6 &&
+      this.wardName.length &&
+      this.wardAddress.length;
     this.setState({ enableButton });
   }
 }

@@ -157,3 +157,7 @@ body {
   height: 80px;
   animation: spin 2s linear infinite;
 }
+
+.padding-tiny {
+  padding: 2px 4px !important;
+}

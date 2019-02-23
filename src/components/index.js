@@ -29,24 +29,30 @@ const Header = ({ title, rightControl }) => (
       opacity: 0.9,
       position: "fixed",
       top: "0px",
-      width: "100%"
+      width: "100%",
+      height: "44px"
     }}
   >
-    <div class="w3-bar w3-content w3-theme-d2 w3-display-container">
+    <div
+      class="w3-bar w3-content w3-theme-d2 w3-display-container"
+      style={{ height: "44px" }}
+    >
       {(location.pathname != "/" || location.hash) && (
         <button
           class="icon-left-open w3-display-left w3-btn"
           onClick={() => history.back()}
         />
       )}
-      <h3 class="w3-center">{title}</h3>
+      <h3 class="w3-center" style={{ margin: 0 }}>
+        {title}
+      </h3>
       {rightControl && <div class="w3-right">{rightControl}</div>}
     </div>
   </header>
 );
 
 const Page = ({ title, children, showLoader, message, rightControl }) => (
-  <div class="fullheight" style={{ paddingTop: "56px" }}>
+  <div class="fullheight" style={{ paddingTop: "44px" }}>
     <Header title={title} rightControl={rightControl} />
     <div class="w3-content fullheight">{children}</div>
     <Loader showLoader={showLoader} message={message} />
@@ -62,7 +68,7 @@ const Alert = ({ text }) => (
 function PopupMenu({ title, items, menuId, handler, isButton }) {
   menuId = menuId || "menu" + Math.floor(Math.random() * 1000000);
   return (
-    <div class="w3-dropdown-click">
+    <div class="w3-theme-d2 w3-dropdown-click w3-padding-small w3-round">
       <div
         onClick={e => {
           toggleMenu(menuId);

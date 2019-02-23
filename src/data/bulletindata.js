@@ -10,7 +10,8 @@
 */
 
 const baseURL = "https://us-central1-ward-bulletin-9b31d.cloudfunctions.net"; // production
-// const baseURL = "http://localhost:5000/ward-bulletin-9b31d/us-central1"; // development
+// const baseURL =
+("http://localhost.charlesproxy.com:5000/ward-bulletin-9b31d/us-central1"); // development
 const LOC_RADIUS = 3; // in kms
 
 const initialBulletinData = {
@@ -241,13 +242,15 @@ let BulletinData = {
 
   // save bulletin
   saveBulletin: function(unit, data) {
-    return fetch(baseURL + "/setBulletin?id=" + unit, {
+    let url = `${baseURL}/setBulletin?id=${unit}`;
+    return fetch(url, {
       method: "POST",
+      body: JSON.stringify(data),
       headers: {
         "Content-Type": "application/json"
       },
-      body: JSON.stringify(data) // body data type must match "Content-Type" header
-    }).then(response => response.json());
+      mode: "no-cors"
+    });
   },
 
   // find bulletins at location
@@ -271,6 +274,22 @@ let BulletinData = {
     return fetch(url).then(response => {
       // console.log("Response", response.json());
       return response.json().then(data => wardList(data, "searchname"));
+    });
+  },
+
+  addUnit: function(id, name, address) {
+    let regex = /[ \.]/gi;
+    let searchname = name.toLowerCase().replace(regex, "");
+    let url = `${baseURL}/addUnit`;
+    let data = { id, name, address, searchname };
+
+    return fetch(url, {
+      method: "POST",
+      body: JSON.stringify(data),
+      headers: {
+        "Content-Type": "application/json"
+      },
+      mode: "no-cors"
     });
   }
 };

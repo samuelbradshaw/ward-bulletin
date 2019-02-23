@@ -17,7 +17,7 @@ export default class EditorMain extends Component {
 
     // look for cached draft
     let data = prefs.get(prefs.draftBulletin);
-    if (data && prefs.get(prefs.draftId === unit)) {
+    if (data && prefs.get(prefs.draftId) === unit) {
       // use cached draft
       this.setState({ data });
     } else {

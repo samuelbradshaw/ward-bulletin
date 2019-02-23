@@ -2,6 +2,7 @@ const functions = require("firebase-functions");
 
 // hello world demo
 exports.helloWorld = functions.https.onRequest((req, res) => {
+  setupCORS(res);
   res.send("Hello from Firebase!");
 });
 
@@ -11,12 +12,12 @@ exports.helloWorld = functions.https.onRequest((req, res) => {
 
 // get bulletin
 exports.getBulletin = functions.https.onRequest((req, res) => {
+  setupCORS(res);
   let id = req.query.id;
   if (!id) {
     res.status(400).send("Missing unit id");
     return;
   }
-  setupCORS(res);
   let db = getFirestore();
   var docRef = db.collection("bulletins").doc(id);
   return docRef
@@ -35,6 +36,7 @@ exports.getBulletin = functions.https.onRequest((req, res) => {
 
 // set bulletin
 exports.setBulletin = functions.https.onRequest((req, res) => {
+  setupCORS(res);
   let id = req.query.id;
   if (!id) {
     res.status(400).send("Missing unit id");
@@ -45,9 +47,12 @@ exports.setBulletin = functions.https.onRequest((req, res) => {
     res.status(400).send("Missing body");
     return;
   }
+  if (typeof body === "string") {
+    // body didn't get converted to JSON object
+    body = JSON.parse(body);
+  }
   let db = getFirestore();
   var docRef = db.collection("bulletins").doc(id);
-  setupCORS(res);
 
   return docRef
     .set(body)
@@ -65,12 +70,17 @@ exports.setBulletin = functions.https.onRequest((req, res) => {
 
 // add ward
 exports.addUnit = functions.https.onRequest((req, res) => {
-  let { id, name, address, searchname } = req.query;
+  setupCORS(res);
+  let body = req.body;
+  if (typeof body === "string") {
+    // body didn't get converted to JSON object
+    body = JSON.parse(body);
+  }
+  let { id, name, address, searchname } = body;
   if (!id || !name || !address || !searchname) {
     res.status(400).send("Missing parameter");
     return;
   }
-  setupCORS(res);
 
   // geocode address
   console.log("Geocode:", address);

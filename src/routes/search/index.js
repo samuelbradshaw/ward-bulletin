@@ -33,7 +33,8 @@ export default class Search extends Component {
   }
 
   updateSearch(target) {
-    let value = target.value.toLowerCase();
+    let regex = /[ \.]/gi;
+    let value = target.value.toLowerCase().replace(regex, "");
     let { searchWards, searchTerm, complete } = this.state;
     if (value.length >= 3) {
       if (searchWards && complete && value.startsWith(searchTerm)) {

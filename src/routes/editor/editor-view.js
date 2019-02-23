@@ -163,12 +163,12 @@ export default class EditorView extends Component {
       case "title":
         content = (
           <div class="w3-row">
-            <div class="w3-col w3-right leftmargin" style="width:44px">
+            <div class="w3-col w3-right leftmargin" style="width:60px">
               <label class={`${style.label} w3-block`}>Style</label>
               {this.styleMenu(item.style, index, section)}
             </div>
 
-            <div class="w3-col w3-right leftmargin" style="width:44px">
+            <div class="w3-col w3-right leftmargin" style="width:60px">
               <label class={`${style.label} w3-block`}>Align</label>
               {this.alignMenu(item.align, index, section)}
             </div>
