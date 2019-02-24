@@ -4,6 +4,7 @@ import BulletinData from "../../data/bulletindata";
 import { Page } from "../../components";
 import BulletinView from "./bulletin-view";
 import prefs from "../../data/prefs";
+import Settings from "./settings";
 
 export default class Bulletin extends Component {
   state = {
@@ -35,18 +36,34 @@ export default class Bulletin extends Component {
   render({ unit }, { data, error }) {
     if (data) {
       let rightControl = (
-        <button
-          class="icon-arrows-cw w3-display-right w3-btn"
-          onClick={e => {
-            this.setState({ data: null });
-            this.reload(unit);
-            e.stopPropagation();
-          }}
-        />
+        <span class="w3-display-right">
+          <button
+            class="icon-cog w3-btn"
+            onClick={e => {
+              document.getElementById("settings-modal").style.display = "block";
+              e.stopPropagation();
+            }}
+          />
+          <button
+            class="icon-arrows-cw w3-btn"
+            onClick={e => {
+              this.setState({ data: null });
+              this.reload(unit);
+              e.stopPropagation();
+            }}
+          />
+        </span>
       );
       return (
         <Page title={data.settings.name} rightControl={rightControl}>
           <BulletinView data={data} />
+          <div id="settings-modal" class="w3-modal">
+            <div class="w3-modal-content w3-animate-top w3-card-4">
+              <div class="w3-container">
+                <Settings update={() => this.setState({ data })} />
+              </div>
+            </div>
+          </div>
         </Page>
       );
     } else if (error) {
