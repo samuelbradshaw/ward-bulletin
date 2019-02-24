@@ -68,7 +68,7 @@ const Alert = ({ text }) => (
 function PopupMenu({ title, items, menuId, handler, isButton }) {
   menuId = menuId || "menu" + Math.floor(Math.random() * 1000000);
   return (
-    <div class="w3-theme-d2 w3-dropdown-click w3-padding-small w3-round">
+    <div class="w3-dropdown-click w3-padding-small w3-border-theme w3-round w3-border">
       <div
         onClick={e => {
           toggleMenu(menuId);

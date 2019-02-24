@@ -19,6 +19,7 @@ export default class Locate extends Component {
 
       // !! test
       // this.getLocationData(32.9681155, -117.1398259);
+      // return;
 
       navigator.geolocation.getCurrentPosition(
         position => {

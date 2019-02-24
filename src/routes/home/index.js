@@ -31,7 +31,7 @@ const Home = () => {
           <div class="w3-row">
             <div class="w3-quarter w3-section w3-center">
               <button
-                class="w3-btn w3-theme-d2 w3-round"
+                class="w3-btn w3-border-theme w3-round w3-border"
                 onClick={() => route("/locate")}
               >
                 Find by Location
@@ -39,7 +39,7 @@ const Home = () => {
             </div>
             <div class="w3-quarter w3-section w3-center">
               <button
-                class="w3-btn w3-theme-d2 w3-round"
+                class="w3-btn w3-border-theme w3-round w3-border"
                 onClick={() => route("/search")}
               >
                 Search by Name
@@ -56,7 +56,8 @@ const Home = () => {
                 {recents.map(ward => (
                   <div class="w3-quarter w3-section w3-center">
                     <span
-                      class="w3-btn w3-border-bottom w3-border-theme w3-padding"
+                      class="w3-btn w3-border-bottom w3-border-theme"
+                      style={{ padding: 0 }}
                       onClick={() => route(`/#/${ward.id}`)}
                     >
                       {ward.name}
@@ -76,7 +77,7 @@ const Home = () => {
           </p>
           <div class="w3-quarter w3-section w3-center">
             <button
-              class="w3-btn w3-theme-d2 w3-round"
+              class="w3-btn w3-border-theme w3-round w3-border"
               onClick={() => route("/editor")}
             >
               Edit Bulletin
