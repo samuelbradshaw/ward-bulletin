@@ -58,9 +58,10 @@ export default class Bulletin extends Component {
         <Page title={data.settings.name} rightControl={rightControl}>
           <BulletinView data={data} />
           <div id="settings-modal" class="w3-modal">
-            <div class="w3-modal-content w3-animate-top w3-card-4">
+            <div class="w3-modal-content w3-animate-top w3-card-4  w3-round">
               <div class="w3-container">
                 <Settings update={() => this.setState({ data })} />
+                <p />
               </div>
             </div>
           </div>

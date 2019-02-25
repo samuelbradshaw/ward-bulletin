@@ -5,6 +5,7 @@ import BulletinView from "../bulletin/bulletin-view";
 import EditorView from "./editor-view";
 import prefs from "../../data/prefs";
 import { logout } from "../../data/firebase";
+import Help from "./help";
 
 export default class EditorMain extends Component {
   state = { data: null };
@@ -40,8 +41,18 @@ export default class EditorMain extends Component {
 
   render({}, { data }) {
     if (data) {
+      let rightControl = (
+        <button
+          class="icon-help-circled w3-btn w3-display-right"
+          onClick={e => {
+            document.getElementById("help-modal").style.display = "block";
+            e.stopPropagation();
+          }}
+        />
+      );
+
       return (
-        <Page title="Editor">
+        <Page title="Editor" rightControl={rightControl}>
           <div class="fullheight" style={{ paddingBottom: "44px" }}>
             <div
               class="w3-row-padding w3-half fullheight w3-border"
@@ -99,16 +110,16 @@ export default class EditorMain extends Component {
                 <i class="icon-logout" />
                 Logout
               </button>
-              <button
-                onClick={e => {
-                  e.stopPropagation();
-                }}
-                class="w3-bar-item w3-btn"
-              >
-                <i class="icon-help-circled" />
-                Help
-              </button>
             </Footer>
+          </div>
+
+          <div id="help-modal" class="w3-modal">
+            <div class="w3-modal-content w3-animate-top w3-card-4 w3-round">
+              <div class="w3-container">
+                <Help />
+                <p />
+              </div>
+            </div>
           </div>
         </Page>
       );

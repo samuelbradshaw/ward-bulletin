@@ -28,7 +28,8 @@ let createLine = item => {
   let line1 = null;
   let line2 = null;
   let { type, label, name, title } = item;
-  let gapStyle = {};
+  let itemStyle = {};
+  let onClick;
 
   switch (type) {
     case "title":
@@ -42,6 +43,8 @@ let createLine = item => {
     case "hymn":
       line1 = nameLine(label, item.hymn);
       line2 = centerLine(title, "italic");
+      onClick = event => viewHymn(item.uri);
+      itemStyle = { cursor: "pointer" };
       break;
 
     case "music":
@@ -64,12 +67,12 @@ let createLine = item => {
 
     case "gap":
       let gap = item.gap || 1.0;
-      gapStyle = { marginTop: `${gap / 4.0}em` };
+      itemStyle = { marginTop: `${gap / 4.0}em` };
       break;
   }
 
   return (
-    <div class={style.entry} style={gapStyle}>
+    <div class={style.entry} style={itemStyle} onClick={onClick}>
       {line1}
       {line2}
     </div>
@@ -109,4 +112,14 @@ function nameLine(label, name) {
       <span class={style.right}>{name}</span>
     </div>
   );
+}
+
+function viewHymn(uri) {
+  var iOS = navigator.userAgent.match(/(iPad|iPhone|iPod)/g) ? true : false;
+  var Android = navigator.userAgent.match(/Android/g) ? true : false;
+  if (iOS || Android) {
+    window.location.href = `ldsmusic://content/manual/hymns/${uri}`;
+  } else {
+    window.open(`https://www.lds.org/music/library/hymns/${uri}`);
+  }
 }

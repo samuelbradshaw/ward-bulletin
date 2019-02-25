@@ -7,8 +7,6 @@ export default class EditorView extends Component {
   constructor(props) {
     super(props);
     this.handleInputChange = this.handleInputChange.bind(this);
-    // create hymns list
-    this.hymns = { ...hymnList };
     this.startGap = null;
     this.state = {
       selectedItem: null,
@@ -95,7 +93,7 @@ export default class EditorView extends Component {
       event.target.value = 1;
     }
 
-    const title = this.hymns[value];
+    const hymn = hymnList[value.toString()];
     let requests = [
       {
         type: "update",
@@ -106,8 +104,15 @@ export default class EditorView extends Component {
       },
       {
         type: "update",
-        value: title,
+        value: hymn.name,
         attr: "title",
+        index,
+        section
+      },
+      {
+        type: "update",
+        value: hymn.uri,
+        attr: "uri",
         index,
         section
       }
