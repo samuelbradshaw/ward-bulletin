@@ -58,7 +58,7 @@ let createLine = item => {
     case "article":
       let { heading, body } = item;
       line1 = heading && <div class={style.heading}>{heading}</div>;
-      line2 = body;
+      line2 = <div dangerouslySetInnerHTML={{ __html: body }} />;
       break;
 
     case "pagebreak":

@@ -2,6 +2,7 @@ import { h, Component } from "preact";
 import style from "./style";
 import hymnList from "../../assets/hymns";
 import { PopupMenu, ToolbarButton } from "../../components";
+import HTMLEditor from "./html-editor";
 
 export default class EditorView extends Component {
   constructor(props) {
@@ -343,13 +344,19 @@ export default class EditorView extends Component {
               />
             </div>
             <label class={`${style.label}`}>Article</label>
-            <textarea
-              class={`${style.textinput} w3-border w3-round`}
-              rows={4}
-              value={body}
-              onChange={event =>
-                this.handleInputChange(event, index, section, "body")
-              }
+
+            <HTMLEditor
+              html={body}
+              onChange={value => {
+                let props = {
+                  type: "update",
+                  value,
+                  attr: "body",
+                  index,
+                  section
+                };
+                this.props.change(props);
+              }}
             />
           </div>
         );
@@ -395,10 +402,9 @@ export default class EditorView extends Component {
     const selectedStyle = selected ? "w3-border-theme" : "";
     return (
       <li
-        class={`w3-leftbar w3-round topmargin w3-border ${selectedStyle} ${color} w3-white`}
+        class={`toolbar-toggle w3-leftbar w3-round topmargin w3-border ${selectedStyle} ${color} w3-white`}
         onClick={event => {
-          const tag = event.target.tagName.toLowerCase();
-          if (tag != "input" && tag != "select") {
+          if (event.target.classList.contains("toolbar-toggle")) {
             const selectedItem = this.state.selectedItem == item ? null : item; // Toggle selected item
             this.setState({
               selectedItem,
@@ -419,7 +425,7 @@ export default class EditorView extends Component {
           <i
             class={`${
               selected ? "icon-up-circled" : "icon-down-circled"
-            } w3-margin-left w3-large ${
+            } w3-margin-left w3-large toolbar-toggle ${
               this.state.selectedItem == item ? "w3-text-theme" : ""
             }`}
             style={{ alignSelf: "center" }}
@@ -499,7 +505,7 @@ export default class EditorView extends Component {
     const isSection = true;
     const toolbar = (
       <div
-        class="w3-theme-d1 w3-margin-top w3-round w3-card"
+        class="w3-theme-d1 w3-margin-top w3-round w3-card toolbar-toggle"
         style={{
           display: "flex",
           justifyContent: "space-around"
