@@ -4,6 +4,8 @@ import hymnList from "../../assets/hymns";
 import { PopupMenu, ToolbarButton } from "../../components";
 import HTMLEditor from "./html-editor";
 
+let KEY_INDEX = 1;
+
 export default class EditorView extends Component {
   constructor(props) {
     super(props);
@@ -148,7 +150,7 @@ export default class EditorView extends Component {
           </div>
           <i
             class={`${
-              selected ? "icon-up-circled" : "icon-down-circled"
+              selected ? "icon-angle-up" : "icon-angle-down"
             } w3-margin-left w3-large ${
               this.state.selectedSection == section ? "w3-text-theme" : ""
             }`}
@@ -162,7 +164,7 @@ export default class EditorView extends Component {
 
   createLine(item, index, section, selected) {
     let { type, label, name, title } = item;
-    let content = label || title || name || type;
+    let content;
     let color = "";
     let toolbar = selected ? this.itemToolBar(item, section) : null;
     switch (type) {
@@ -397,11 +399,71 @@ export default class EditorView extends Component {
         );
         color = "w3-border-brown";
         break;
+
+      case "event":
+        let { day, weekday, time, event } = item;
+        content = (
+          <div class="w3-cell-row">
+            <div class="w3-cell" style={{ width: "32px" }}>
+              <label class={`${style.label}`}>Day</label>
+              <input
+                class={`${style.textinput} w3-border w3-round`}
+                type="text"
+                placeholder="Day"
+                value={day}
+                onChange={event =>
+                  this.handleInputChange(event, index, section, "day")
+                }
+              />
+            </div>
+            <div class="w3-cell leftpadding" style={{ width: "36px" }}>
+              <label class={`${style.label} w3-block`}>Weekday</label>
+              <input
+                class={`${style.textinput} w3-border w3-round`}
+                type="text"
+                placeholder="Weekday"
+                value={weekday}
+                onChange={event =>
+                  this.handleInputChange(event, index, section, "weekday")
+                }
+              />
+            </div>
+            <div class="w3-cell leftpadding" style={{ width: "72px" }}>
+              <label class={`${style.label} w3-block`}>Time</label>
+              <input
+                class={`${style.textinput} w3-border w3-round`}
+                type="text"
+                placeholder="Time"
+                value={time}
+                onChange={event =>
+                  this.handleInputChange(event, index, section, "time")
+                }
+              />
+            </div>
+            <div class="w3-cell leftpadding" style={{ width: "auto" }}>
+              <label class={`${style.label} w3-block`}>Event</label>
+              <input
+                class={`${style.textinput} w3-border w3-round`}
+                type="text"
+                placeholder="Event"
+                value={event}
+                onChange={event =>
+                  this.handleInputChange(event, index, section, "event")
+                }
+              />
+            </div>
+          </div>
+        );
+        color = "w3-border-purple";
+        break;
     }
 
     const selectedStyle = selected ? "w3-border-theme" : "";
+    KEY_INDEX++;
+
     return (
       <li
+        key={KEY_INDEX.toString()}
         class={`toolbar-toggle w3-leftbar w3-round topmargin w3-border ${selectedStyle} ${color} w3-white`}
         onClick={event => {
           if (event.target.classList.contains("toolbar-toggle")) {
@@ -424,7 +486,7 @@ export default class EditorView extends Component {
           <div style={{ flexGrow: 1 }}>{content}</div>
           <i
             class={`${
-              selected ? "icon-up-circled" : "icon-down-circled"
+              selected ? "icon-angle-up" : "icon-angle-down"
             } w3-margin-left w3-large toolbar-toggle ${
               this.state.selectedItem == item ? "w3-text-theme" : ""
             }`}
@@ -469,7 +531,7 @@ export default class EditorView extends Component {
 
         <ToolbarButton
           title="Up"
-          icon="icon-up-circled"
+          icon="icon-angle-up"
           onClick={e => {
             this.props.update({
               type: "moveUp",
@@ -483,7 +545,7 @@ export default class EditorView extends Component {
 
         <ToolbarButton
           title="Down"
-          icon="icon-down-circled"
+          icon="icon-angle-down"
           onClick={e => {
             this.props.update({
               type: "moveDown",
@@ -538,7 +600,7 @@ export default class EditorView extends Component {
 
         <ToolbarButton
           title="Up"
-          icon="icon-up-circled"
+          icon="icon-angle-up"
           onClick={e => {
             // move section up
             this.props.update({
@@ -554,7 +616,7 @@ export default class EditorView extends Component {
 
         <ToolbarButton
           title="Down"
-          icon="icon-down-circled"
+          icon="icon-angle-down"
           onClick={e => {
             // move section down
             this.props.update({
@@ -580,6 +642,7 @@ export default class EditorView extends Component {
       ["Title", "title"],
       ["Columns", "columns"],
       ["Announcement", "article"],
+      ["Calendar Event", "event"],
       ["Pagebreak", "pagebreak"],
       ["Gap", "gap"]
     ];
@@ -603,6 +666,7 @@ export default class EditorView extends Component {
     let items = [
       ["Program", "program"],
       ["Announcements", "announcements"],
+      ["Calendar", "calendar"],
       ["Leaders", "leaders"],
       ["Missionaries", "missionaries"],
       ["Lessons", "lessons"],
@@ -715,6 +779,10 @@ export default class EditorView extends Component {
 
       case "article":
         item = { heading: "", name: "" };
+        break;
+
+      case "event":
+        item = { day: "", date: "", time: "", event: "" };
         break;
     }
     item.type = type;

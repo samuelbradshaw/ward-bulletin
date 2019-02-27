@@ -161,3 +161,7 @@ body {
 .padding-tiny {
   padding: 2px 4px !important;
 }
+
+.padding-tiny-lr {
+  padding: 0px 4px !important;
+}
