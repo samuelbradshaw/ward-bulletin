@@ -85,6 +85,9 @@ function PopupMenu({ title, items, menuId, handler, isButton }) {
         style={{ minWidth: 0 }}
       >
         {items.map(([title, value]) => {
+          if (title === "-") {
+            return <hr />;
+          }
           return (
             <a
               class="w3-bar-item w3-btn"

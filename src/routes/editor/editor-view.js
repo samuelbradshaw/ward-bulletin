@@ -636,16 +636,25 @@ export default class EditorView extends Component {
 
   addItemMenu(index, section) {
     let items = [
-      ["Person", "name"],
-      ["Hymn", "hymn"],
-      ["Music", "music"],
-      ["Title", "title"],
-      ["Columns", "columns"],
-      ["Announcement", "article"],
-      ["Calendar Event", "event"],
-      ["Pagebreak", "pagebreak"],
-      ["Gap", "gap"]
+      ["Announcement", "article", ["announcements", "information"]],
+      ["Calendar Event", "event", ["calendar"]],
+      ["Person", "name", ["program", "leaders", "missionaries", "classes"]],
+      ["Hymn", "hymn", ["program"]],
+      ["Music", "music", ["program"]],
+      ["Title", "title", ["program", "calendar"]],
+      ["Columns", "columns", ["program"]],
+      ["Pagebreak", "pagebreak", []],
+      ["Gap", "gap", []]
     ];
+
+    let type = section.type;
+
+    // prioritize items for each section
+    let high = items.filter(item => item[2].includes(type));
+    let low = items.filter(item => !item[2].includes(type));
+
+    items = [...high, ["-"], ...low];
+
     let title = (
       <span>
         <i class="icon-plus-circled" />
