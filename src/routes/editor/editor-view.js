@@ -3,6 +3,7 @@ import style from "./style";
 import hymnList from "../../assets/hymns";
 import { PopupMenu, ToolbarButton } from "../../components";
 import HTMLEditor from "./html-editor";
+import prefs from "../../data/prefs";
 
 let KEY_INDEX = 1;
 
@@ -167,22 +168,24 @@ export default class EditorView extends Component {
     let content;
     let color = "";
     let toolbar = selected ? this.itemToolBar(item, section) : null;
+    let showLabels = !prefs.get(prefs.hideLabels);
+
     switch (type) {
       case "title":
         content = (
           <div class="w3-row">
             <div class="w3-col w3-right leftmargin" style="width:60px">
-              <label class={`${style.label} w3-block`}>Style</label>
+              <HidingLabel name="Style" />
               {this.styleMenu(item.style, index, section)}
             </div>
 
             <div class="w3-col w3-right leftmargin" style="width:60px">
-              <label class={`${style.label} w3-block`}>Align</label>
+              <HidingLabel name="Align" />
               {this.alignMenu(item.align, index, section)}
             </div>
 
             <div class="w3-rest">
-              <label class={`${style.label}`}>Title</label>
+              <HidingLabel name="Title" />
               <input
                 class={`${style.textinput} w3-border w3-round`}
                 type="text"
@@ -202,7 +205,7 @@ export default class EditorView extends Component {
         content = (
           <div class="w3-cell-row">
             <div class="w3-cell">
-              <label class={`${style.label}`}>Label</label>
+              <HidingLabel name="Label" />
               <input
                 class={`${style.textinput} w3-border w3-round`}
                 type="text"
@@ -214,7 +217,7 @@ export default class EditorView extends Component {
               />
             </div>
             <div class="w3-cell leftpadding">
-              <label class={`${style.label} w3-block`}>Name</label>
+              <HidingLabel name="Name" />
               <input
                 class={`${style.textinput} w3-border w3-round`}
                 type="text"
@@ -235,7 +238,7 @@ export default class EditorView extends Component {
           <div>
             <div class="w3-row">
               <div class="w3-col w3-right leftmargin" style="width:64px">
-                <label class={`${style.label} w3-block`}>Hymn</label>
+                <HidingLabel name="Hymn" />
                 <input
                   class={`w3-border w3-round ${style.numberinput}`}
                   type="number"
@@ -247,7 +250,7 @@ export default class EditorView extends Component {
                 />
               </div>
               <div class="w3-rest">
-                <label class={`${style.label}`}>Label</label>
+                <HidingLabel name="Label" />
                 <input
                   class={`${style.textinput} w3-border w3-round`}
                   type="text"
@@ -261,7 +264,7 @@ export default class EditorView extends Component {
             </div>
             <div class="w3-cell-row">
               <div class="w3-cell">
-                <label class={`${style.label}`}>Title</label>
+                <HidingLabel name="Title" />
                 <input
                   class={`${style.textinput} w3-border w3-round`}
                   type="text"
@@ -283,7 +286,7 @@ export default class EditorView extends Component {
           <div>
             <div class="w3-cell-row">
               <div class="w3-cell">
-                <label class={`${style.label}`}>Label</label>
+                <HidingLabel name="Label" />
                 <input
                   class={`${style.textinput} w3-border w3-round`}
                   type="text"
@@ -295,7 +298,7 @@ export default class EditorView extends Component {
                 />
               </div>
               <div class="w3-cell leftpadding">
-                <label class={`${style.label} w3-block`}>Name</label>
+                <HidingLabel name="Name" />
                 <input
                   class={`${style.textinput} w3-border w3-round`}
                   type="text"
@@ -309,7 +312,7 @@ export default class EditorView extends Component {
             </div>
             <div class="w3-cell-row">
               <div class="w3-cell">
-                <label class={`${style.label}`}>Title</label>
+                <HidingLabel name="Title" />
                 <input
                   class={`${style.textinput} w3-border w3-round`}
                   type="text"
@@ -334,7 +337,7 @@ export default class EditorView extends Component {
         content = (
           <div>
             <div>
-              <label class={`${style.label}`}>Heading</label>
+              <HidingLabel name="Heading" />
               <input
                 class={`${style.textinput} w3-border w3-round`}
                 type="text"
@@ -345,7 +348,7 @@ export default class EditorView extends Component {
                 }
               />
             </div>
-            <label class={`${style.label}`}>Article</label>
+            <HidingLabel name="Article" />
 
             <HTMLEditor
               html={body}
@@ -366,7 +369,7 @@ export default class EditorView extends Component {
         break;
 
       case "pagebreak":
-        content = <label class={`${style.label}`}>Print Page Break</label>;
+        content = <HidingLabel name="Print" />;
         color = "w3-border-blue";
         break;
 
@@ -377,7 +380,7 @@ export default class EditorView extends Component {
         }
         content = (
           <div>
-            <label class={`${style.label}`}>Gap</label>
+            <HidingLabel name="Gap" />
             <input
               type="range"
               value={gap}
@@ -405,7 +408,7 @@ export default class EditorView extends Component {
         content = (
           <div class="w3-cell-row">
             <div class="w3-cell" style={{ width: "32px" }}>
-              <label class={`${style.label}`}>Day</label>
+              <HidingLabel name="Day" />
               <input
                 class={`${style.textinput} w3-border w3-round`}
                 type="text"
@@ -417,7 +420,7 @@ export default class EditorView extends Component {
               />
             </div>
             <div class="w3-cell leftpadding" style={{ width: "36px" }}>
-              <label class={`${style.label} w3-block`}>Weekday</label>
+              <HidingLabel name="Weekday" />
               <input
                 class={`${style.textinput} w3-border w3-round`}
                 type="text"
@@ -429,7 +432,7 @@ export default class EditorView extends Component {
               />
             </div>
             <div class="w3-cell leftpadding" style={{ width: "72px" }}>
-              <label class={`${style.label} w3-block`}>Time</label>
+              <HidingLabel name="Time" />
               <input
                 class={`${style.textinput} w3-border w3-round`}
                 type="text"
@@ -441,7 +444,7 @@ export default class EditorView extends Component {
               />
             </div>
             <div class="w3-cell leftpadding" style={{ width: "auto" }}>
-              <label class={`${style.label} w3-block`}>Event</label>
+              <HidingLabel name="Event" />
               <input
                 class={`${style.textinput} w3-border w3-round`}
                 type="text"
@@ -824,4 +827,10 @@ export default class EditorView extends Component {
       selectedSection: item
     });
   }
+}
+
+function HidingLabel({ name }) {
+  return prefs.get(prefs.hideLabels) ? null : (
+    <label class={`${style.label} w3-block`}>{name}</label>
+  );
 }

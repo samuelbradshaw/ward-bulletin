@@ -7,6 +7,7 @@ var prefs = {
   recents: "recents",
   leaderChar: "leader-char",
   themeColor: "theme-color",
+  hideLabels: "hide-labels",
 
   get: function(key) {
     let dataString;

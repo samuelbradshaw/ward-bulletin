@@ -38,14 +38,14 @@ export default class Bulletin extends Component {
       let rightControl = (
         <span class="w3-display-right">
           <button
-            class="icon-cog w3-btn"
+            class="icon-cog w3-btn w3-large"
             onClick={e => {
               document.getElementById("settings-modal").style.display = "block";
               e.stopPropagation();
             }}
           />
           <button
-            class="icon-arrows-cw w3-btn"
+            class="icon-arrows-cw w3-btn w3-large"
             onClick={e => {
               this.setState({ data: null });
               this.reload(unit);

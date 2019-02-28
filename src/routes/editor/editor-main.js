@@ -6,9 +6,10 @@ import EditorView from "./editor-view";
 import prefs from "../../data/prefs";
 import { logout } from "../../data/firebase";
 import Help from "./help";
+import Settings from "./settings";
 
 export default class EditorMain extends Component {
-  state = { data: null };
+  state = { data: null, update: 0 };
   undoStack = [];
 
   // gets called when this route is navigated to
@@ -42,13 +43,22 @@ export default class EditorMain extends Component {
   render({}, { data }) {
     if (data) {
       let rightControl = (
-        <button
-          class="icon-help-circled w3-btn w3-display-right"
-          onClick={e => {
-            document.getElementById("help-modal").style.display = "block";
-            e.stopPropagation();
-          }}
-        />
+        <span class="w3-display-right">
+          <button
+            class="icon-cog w3-btn w3-large"
+            onClick={e => {
+              document.getElementById("settings-modal").style.display = "block";
+              e.stopPropagation();
+            }}
+          />
+          <button
+            class="icon-help-circled w3-btn w3-large"
+            onClick={e => {
+              document.getElementById("help-modal").style.display = "block";
+              e.stopPropagation();
+            }}
+          />
+        </span>
       );
 
       return (
@@ -117,6 +127,19 @@ export default class EditorMain extends Component {
             <div class="w3-modal-content w3-animate-top w3-card-4 w3-round">
               <div class="w3-container">
                 <Help />
+                <p />
+              </div>
+            </div>
+          </div>
+
+          <div id="settings-modal" class="w3-modal">
+            <div class="w3-modal-content w3-animate-top w3-card-4 w3-round">
+              <div class="w3-container">
+                <Settings
+                  update={() => {
+                    this.setState({ update: 0 });
+                  }}
+                />
                 <p />
               </div>
             </div>
