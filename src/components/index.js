@@ -79,7 +79,7 @@ const Header = ({ title, rightControl, isHome }) => (
           onClick={() => location.replace("/home")}
         />
       )}
-      <h3 class="w3-center" style={{ margin: 0 }}>
+      <h3 class="w3-center" style={{ margin: 0, marginTop: 4 }}>
         {title}
       </h3>
       {rightControl && <div class="w3-right">{rightControl}</div>}
@@ -88,7 +88,7 @@ const Header = ({ title, rightControl, isHome }) => (
 );
 
 const Footer = ({ children }) => (
-  <header
+  <footer
     class=""
     style={{
       opacity: 0.9,
@@ -108,7 +108,7 @@ const Footer = ({ children }) => (
     >
       {children}
     </div>
-  </header>
+  </footer>
 );
 
 const Page = ({
