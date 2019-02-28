@@ -1,15 +1,17 @@
 import { h, Component } from "preact";
 import style from "./style";
 import BulletinData from "../../data/bulletindata";
-import { Page } from "../../components";
+import { Page, Modal, showModal, Footer } from "../../components";
 import BulletinView from "./bulletin-view";
 import prefs from "../../data/prefs";
 import Settings from "./settings";
+import platform from "mini-platform-detect";
 
 export default class Bulletin extends Component {
   state = {
     data: null,
-    error: null
+    error: null,
+    showInstallMessage: false
   };
 
   // gets called when this route is navigated to
@@ -30,6 +32,23 @@ export default class Bulletin extends Component {
       // get data
       this.reload(unit);
     }
+
+    // see if we want to display prompt in Safari to add to home screen
+    if (platform.safari && platform.ios) {
+      const isInStandaloneMode =
+        "standalone" in window.navigator && window.navigator.standalone;
+      if (!isInStandaloneMode) {
+        let promptTime = prefs.get(prefs.homeScreenPromptTime);
+        let then = promptTime ? parseInt(promptTime) : 0;
+        let now = Date.now();
+        let days = (now - then) / 1000 / 60 / 60 / 24;
+        if (days >= 0) {
+          // let's prompt
+          this.setState({ showInstallMessage: true });
+          prefs.set(prefs.homeScreenPromptTime, Date.now());
+        }
+      }
+    }
   }
 
   // Note: `user` comes from the URL, courtesy of our router
@@ -40,7 +59,7 @@ export default class Bulletin extends Component {
           <button
             class="icon-cog w3-btn w3-large w3-padding-small"
             onClick={e => {
-              document.getElementById("settings-modal").style.display = "block";
+              showModal("settings-modal");
               e.stopPropagation();
             }}
           />
@@ -54,17 +73,43 @@ export default class Bulletin extends Component {
           />
         </span>
       );
+      let installPrompt;
+      let device = "device";
+      if (this.state.showInstallMessage) {
+        installPrompt = (
+          <footer
+            class="w3-pale-yellow w3-padding w3-card-4"
+            style={{
+              // opacity: 0.9,
+              position: "fixed",
+              bottom: "10px",
+              width: "100%",
+              left: "0px"
+            }}
+          >
+            <div class="w3-panel">
+              <span
+                onClick={e => this.setState({ showInstallMessage: false })}
+                class="icon-cancel-circled w3-large w3-padding w3-display-topright"
+              />
+              <p>
+                To install the Ward Bulletin app on your device, tap{" "}
+                <img src="assets/images/share.svg" /> and then Add to Home
+                Screen.
+              </p>
+            </div>
+            <p />
+          </footer>
+        );
+        setTimeout(() => this.setState({ showInstallMessage: false }), 30000);
+      }
       return (
         <Page title={data.settings.name} rightControl={rightControl}>
           <BulletinView data={data} />
-          <div id="settings-modal" class="w3-modal">
-            <div class="w3-modal-content w3-animate-top w3-card-4  w3-round">
-              <div class="w3-container">
-                <Settings update={() => this.setState({ data })} />
-                <p />
-              </div>
-            </div>
-          </div>
+          {installPrompt}
+          <Modal id="settings-modal">
+            <Settings update={() => this.setState({ data })} />
+          </Modal>
         </Page>
       );
     } else if (error) {

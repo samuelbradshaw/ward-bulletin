@@ -5,27 +5,16 @@ import { setThemeColor } from "../../components";
 const Settings = ({ update }) => {
   return (
     <div>
-      <span
-        onClick={e => {
-          document.getElementById("settings-modal").style.display = "none";
-          e.stopPropagation();
-        }}
-        class="w3-button w3-display-topright"
-      >
-        &times;
-      </span>
-      <h5>Settings</h5>
+      <h4>Settings</h4>
       <div class="w3-card w3-container">
-        <div class="w3-container">
-          <p>
-            Dots used to separate the title on the left from the value on the
-            right
-          </p>
-          <LeaderMenu update={update} />
-          <p>Set the color used throughout the app</p>
-          <ColorMenu />
-          <p />
-        </div>
+        <h5>Separator Dots</h5>
+        <LeaderMenu update={update} />
+        <p />
+      </div>
+      <div class="w3-card w3-container w3-margin-top">
+        <h5>App Color Theme</h5>
+        <ColorMenu />
+        <p />
       </div>
     </div>
   );
@@ -43,8 +32,8 @@ class LeaderMenu extends Component {
   }
 
   render({}, { leaderChar }) {
-    let sel = "icon-dot-circled";
-    let unsel = "icon-circle-empty";
+    let sel = "icon-dot-circled w3-large";
+    let unsel = "icon-circle-empty w3-large";
     let dots = leaderChar === " ." ? sel : unsel;
     let dash = leaderChar === " -" ? sel : unsel;
     let none = dots === unsel && dash === unsel ? sel : unsel;

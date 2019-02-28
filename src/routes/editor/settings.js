@@ -7,15 +7,6 @@ class Settings extends Component {
   render({ update }, { hideLabels }) {
     return (
       <div>
-        <span
-          onClick={e => {
-            document.getElementById("settings-modal").style.display = "none";
-            e.stopPropagation();
-          }}
-          class="w3-button w3-display-topright"
-        >
-          &times;
-        </span>
         <h5>Settings</h5>
         <div class="w3-card w3-container">
           <div class="w3-container">

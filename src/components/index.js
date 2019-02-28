@@ -22,6 +22,42 @@ const Loader = ({ showLoader, message }) => {
   );
 };
 
+const Modal = ({ id, children }) => {
+  return (
+    <div
+      id={id}
+      class="w3-modal"
+      onClick={e => {
+        hideModal(id);
+        e.stopPropagation();
+      }}
+    >
+      <div class="w3-modal-content w3-animate-top w3-card-4 w3-round">
+        <div class="w3-container">
+          <span
+            onClick={e => {
+              hideModal(id);
+              e.stopPropagation();
+            }}
+            class="icon-cancel-circled w3-large w3-btn w3-display-topright"
+          />
+
+          {children}
+          <p />
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const showModal = id => {
+  document.getElementById(id).style.display = "block";
+};
+
+const hideModal = id => {
+  document.getElementById(id).style.display = "none";
+};
+
 const Header = ({ title, rightControl, isHome }) => (
   <header
     class=""
@@ -47,6 +83,30 @@ const Header = ({ title, rightControl, isHome }) => (
         {title}
       </h3>
       {rightControl && <div class="w3-right">{rightControl}</div>}
+    </div>
+  </header>
+);
+
+const Footer = ({ children }) => (
+  <header
+    class=""
+    style={{
+      opacity: 0.9,
+      position: "fixed",
+      bottom: "0px",
+      width: "100%",
+      opacity: ".9",
+      left: "0px"
+    }}
+  >
+    <div
+      class="w3-bar w3-content w3-theme-d2 w3-display-container"
+      style={{
+        display: "flex",
+        justifyContent: "space-around"
+      }}
+    >
+      {children}
     </div>
   </header>
 );
@@ -163,11 +223,15 @@ function setThemeColor(color) {
 
 export {
   Header,
+  Footer,
   Page,
   Alert,
   PopupMenu,
   ToolbarButton,
   loader,
   toggleMenu,
-  setThemeColor
+  setThemeColor,
+  Modal,
+  showModal,
+  hideModal
 };

@@ -1,6 +1,6 @@
 import { h, Component } from "preact";
 import BulletinData from "../../data/bulletindata";
-import { Page, loader } from "../../components";
+import { Page, loader, Modal, showModal, Footer } from "../../components";
 import BulletinView from "../bulletin/bulletin-view";
 import EditorView from "./editor-view";
 import prefs from "../../data/prefs";
@@ -47,14 +47,14 @@ export default class EditorMain extends Component {
           <button
             class="icon-cog w3-btn w3-large w3-padding-small"
             onClick={e => {
-              document.getElementById("settings-modal").style.display = "block";
+              showModal("settings-modal");
               e.stopPropagation();
             }}
           />
           <button
             class="icon-help-circled w3-btn w3-large w3-padding-small"
             onClick={e => {
-              document.getElementById("help-modal").style.display = "block";
+              showModal("help-modal");
               e.stopPropagation();
             }}
           />
@@ -123,27 +123,17 @@ export default class EditorMain extends Component {
             </Footer>
           </div>
 
-          <div id="help-modal" class="w3-modal">
-            <div class="w3-modal-content w3-animate-top w3-card-4 w3-round">
-              <div class="w3-container">
-                <Help />
-                <p />
-              </div>
-            </div>
-          </div>
+          <Modal id="help-modal">
+            <Help />
+          </Modal>
 
-          <div id="settings-modal" class="w3-modal">
-            <div class="w3-modal-content w3-animate-top w3-card-4 w3-round">
-              <div class="w3-container">
-                <Settings
-                  update={() => {
-                    this.setState({ update: 0 });
-                  }}
-                />
-                <p />
-              </div>
-            </div>
-          </div>
+          <Modal id="settings-modal">
+            <Settings
+              update={() => {
+                this.setState({ update: 0 });
+              }}
+            />
+          </Modal>
         </Page>
       );
     } else {
@@ -241,27 +231,3 @@ export default class EditorMain extends Component {
       });
   }
 }
-
-const Footer = ({ children }) => (
-  <header
-    class=""
-    style={{
-      opacity: 0.9,
-      position: "fixed",
-      bottom: "0px",
-      width: "100%",
-      opacity: ".9",
-      left: "0px"
-    }}
-  >
-    <div
-      class="w3-bar w3-content w3-theme-d2 w3-display-container"
-      style={{
-        display: "flex",
-        justifyContent: "space-around"
-      }}
-    >
-      {children}
-    </div>
-  </header>
-);

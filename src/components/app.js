@@ -2,6 +2,7 @@ import { h, Component } from "preact";
 import { Router } from "preact-router";
 import Match from "preact-router/match";
 import Helmet from "preact-helmet";
+import platform from "mini-platform-detect";
 
 // Code-splitting is automated for routes
 import Home from "../routes/home";
@@ -22,6 +23,19 @@ export default class App extends Component {
     let color = prefs.get(prefs.themeColor);
     if (color && color !== "blue") {
       setThemeColor(color);
+    }
+  }
+
+  componentDidMount() {
+    // prompt user to install app on home screen
+    if (platform.chrome) {
+      window.addEventListener("beforeinstallprompt", event => {
+        // Prevent Chrome <= 67 from automatically showing the prompt
+        event.preventDefault();
+        event.prompt();
+        // Wait for the user to respond to the prompt
+        // event.userChoice.then(handleInstall);
+      });
     }
   }
 

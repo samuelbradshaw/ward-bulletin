@@ -1,16 +1,31 @@
 {
   "name": "Ward Bulletin",
-  "short_name": "Ward Bulletin",
+  "short_name": "Bulletin",
   "start_url": "/",
   "display": "standalone",
   "orientation": "portrait",
   "background_color": "#fff",
-  "theme_color": "#673ab8",
+  "theme_color": "#2b98f0",
   "icons": [
     {
-      "src": "/assets/icons/chapel.jpg",
-      "type": "image/jpg",
-      "sizes": "121x121"
+      "src": "/assets/icons/app-icon-120x120.png",
+      "sizes": "120x120"
+    },
+    {
+      "src": "/assets/icons/app-icon-144x144.png",
+      "sizes": "144x144"
+    },
+    {
+      "src": "/assets/icons/app-icon-180x180.png",
+      "sizes": "180x180"
+    },
+    {
+      "src": "/assets/icons/app-icon-192x192.png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "/assets/icons/app-icon-512x512.png",
+      "sizes": "512x512"
     }
   ]
 }

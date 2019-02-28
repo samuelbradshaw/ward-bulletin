@@ -8,6 +8,7 @@ var prefs = {
   leaderChar: "leader-char",
   themeColor: "theme-color",
   hideLabels: "hide-labels",
+  homeScreenPromptTime: "home-screen-prompt-time",
 
   get: function(key) {
     let dataString;
