@@ -12,9 +12,15 @@ const Home = () => {
     return <Bulletin unit={unit} />;
   }
 
+  // if bulletin is cached and url is not /home, show bulletin
+  let unit = prefs.get(prefs.cacheId);
+  if (unit && prefs.get(prefs.cacheBulletin) && location.pathname !== "/home") {
+    return <Bulletin unit={unit} />;
+  }
+
   let recents = prefs.get(prefs.recents);
   return (
-    <Page title="Ward Bulletin App">
+    <Page title="Ward Bulletin App" isHome>
       <div class="w3-white w3-container" style={{ paddingBottom: "300px" }}>
         <h5>Find Ward Bulletin</h5>
         <div class="w3-card w3-container">

@@ -22,7 +22,7 @@ const Loader = ({ showLoader, message }) => {
   );
 };
 
-const Header = ({ title, rightControl }) => (
+const Header = ({ title, rightControl, isHome }) => (
   <header
     class=""
     style={{
@@ -37,10 +37,10 @@ const Header = ({ title, rightControl }) => (
       class="w3-bar w3-content w3-theme-d2 w3-display-container"
       style={{ height: "44px" }}
     >
-      {(location.pathname != "/" || location.hash) && (
+      {!isHome && (
         <button
           class="icon-left-open w3-display-left w3-btn"
-          onClick={() => history.back()}
+          onClick={() => location.replace("/home")}
         />
       )}
       <h3 class="w3-center" style={{ margin: 0 }}>
@@ -51,9 +51,16 @@ const Header = ({ title, rightControl }) => (
   </header>
 );
 
-const Page = ({ title, children, showLoader, message, rightControl }) => (
+const Page = ({
+  title,
+  children,
+  showLoader,
+  message,
+  rightControl,
+  isHome
+}) => (
   <div class="fullheight" style={{ paddingTop: "44px" }}>
-    <Header title={title} rightControl={rightControl} />
+    <Header title={title} rightControl={rightControl} isHome={isHome} />
     <div class="w3-content fullheight">{children}</div>
     <Loader showLoader={showLoader} message={message} />
   </div>

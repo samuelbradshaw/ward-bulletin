@@ -35,6 +35,7 @@ export default class App extends Component {
         <Helmet title="Ward Bulletin" />
         <Router onChange={this.handleRoute}>
           <Home path="/" />
+          <Home path="/home/" />
           <Editor path="/editor/" />
           <Locate path="/locate/" />
           <Search path="/search/" />
