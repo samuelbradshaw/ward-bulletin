@@ -38,7 +38,7 @@ export default class App extends Component {
           <Editor path="/editor/" />
           <Locate path="/locate/" />
           <Search path="/search/" />
-          <Bulletin path="/#/:unit" />
+          <Bulletin path="/#:unit" />
         </Router>
       </div>
     );

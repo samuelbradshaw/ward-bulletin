@@ -45,14 +45,14 @@ export default class EditorMain extends Component {
       let rightControl = (
         <span class="w3-display-right">
           <button
-            class="icon-cog w3-btn w3-large"
+            class="icon-cog w3-btn w3-large w3-padding-small"
             onClick={e => {
               document.getElementById("settings-modal").style.display = "block";
               e.stopPropagation();
             }}
           />
           <button
-            class="icon-help-circled w3-btn w3-large"
+            class="icon-help-circled w3-btn w3-large w3-padding-small"
             onClick={e => {
               document.getElementById("help-modal").style.display = "block";
               e.stopPropagation();

@@ -7,8 +7,8 @@ import Bulletin from "../bulletin";
 const Home = () => {
   let hash = location.hash;
   if (hash.startsWith("#")) {
-    // if url path is /#/:unit, show bulletin
-    let unit = hash.replace("#/", "");
+    // if url path is /#:unit, show bulletin
+    let unit = hash.replace("#", "");
     return <Bulletin unit={unit} />;
   }
 
@@ -52,7 +52,7 @@ const Home = () => {
                     <span
                       class="w3-btn w3-border-bottom w3-border-theme"
                       style={{ padding: 0 }}
-                      onClick={() => route(`/#/${ward.id}`)}
+                      onClick={() => route(`/#${ward.id}`)}
                     >
                       {ward.name}
                     </span>

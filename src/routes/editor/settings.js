@@ -4,7 +4,7 @@ import prefs from "../../data/prefs";
 class Settings extends Component {
   state = { hideLabels: prefs.get(prefs.hideLabels) };
 
-  render({}, { hideLabels }) {
+  render({ update }, { hideLabels }) {
     return (
       <div>
         <span
@@ -27,7 +27,7 @@ class Settings extends Component {
                 onChange={e => {
                   prefs.set(prefs.hideLabels, !hideLabels);
                   this.setState({ hideLabels: !hideLabels });
-                  this.props.update();
+                  update();
                 }}
               />
               <label>Show labels</label>
