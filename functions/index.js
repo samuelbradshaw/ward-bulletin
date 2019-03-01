@@ -1,4 +1,6 @@
 const functions = require("firebase-functions");
+const admin = require("firebase-admin");
+admin.initializeApp();
 
 // hello world demo
 exports.helloWorld = functions.https.onRequest((req, res) => {
@@ -92,7 +94,7 @@ exports.addUnit = functions.https.onRequest((req, res) => {
       return res.status(404).send("Address not found");
     }
 
-    let db = getFirebaseDB();
+    let db = admin.database();
 
     // add GeoFire location
     let GeoFire = require("geofire");
@@ -142,11 +144,6 @@ function getFirebase() {
 // get firestore database
 function getFirestore() {
   return getFirebase().firestore();
-}
-
-// get firebase database
-function getFirebaseDB() {
-  return getFirebase().database();
 }
 
 function setupCORS(res) {
