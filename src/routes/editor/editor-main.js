@@ -7,6 +7,7 @@ import prefs from "../../data/prefs";
 import { logout } from "../../data/firebase";
 import Help from "./help";
 import Settings from "./settings";
+import firebase from "../../data/firebase";
 
 export default class EditorMain extends Component {
   state = { data: null, update: 0 };
@@ -222,7 +223,16 @@ export default class EditorMain extends Component {
 
   publish() {
     loader.show("Publishing Bulletin");
-    BulletinData.saveBulletin(this.props.unit, this.state.data)
+    firebase
+      .auth()
+      .currentUser.getIdToken()
+      .then(token => {
+        return BulletinData.saveBulletin(
+          this.props.unit,
+          this.state.data,
+          token
+        );
+      })
       .then(response => {
         loader.hide();
       })

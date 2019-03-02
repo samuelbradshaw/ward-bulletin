@@ -2,7 +2,10 @@ import { h } from "preact";
 
 const Loader = ({ showLoader, message }) => {
   return (
-    <div id="page-loader" class={"w3-modal" + (showLoader ? " w3-show" : "")}>
+    <div
+      id="page-loader"
+      class={"w3-modal w3-animate-opacity" + (showLoader ? " w3-show" : "")}
+    >
       <div class="w3-modal-content w3-transparent">
         <div
           id="loader-message-container"

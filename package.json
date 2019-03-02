@@ -30,6 +30,7 @@
   },
   "dependencies": {
     "firebase": "^5.8.2",
+    "firebase-firestore-fields": "^1.0.2",
     "firebaseui": "^3.5.2",
     "mini-platform-detect": "^0.1.0",
     "pell": "^1.0.6",

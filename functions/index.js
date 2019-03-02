@@ -2,10 +2,13 @@ const functions = require("firebase-functions");
 const admin = require("firebase-admin");
 admin.initializeApp();
 
+const cors = require("cors")({ origin: true });
+
 // hello world demo
 exports.helloWorld = functions.https.onRequest((req, res) => {
-  setupCORS(res);
-  res.send("Hello from Firebase!");
+  return cors(req, res, () => {
+    res.send("Hello from Ward Bulletin!");
+  });
 });
 
 /*
@@ -13,57 +16,69 @@ exports.helloWorld = functions.https.onRequest((req, res) => {
 */
 
 // get bulletin
-exports.getBulletin = functions.https.onRequest((req, res) => {
-  setupCORS(res);
-  let id = req.query.id;
-  if (!id) {
-    res.status(400).send("Missing unit id");
-    return;
-  }
-  let db = getFirestore();
-  var docRef = db.collection("bulletins").doc(id);
-  return docRef
-    .get()
-    .then(function(doc) {
-      if (doc.exists) {
-        return res.json(doc.data());
-      } else {
-        return res.sendStatus(404);
-      }
-    })
-    .catch(function(error) {
-      return res.status(599).send(error);
-    });
-});
+// exports.getBulletin = functions.https.onRequest((req, res) => {
+//   return cors(req, res, () => {
+//     let id = req.query.id;
+//     if (!id) {
+//       res.status(400).send("Missing unit id");
+//       return;
+//     }
+
+//     let db = getFirestore();
+//     var docRef = db.collection("bulletins").doc(id);
+//     return docRef
+//       .get()
+//       .then(function(doc) {
+//         if (doc.exists) {
+//           let data = doc.data();
+//           return res.json(data);
+//         } else {
+//           return res.sendStatus(404);
+//         }
+//       })
+//       .catch(function(error) {
+//         return res.status(599).send(error);
+//       });
+//   });
+// });
 
 // set bulletin
 exports.setBulletin = functions.https.onRequest((req, res) => {
-  setupCORS(res);
-  let id = req.query.id;
-  if (!id) {
-    res.status(400).send("Missing unit id");
-    return;
-  }
-  let body = req.body;
-  if (!body) {
-    res.status(400).send("Missing body");
-    return;
-  }
-  if (typeof body === "string") {
-    // body didn't get converted to JSON object
-    body = JSON.parse(body);
-  }
-  let db = getFirestore();
-  var docRef = db.collection("bulletins").doc(id);
+  return cors(req, res, () => {
+    let id = req.query.id;
+    if (!id) {
+      return res.status(400).send("Missing unit id");
+    }
+    let body = req.body;
+    if (!body) {
+      return res.status(400).send("Missing body");
+    }
+    if (typeof body === "string") {
+      // body didn't get converted to JSON object
+      body = JSON.parse(body);
+    }
 
-  return docRef
-    .set(body)
-    .then(function(doc) {
-      return res.status(200).end();
-    })
-    .catch(function(error) {
-      return res.status(599).send(error);
-    });
+    let db = admin.firestore();
+    var docRef = db.collection("bulletins").doc(id);
+
+    const tokenId = req.get("Authorization").split("Bearer ")[1];
+    return admin
+      .auth()
+      .verifyIdToken(tokenId)
+      .then(claims => {
+        if (claims && claims.unit === id) {
+          return docRef.set(body);
+        } else {
+          return res.status(401).send("Permission denied");
+        }
+      })
+      .then(function(doc) {
+        return res.status(200).end();
+      })
+      .catch(function(error) {
+        return res.status(599).send(error);
+      });
+  });
 });
 
 /*
@@ -72,55 +87,53 @@ exports.setBulletin = functions.https.onRequest((req, res) => {
 
 // add ward
 exports.addUnit = functions.https.onRequest((req, res) => {
-  setupCORS(res);
-  let body = req.body;
-  if (typeof body === "string") {
-    // body didn't get converted to JSON object
-    body = JSON.parse(body);
-  }
-  let { id, name, address, searchname } = body;
-  if (!id || !name || !address || !searchname) {
-    res.status(400).send("Missing parameter");
-    return;
-  }
-
-  // geocode address
-  console.log("Geocode:", address);
-  geoCode(address, (loc, err) => {
-    if (err) {
-      return res.status(599).send(error);
+  return cors(req, res, () => {
+    let body = req.body;
+    if (typeof body === "string") {
+      // body didn't get converted to JSON object
+      body = JSON.parse(body);
     }
-    if (!loc) {
-      return res.status(404).send("Address not found");
+    let { id, name, address, searchname, user } = body;
+    console.log("addUnit:", JSON.stringify(body));
+    if (!id || !name || !address || !searchname || !user) {
+      return res.status(400).send("Missing parameter");
     }
 
-    let db = admin.database();
-
-    // add GeoFire location
-    let GeoFire = require("geofire");
-    let geoFire = new GeoFire(db.ref("units"));
-    geoFire
-      .set(id, [loc.lat, loc.lng])
-      .then(
-        function() {
-          // add unit to Firebase DB
-          db.ref("units/" + id)
-            .update({
-              name,
-              address,
-              searchname
-            })
-            .then(function(doc) {
-              return res.status(200).end();
-            });
-        },
-        function(error) {
-          return res.status(599).send(error);
-        }
-      )
-      .catch(function(error) {
+    // geocode address
+    geoCode(address, (loc, err) => {
+      if (err) {
         return res.status(599).send(error);
-      });
+      }
+      if (!loc) {
+        return res.status(404).send("Address not found");
+      }
+
+      let db = admin.database();
+
+      // add GeoFire location
+      let GeoFire = require("geofire");
+      let geoFire = new GeoFire(db.ref("units"));
+      geoFire
+        .set(id, [loc.lat, loc.lng])
+        .then(function() {
+          // add unit to Firebase DB
+          return db.ref("units/" + id).update({
+            name,
+            address,
+            searchname
+          });
+        })
+        .then(function() {
+          // add unit id to user claims
+          return admin.auth().setCustomUserClaims(user, { unit: id });
+        })
+        .then(function(doc) {
+          return res.status(200).end();
+        })
+        .catch(function(error) {
+          return res.status(599).send(error);
+        });
+    });
   });
 });
 
@@ -144,14 +157,6 @@ function getFirebase() {
 // get firestore database
 function getFirestore() {
   return getFirebase().firestore();
-}
-
-function setupCORS(res) {
-  res.set("Access-Control-Allow-Origin", "*");
-  res.set(
-    "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept"
-  );
 }
 
 // get lat/lng of address

@@ -9,9 +9,9 @@
 
 */
 
-const baseURL = "https://us-central1-ward-bulletin-9b31d.cloudfunctions.net"; // production
-// const baseURL =
-("http://localhost.charlesproxy.com:5000/ward-bulletin-9b31d/us-central1"); // development
+// const functionsURL ="https://us-central1-ward-bulletin-9b31d.cloudfunctions.net"; // production
+const functionsURL =
+  "http://localhost.charlesproxy.com:5000/ward-bulletin-9b31d/us-central1"; // development
 const LOC_RADIUS = 10000; // in kms
 
 const initialBulletinData = {
@@ -218,11 +218,6 @@ function wardList(data, extra) {
   return wards;
 }
 
-// get firebase database url
-function getFirebaseURL() {
-  return "https://ward-bulletin-9b31d.firebaseio.com";
-}
-
 let BulletinData = {
   // get initial bulletin data for new account
   getInitialData: function() {
@@ -235,19 +230,22 @@ let BulletinData = {
 
   // get bulletin
   getBulletin: function(unit) {
-    return fetch(baseURL + "/getBulletin?id=" + unit).then(response =>
-      response.json()
-    );
+    const convert = require("firebase-firestore-fields");
+    const url = `https://firestore.googleapis.com/v1beta1/projects/ward-bulletin-9b31d/databases/(default)/documents/bulletins/${unit}`;
+    return fetch(url)
+      .then(response => response.json())
+      .then(json => convert(json.fields));
   },
 
   // save bulletin
-  saveBulletin: function(unit, data) {
-    let url = `${baseURL}/setBulletin?id=${unit}`;
+  saveBulletin: function(unit, data, token) {
+    let url = `${functionsURL}/setBulletin?id=${unit}`;
     return fetch(url, {
       method: "POST",
       body: JSON.stringify(data),
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token
       }
     });
   },
@@ -269,22 +267,23 @@ let BulletinData = {
 
   // search for bulletins by name
   searchBulletins: function(search, limit) {
-    let url = `${getFirebaseURL()}/units.json?orderBy="searchname"&startAt="${search}"&endAt="${search}z"&limitToFirst=${limit}`;
+    let url = `https://ward-bulletin-9b31d.firebaseio.com/units.json?orderBy="searchname"&startAt="${search}"&endAt="${search}z"&limitToFirst=${limit}`;
     return fetch(url).then(response => {
       // console.log("Response", response.json());
       return response.json().then(data => wardList(data, "searchname"));
     });
   },
 
-  addUnit: function(id, name, address) {
+  addUnit: function(id, name, address, user) {
     let regex = /[ \.]/gi;
     let searchname = name.toLowerCase().replace(regex, "");
-    let url = `${baseURL}/addUnit`;
-    let data = { id, name, address, searchname };
+    let url = `${functionsURL}/addUnit`;
+    let data = { id, name, address, searchname, user };
+    let body = JSON.stringify(data);
 
     return fetch(url, {
       method: "POST",
-      body: JSON.stringify(data),
+      body,
       headers: {
         "Content-Type": "application/json"
       }

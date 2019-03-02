@@ -12,13 +12,24 @@ let pageTitle = "Sign In";
 
 export default class Editor extends Component {
   message = null;
+  unit = null;
   state = { status: "checking" };
 
   componentDidMount() {
     // see if we are logged in
     firebase.auth().onAuthStateChanged(
       user => {
-        this.setState({ status: user ? "loggedin" : "loggedout" });
+        if (user) {
+          user.getIdTokenResult().then(idTokenResult => {
+            let claims = idTokenResult.claims;
+            if (claims) {
+              this.unit = claims.unit;
+            }
+            this.setState({ status: "loggedin" });
+          });
+        } else {
+          this.setState({ status: "loggedout" });
+        }
       },
       error => {
         this.error = error;
@@ -37,10 +48,8 @@ export default class Editor extends Component {
   render({}, { status }) {
     switch (status) {
       case "loggedin":
-        let user = currentUser();
-        if (user.displayName) {
-          // displayName == unit id
-          return <EditorMain unit={user.displayName} />;
+        if (this.unit) {
+          return <EditorMain unit={this.unit} />;
         } else {
           return (
             <Page title="Create New Account">
@@ -79,42 +88,33 @@ export default class Editor extends Component {
 
   newAccount(wardName, wardAddress, wardId) {
     // save new user
-    BulletinData.addUnit(wardId, wardName, wardAddress)
-      .then(() => {
+    var user = firebase.auth().currentUser;
+    let data;
+    BulletinData.addUnit(wardId, wardName, wardAddress, user.uid)
+      .then(() => user.getIdToken())
+      .then(token => {
         // get initial data and publish it
-        let data = BulletinData.getInitialData();
+        data = BulletinData.getInitialData();
         data.settings.name = wardName;
         data.settings.address = wardAddress;
-        BulletinData.saveBulletin(wardId, data)
-          .then(() => {
-            // set ward id as user display name
-            var user = firebase.auth().currentUser;
-            user
-              .updateProfile({
-                displayName: wardId
-              })
-              .then(() => {
-                // Ready!
-                prefs.set(prefs.currentDraft, data);
-                this.setState({ status: "loggedin" });
-              })
-              .catch(error => {
-                // An error happened.
-                this.error = error;
-                this.setState({ status: "error" });
-                console.log(error);
-              });
-          })
-          .catch(error => {
-            // An error happened.
-            this.error = error;
-            this.setState({ status: "error" });
-            console.log(error);
-          });
+        return BulletinData.saveBulletin(wardId, data, token);
+      })
+      .then(() => user.getIdToken(true))
+      .then(() => firebase.auth().currentUser.getIdTokenResult())
+      .then(idTokenResult => {
+        // Done!
+        let claims = idTokenResult.claims;
+        if (claims) {
+          this.unit = claims.unit;
+        }
+        prefs.set(prefs.currentDraft, data);
+        this.setState({ status: "loggedin" });
       })
       .catch(error => {
+        // An error happened.
         this.error = error;
         this.setState({ status: "error" });
+        console.log(error);
       });
     this.message = "Setting Up Account";
     this.setState({ status: "checking" });

@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@google/maps": "^0.5.5",
+    "cors": "^2.8.5",
     "firebase": "^5.8.2",
     "firebase-admin": "~7.0.0",
     "firebase-functions": "^2.2.0",
