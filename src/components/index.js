@@ -137,8 +137,11 @@ const Alert = ({ text }) => (
 
 function PopupMenu({ title, items, menuId, handler, isButton }) {
   menuId = menuId || "menu" + Math.floor(Math.random() * 1000000);
+  let className = `w3-dropdown-click w3-border-theme ${
+    isButton ? "" : "w3-padding-small"
+  } w3-round w3-border`;
   return (
-    <div class="w3-dropdown-click w3-padding-small w3-border-theme w3-round w3-border">
+    <div class={className}>
       <div
         onClick={e => {
           toggleMenu(menuId);
@@ -181,17 +184,17 @@ function ToolbarButton({ title, icon, onClick, disabled }) {
   return (
     <button onClick={disabled ? null : onClick} class={classText}>
       <i class={icon} />
-      {title}
+      <span>{title}</span>
     </button>
   );
 }
 
 function toggleMenu(menuId) {
-  var addMenu = document.getElementById(menuId);
-  if (addMenu.className.indexOf("w3-show") == -1) {
-    addMenu.className += " w3-show";
+  var menu = document.getElementById(menuId);
+  if (menu.className.indexOf("w3-show") == -1) {
+    menu.className += " w3-show";
   } else {
-    addMenu.className = addMenu.className.replace(" w3-show", "");
+    menu.className = menu.className.replace(" w3-show", "");
   }
 }
 

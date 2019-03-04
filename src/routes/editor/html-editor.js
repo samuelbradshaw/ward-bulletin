@@ -93,7 +93,10 @@ class HTMLEditor extends Component {
           icon: '<i class="icon-file-image" />',
           result: () => {
             const url = window.prompt("Enter the image URL");
-            if (url) exec("insertImage", url);
+            if (url) {
+              let html = `<img src="${url}" style="max-width:100%" />`;
+              exec("insertHTML", html);
+            }
           }
         },
         {

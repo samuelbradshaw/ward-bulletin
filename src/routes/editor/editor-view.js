@@ -12,11 +12,18 @@ export default class EditorView extends Component {
     super(props);
     this.handleInputChange = this.handleInputChange.bind(this);
     this.startGap = null;
+    this.skipRender = false;
     this.state = {
       selectedItem: null,
       selectedSection: null,
       section: null
     };
+  }
+
+  shouldComponentUpdate() {
+    let skipRender = this.skipRender;
+    this.skipRender = false;
+    return !skipRender;
   }
 
   render({ data }) {
@@ -360,6 +367,7 @@ export default class EditorView extends Component {
                   index,
                   section
                 };
+                this.skipRender = true;
                 this.props.change(props);
               }}
             />
@@ -517,6 +525,23 @@ export default class EditorView extends Component {
         }}
       >
         {this.addItemMenu(index, section)}
+
+        <ToolbarButton
+          title="Clone"
+          icon="icon-clone"
+          onClick={e => {
+            // clone item
+            item = JSON.parse(JSON.stringify(item));
+            this.state.selectedItem = item;
+            this.props.update({
+              type: "add",
+              item,
+              index: index + 1,
+              section
+            });
+            e.stopPropagation();
+          }}
+        />
 
         <ToolbarButton
           title="Delete"

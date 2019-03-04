@@ -1,11 +1,11 @@
 @font-face {
   font-family: 'myfont';
-  src: url('../font/myfont.eot?18752216');
-  src: url('../font/myfont.eot?18752216#iefix') format('embedded-opentype'),
-       url('../font/myfont.woff2?18752216') format('woff2'),
-       url('../font/myfont.woff?18752216') format('woff'),
-       url('../font/myfont.ttf?18752216') format('truetype'),
-       url('../font/myfont.svg?18752216#myfont') format('svg');
+  src: url('../font/myfont.eot?17049443');
+  src: url('../font/myfont.eot?17049443#iefix') format('embedded-opentype'),
+       url('../font/myfont.woff2?17049443') format('woff2'),
+       url('../font/myfont.woff?17049443') format('woff'),
+       url('../font/myfont.ttf?17049443') format('truetype'),
+       url('../font/myfont.svg?17049443#myfont') format('svg');
   font-weight: normal;
   font-style: normal;
 }
@@ -15,7 +15,7 @@
 @media screen and (-webkit-min-device-pixel-ratio:0) {
   @font-face {
     font-family: 'myfont';
-    src: url('../font/myfont.svg?18752216#myfont') format('svg');
+    src: url('../font/myfont.svg?17049443#myfont') format('svg');
   }
 }
 */
@@ -89,3 +89,4 @@
 .icon-help:before { content: '\f128'; } /* '' */
 .icon-dot-circled:before { content: '\f192'; } /* '' */
 .icon-file-image:before { content: '\f1c5'; } /* '' */
+.icon-clone:before { content: '\f24d'; } /* '' */
