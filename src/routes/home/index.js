@@ -3,6 +3,7 @@ import { route } from "preact-router";
 import { Page } from "../../components";
 import prefs from "../../data/prefs";
 import Bulletin from "../bulletin";
+import style from "./style";
 
 const Home = () => {
   let hash = location.hash;
@@ -21,9 +22,12 @@ const Home = () => {
   let recents = prefs.get(prefs.recents);
   return (
     <Page title="Ward Bulletin App" isHome>
-      <div class="w3-white w3-container" style={{ paddingBottom: "300px" }}>
-        <h5>Find Ward Bulletin</h5>
-        <div class="w3-card w3-container">
+      <div
+        class="w3-light-grey w3-container"
+        style={{ paddingBottom: "300px" }}
+      >
+        <h5 class={style.h5}>Find Ward Bulletin</h5>
+        <div class="w3-card w3-container w3-white w3-round">
           <p>
             View your bulletin by using your current location to find the
             closest bulletins or search using the name of your ward.
@@ -51,7 +55,7 @@ const Home = () => {
         {recents && recents.length && (
           <div>
             <h5>Recent Ward Bulletins</h5>
-            <div class="w3-card w3-container">
+            <div class="w3-card w3-container w3-white w3-round">
               <ul class="w3-ul w3-margin-bottom">
                 {recents.map(ward => (
                   <div class="w3-quarter w3-section w3-center">
@@ -70,19 +74,52 @@ const Home = () => {
         )}
 
         <h5>Edit Ward Bulletin</h5>
-        <div class="w3-card w3-container">
+        <div class="w3-card w3-container w3-white w3-round">
           <p>
             If you are a bulletin editor for your ward, login or create a new
             account to edit your ward bulletin.
           </p>
-          <div class="w3-quarter w3-section w3-center">
-            <button
-              class="w3-btn w3-border-theme w3-round w3-border"
-              onClick={() => route("/editor")}
-            >
-              Edit Bulletin
-            </button>
-          </div>
+          <button
+            class="w3-btn w3-border-theme w3-round w3-border"
+            onClick={() => route("/editor")}
+          >
+            Edit Bulletin
+          </button>
+          <p />
+        </div>
+
+        <h5>About Ward Bulletin</h5>
+        <div class="w3-card w3-container w3-white w3-round">
+          <p>
+            The Ward Bulletin App is provided as a free service to ward and
+            stake bulletin editors and members of The Church of Jesus Christ of
+            Latter-day Saints. It is not an official app of the Church.
+          </p>
+          <p>
+            If you have questions about the app, suggestions, or need to report
+            a problem, please send email to: wardbulletinapp@gmail.com.
+          </p>
+          <button
+            class="w3-btn w3-border-theme w3-round w3-border"
+            onClick={() =>
+              (window.location = "mailto:wardbulletinapp@gmail.com")
+            }
+          >
+            Send Us Email
+          </button>
+          <p>See an example ward bulletin:</p>
+          <button
+            class="w3-btn w3-border-theme w3-round w3-border"
+            onClick={() => route("/#demoward")}
+          >
+            Example Bulletin
+          </button>
+          <p />
+          <small class="w3-right w3-text-grey">
+            Copyright &copy; 2019 by Alan Bird
+          </small>
+          <p />
+          <br />
         </div>
       </div>
     </Page>

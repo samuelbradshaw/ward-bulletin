@@ -134,6 +134,9 @@ export default class Bulletin extends Component {
   }
 
   addRecent(unit, data) {
+    if (unit === "demoward") {
+      return; // don't add demo ward to recents
+    }
     // add unit to recents
     let recents = prefs.get(prefs.recents) || [];
     // filter out this unit

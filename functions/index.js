@@ -49,6 +49,9 @@ exports.setBulletin = functions.https.onRequest((req, res) => {
     if (!id) {
       return res.status(400).send("Missing unit id");
     }
+    if (id === "demoward") {
+      return res.status(401).send("Permission denied"); // don't publish demo ward
+    }
     let body = req.body;
     if (!body) {
       return res.status(400).send("Missing body");

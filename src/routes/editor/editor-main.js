@@ -41,7 +41,7 @@ export default class EditorMain extends Component {
     }
   }
 
-  render({}, { data }) {
+  render({ unit }, { data }) {
     if (data) {
       let rightControl = (
         <span class="w3-display-right">
@@ -63,7 +63,7 @@ export default class EditorMain extends Component {
       );
 
       return (
-        <Page title="Editor" rightControl={rightControl}>
+        <Page title={data.settings.name} rightControl={rightControl}>
           <div class="fullheight" style={{ paddingBottom: "44px" }}>
             <div
               class="w3-row-padding w3-half fullheight w3-border"
@@ -106,7 +106,9 @@ export default class EditorMain extends Component {
                   this.publish();
                   e.stopPropagation();
                 }}
-                class="w3-bar-item w3-btn"
+                class={`w3-bar-item w3-btn ${
+                  unit === "demoward" ? "w3-disabled" : ""
+                }`}
               >
                 <i class="icon-upload-cloud" />
                 Publish
