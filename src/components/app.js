@@ -10,6 +10,7 @@ import Bulletin from "../routes/bulletin";
 import Editor from "../routes/editor";
 import Locate from "../routes/locate";
 import Search from "../routes/search";
+import ViewHymn from "../routes/bulletin/hymn-view";
 import Test from "../routes/home/test";
 
 import prefs from "../data/prefs";
@@ -56,6 +57,7 @@ export default class App extends Component {
           <Search path="/search/" />
           <Test path="/test/" />
           <Bulletin path="/#:unit" />
+          <ViewHymn path="/hymn/:uri/:id/:name" />
         </Router>
       </div>
     );

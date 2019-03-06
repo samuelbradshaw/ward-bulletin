@@ -61,7 +61,7 @@ const hideModal = id => {
   document.getElementById(id).style.display = "none";
 };
 
-const Header = ({ title, rightControl, isHome }) => (
+const Header = ({ title, rightControl, isHome, goBack }) => (
   <header
     class=""
     style={{
@@ -79,7 +79,13 @@ const Header = ({ title, rightControl, isHome }) => (
       {!isHome && (
         <button
           class="icon-left-open w3-display-left w3-btn"
-          onClick={() => location.replace("/home")}
+          onClick={() => {
+            if (goBack) {
+              history.back();
+            } else {
+              location.replace("/home");
+            }
+          }}
         />
       )}
       <h3 class="w3-center" style={{ margin: 0, marginTop: 4 }}>
@@ -120,11 +126,17 @@ const Page = ({
   showLoader,
   message,
   rightControl,
-  isHome
+  isHome,
+  goBack
 }) => (
   <div class="fullheight" style={{ paddingTop: "44px" }}>
-    <Header title={title} rightControl={rightControl} isHome={isHome} />
-    <div class="w3-content fullheight">{children}</div>
+    <Header
+      title={title}
+      rightControl={rightControl}
+      isHome={isHome}
+      goBack={goBack}
+    />
+    <div class="w3-content fullheight w3-display-container">{children}</div>
     <Loader showLoader={showLoader} message={message} />
   </div>
 );

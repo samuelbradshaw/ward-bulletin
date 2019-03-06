@@ -1,8 +1,11 @@
 import { h, Component } from "preact";
 import style from "./style";
 import prefs from "../../data/prefs";
+import { route } from "preact-router";
 
 export default class BulletinView extends Component {
+  state = { hymn: null };
+
   render({ data }) {
     let sections = [];
     for (let section of data.sections) {
@@ -70,7 +73,7 @@ let createLine = item => {
     case "hymn":
       line1 = nameLine(label, item.hymn);
       line2 = centerLine(title, "italic");
-      onClick = event => viewHymn(item.uri);
+      onClick = event => viewHymn(item);
       itemStyle = { cursor: "pointer" };
       break;
 
@@ -157,12 +160,16 @@ function nameLine(label, name) {
   );
 }
 
-function viewHymn(uri) {
-  var iOS = navigator.userAgent.match(/(iPad|iPhone|iPod)/g) ? true : false;
-  var Android = navigator.userAgent.match(/Android/g) ? true : false;
-  if (iOS || Android) {
-    window.location.href = `ldsmusic://content/manual/hymns/${uri}`;
+function viewHymn({ uri, id, title }) {
+  if (prefs.get(prefs.useHymnsApp)) {
+    var iOS = navigator.userAgent.match(/(iPad|iPhone|iPod)/g) ? true : false;
+    var Android = navigator.userAgent.match(/Android/g) ? true : false;
+    if (iOS || Android) {
+      window.location.href = `ldsmusic://content/manual/hymns/${uri}`;
+    } else {
+      window.open(`https://www.lds.org/music/library/hymns/${uri}`);
+    }
   } else {
-    window.open(`https://www.lds.org/music/library/hymns/${uri}`);
+    route(`/hymn/${uri}/${id}/${encodeURI(title)}`);
   }
 }

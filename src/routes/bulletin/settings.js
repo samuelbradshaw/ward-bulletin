@@ -11,6 +11,11 @@ const Settings = ({ update }) => {
         <LeaderMenu update={update} />
         <p />
       </div>
+      <div class="w3-card w3-container">
+        <h5>When Tapping on a Hymn:</h5>
+        <HymnMenu update={update} />
+        <p />
+      </div>
       <div class="w3-card w3-container w3-margin-top">
         <h5>App Color Theme</h5>
         <ColorMenu />
@@ -73,6 +78,54 @@ class LeaderMenu extends Component {
           >
             <i class={none} />
             None
+          </span>
+        </div>
+      </div>
+    );
+  }
+}
+
+class HymnMenu extends Component {
+  state = {
+    useHymnsApp: prefs.get(prefs.useHymnsApp)
+  };
+
+  setUseHymnsApp(useHymnsApp) {
+    prefs.set(prefs.useHymnsApp, useHymnsApp);
+    this.setState({ useHymnsApp });
+    this.props.update();
+  }
+
+  render({}, { useHymnsApp }) {
+    let sel = "icon-dot-circled w3-large";
+    let unsel = "icon-circle-empty w3-large";
+    let thisApp = useHymnsApp ? unsel : sel;
+    let hymnsApp = useHymnsApp ? sel : unsel;
+    return (
+      <div class="w3-row">
+        <div class="w3-half w3-padding-small">
+          <span
+            class="w3-text-theme"
+            onClick={e => {
+              this.setUseHymnsApp(false);
+              e.stopPropagation();
+            }}
+          >
+            <i class={thisApp} />
+            View in this app
+          </span>
+        </div>
+
+        <div class="w3-half w3-padding-small">
+          <span
+            class="w3-text-theme"
+            onClick={e => {
+              this.setUseHymnsApp(true);
+              e.stopPropagation();
+            }}
+          >
+            <i class={hymnsApp} />
+            Open in LDS Hymns app
           </span>
         </div>
       </div>

@@ -7,6 +7,12 @@
     {
       "type": "node",
       "request": "launch",
+      "name": "Launch Generate Hymns",
+      "program": "${workspaceFolder}/tools/generate-hymns.js"
+    },
+    {
+      "type": "node",
+      "request": "launch",
       "name": "Launch Generate Media",
       "program": "${workspaceFolder}/tools/generate-media.js"
     },

@@ -9,6 +9,7 @@ var prefs = {
   themeColor: "theme-color",
   hideLabels: "hide-labels",
   homeScreenPromptTime: "home-screen-prompt-time",
+  useHymnsApp: "use-hymns-app",
 
   get: function(key) {
     let dataString;

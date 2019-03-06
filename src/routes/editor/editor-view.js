@@ -1,6 +1,6 @@
 import { h, Component } from "preact";
 import style from "./style";
-import hymnList from "../../assets/hymns";
+import hymnList from "../../assets/hymns.json";
 import {
   PopupMenu,
   ToolbarButton,
@@ -150,6 +150,13 @@ export default class EditorView extends Component {
         type: "update",
         value: hymn.uri,
         attr: "uri",
+        index,
+        section
+      },
+      {
+        type: "update",
+        value: hymn.id,
+        attr: "id",
         index,
         section
       }
