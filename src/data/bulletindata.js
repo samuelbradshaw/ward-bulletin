@@ -234,7 +234,7 @@ let BulletinData = {
     const url = `https://firestore.googleapis.com/v1beta1/projects/ward-bulletin-9b31d/databases/(default)/documents/bulletins/${unit}`;
     return fetch(url)
       .then(response => response.json())
-      .then(json => convert(json.fields));
+      .then(json => (json.fields ? convert(json.fields) : json));
   },
 
   // save bulletin
@@ -287,6 +287,13 @@ let BulletinData = {
       headers: {
         "Content-Type": "application/json"
       }
+    }).then(function(response) {
+      if (!response.ok) {
+        return response.text().then(errorText => {
+          throw Error(errorText);
+        });
+      }
+      return response;
     });
   }
 };

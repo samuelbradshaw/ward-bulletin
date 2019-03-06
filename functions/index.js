@@ -97,46 +97,56 @@ exports.addUnit = functions.https.onRequest((req, res) => {
       body = JSON.parse(body);
     }
     let { id, name, address, searchname, user } = body;
-    console.log("addUnit:", JSON.stringify(body));
+    // console.log("addUnit:", JSON.stringify(body));
     if (!id || !name || !address || !searchname || !user) {
       return res.status(400).send("Missing parameter");
     }
 
-    // geocode address
-    geoCode(address, (loc, err) => {
-      if (err) {
-        return res.status(599).send(error);
-      }
-      if (!loc) {
-        return res.status(404).send("Address not found");
-      }
+    // make sure it doesn't already exist
+    const db = admin.database();
+    db.ref("units/" + id)
+      .once("value")
+      .then(snapshot => {
+        let data = snapshot.val();
+        if (data) {
+          // ward already exists
+          return res.status(597).send(`Ward id '${id}' already exists.`);
+        }
 
-      let db = admin.database();
+        // geocode address
+        geoCode(address, (loc, err) => {
+          if (err) {
+            return res.status(599).send(error);
+          }
+          if (!loc) {
+            return res.status(404).send("Address not found");
+          }
 
-      // add GeoFire location
-      let GeoFire = require("geofire");
-      let geoFire = new GeoFire(db.ref("units"));
-      geoFire
-        .set(id, [loc.lat, loc.lng])
-        .then(function() {
-          // add unit to Firebase DB
-          return db.ref("units/" + id).update({
-            name,
-            address,
-            searchname
-          });
-        })
-        .then(function() {
-          // add unit id to user claims
-          return admin.auth().setCustomUserClaims(user, { unit: id });
-        })
-        .then(function(doc) {
-          return res.status(200).end();
-        })
-        .catch(function(error) {
-          return res.status(599).send(error);
+          // add GeoFire location
+          let GeoFire = require("geofire");
+          let geoFire = new GeoFire(db.ref("units"));
+          geoFire
+            .set(id, [loc.lat, loc.lng])
+            .then(function() {
+              // add unit to Firebase DB
+              return db.ref("units/" + id).update({
+                name,
+                address,
+                searchname
+              });
+            })
+            .then(function() {
+              // add unit id to user claims
+              return admin.auth().setCustomUserClaims(user, { unit: id });
+            })
+            .then(function(doc) {
+              return res.status(200).end();
+            })
+            .catch(function(error) {
+              return res.status(599).send(error);
+            });
         });
-    });
+      });
   });
 });
 
@@ -149,16 +159,9 @@ exports.greenToDemo = functions.https.onRequest((req, res) => {
 
     return greenRef
       .get()
-      .then(doc => {
-        let data = doc.data();
-        console.log("Data:", data);
-        return demoRef.set(data);
-      })
+      .then(doc => demoRef.set(doc.data()))
       .then(() => res.status(200).end())
-      .catch(error => {
-        console.log("Error:", error);
-        return res.status(599).send(error);
-      });
+      .catch(error => res.status(599).send(error));
   });
 });
 

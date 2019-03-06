@@ -112,8 +112,8 @@ export default class Editor extends Component {
       })
       .catch(error => {
         // An error happened.
-        this.error = error;
-        this.setState({ status: "error" });
+        alert(error);
+        this.setState({ status: "loggedin" });
         console.log(error);
       });
     this.message = "Setting Up Account";

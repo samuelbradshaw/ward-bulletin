@@ -27,7 +27,7 @@ export default class EditorMain extends Component {
       // download bulletin
       BulletinData.getBulletin(unit)
         .then(data => {
-          if (data.status) {
+          if (data.error) {
             // an error happened. return initial data
             data = BulletinData.getInitialData();
           }
