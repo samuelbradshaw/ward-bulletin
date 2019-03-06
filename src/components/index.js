@@ -137,11 +137,9 @@ const Alert = ({ text }) => (
 
 function PopupMenu({ title, items, menuId, handler, isButton }) {
   menuId = menuId || "menu" + Math.floor(Math.random() * 1000000);
-  let className = `w3-dropdown-click w3-border-theme ${
-    isButton ? "" : "w3-padding-small"
-  } w3-round w3-border`;
+  let className = `w3-dropdown-click w3-border-theme w3-round w3-border`;
   return (
-    <div class={className}>
+    <div class={className} style={{ padding: "4px 0px 4px 8px" }}>
       <div
         onClick={e => {
           toggleMenu(menuId);

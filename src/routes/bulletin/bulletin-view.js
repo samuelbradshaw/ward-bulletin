@@ -55,11 +55,16 @@ let createLine = item => {
 
   switch (type) {
     case "title":
-      line1 = alignLine(title, item.style, item.align);
+      line1 = alignLine(title, item.style, item.align, item.size);
       break;
 
     case "name":
       line1 = nameLine(label, name);
+      break;
+
+    case "image":
+      let image = <img src={item.url} class="w3-image w3-round" />;
+      line1 = alignLine(image, null, item.align);
       break;
 
     case "hymn":
@@ -114,7 +119,7 @@ let createLine = item => {
   );
 };
 
-function alignLine(title, styleType, alignType) {
+function alignLine(title, styleType, alignType, size) {
   let lineStyle = {};
   if (styleType == "bold") {
     lineStyle.fontWeight = "bold";
@@ -127,6 +132,9 @@ function alignLine(title, styleType, alignType) {
       : alignType === "right"
       ? "flex-end"
       : "center";
+  if (size) {
+    lineStyle.fontSize = size;
+  }
   return (
     <div class={style.align} style={{ ...lineStyle, justifyContent: justify }}>
       <span>{title}</span>

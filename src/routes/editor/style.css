@@ -18,3 +18,24 @@
   width: 4em;
   text-align: right;
 }
+
+.mediaContainer {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.folderImage {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+}
+
+.folderTitle {
+  max-width: 100px;
+}
+
+.assetImage {
+  width: 72px;
+  height: 72px;
+  object-fit: cover;
+}

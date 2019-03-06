@@ -94,7 +94,7 @@ class HTMLEditor extends Component {
           result: () => {
             const url = window.prompt("Enter the image URL");
             if (url) {
-              let html = `<img src="${url}" style="max-width:100%" />`;
+              let html = `<img src="${url}" class="w3-image" />`;
               exec("insertHTML", html);
             }
           }

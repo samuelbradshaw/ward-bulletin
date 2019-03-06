@@ -1,9 +1,16 @@
 import { h, Component } from "preact";
 import style from "./style";
 import hymnList from "../../assets/hymns";
-import { PopupMenu, ToolbarButton } from "../../components";
+import {
+  PopupMenu,
+  ToolbarButton,
+  showModal,
+  hideModal,
+  Modal
+} from "../../components";
 import HTMLEditor from "./html-editor";
 import prefs from "../../data/prefs";
+import MediaLibrary from "./media-library";
 
 let KEY_INDEX = 1;
 
@@ -13,6 +20,8 @@ export default class EditorView extends Component {
     this.handleInputChange = this.handleInputChange.bind(this);
     this.startGap = null;
     this.skipRender = false;
+    this.mediaSection = null;
+    this.mediaIndex = 0;
     this.state = {
       selectedItem: null,
       selectedSection: null,
@@ -48,6 +57,22 @@ export default class EditorView extends Component {
         style={{ outline: "none" }}
       >
         <div class="w3-content">{sections}</div>
+
+        <Modal id="media-modal">
+          <MediaLibrary
+            select={item => {
+              hideModal("media-modal");
+              let props = {
+                type: "update",
+                value: item.mobile,
+                attr: "url",
+                index: this.mediaIndex,
+                section: this.mediaSection
+              };
+              this.props.update(props);
+            }}
+          />
+        </Modal>
       </div>
     );
   }
@@ -90,6 +115,7 @@ export default class EditorView extends Component {
       index,
       section
     };
+    this.skipRender = true;
     if (noUndo) {
       this.props.change(props);
     } else {
@@ -181,6 +207,27 @@ export default class EditorView extends Component {
       case "title":
         content = (
           <div class="w3-row">
+            <div class="w3-col w3-right" style={{ width: 44, marginLeft: 18 }}>
+              <HidingLabel name="Size" />
+              <input
+                class={`${style.textinput} w3-border w3-round`}
+                type="number"
+                value={item.size || 15}
+                onChange={event => {
+                  let value = parseInt(event.target.value);
+                  value = Math.max(value, 6);
+                  let request = {
+                    type: "update",
+                    value,
+                    attr: "size",
+                    index,
+                    section
+                  };
+                  this.props.update(request);
+                }}
+              />
+            </div>
+
             <div class="w3-col w3-right leftmargin" style="width:60px">
               <HidingLabel name="Style" />
               {this.styleMenu(item.style, index, section)}
@@ -238,6 +285,47 @@ export default class EditorView extends Component {
           </div>
         );
         color = "w3-border-green";
+        break;
+
+      case "image":
+        let url = item.url;
+        content = (
+          <div class="w3-row">
+            <div class="w3-col w3-right leftmargin" style="width:60px">
+              <HidingLabel name="Align" />
+              {this.alignMenu(item.align, index, section)}
+            </div>
+
+            <div class="w3-col w3-right leftmargin" style="width:60px">
+              <HidingLabel name="Library" />
+              <button
+                class="w3-btn w3-border-theme w3-round w3-border w3-padding-small"
+                style={{ height: 32 }}
+                onClick={() => {
+                  this.mediaSection = section;
+                  this.mediaIndex = index;
+                  showModal("media-modal");
+                }}
+              >
+                Media
+              </button>
+            </div>
+
+            <div class="w3-rest">
+              <HidingLabel name="URL" />
+              <input
+                class={`${style.textinput} w3-border w3-round`}
+                type="text"
+                placeholder="Image URL"
+                value={url}
+                onChange={event =>
+                  this.handleInputChange(event, index, section, "url")
+                }
+              />
+            </div>
+          </div>
+        );
+        color = "w3-border-black";
         break;
 
       case "hymn":
@@ -393,7 +481,7 @@ export default class EditorView extends Component {
               type="range"
               value={gap}
               min="1"
-              max="10"
+              max="32"
               onChange={event => {
                 // final update
                 item.gap = this.startGap;
@@ -498,10 +586,10 @@ export default class EditorView extends Component {
           <i
             class={`${
               selected ? "icon-angle-up" : "icon-angle-down"
-            } w3-margin-left w3-large toolbar-toggle ${
+            } w3-large toolbar-toggle ${
               this.state.selectedItem == item ? "w3-text-theme" : ""
             }`}
-            style={{ alignSelf: "center" }}
+            style={{ alignSelf: "center", marginLeft: 4 }}
           />
         </div>
         {toolbar}
@@ -669,7 +757,8 @@ export default class EditorView extends Component {
       ["Person", "name", ["program", "leaders", "missionaries", "classes"]],
       ["Hymn", "hymn", ["program"]],
       ["Music", "music", ["program"]],
-      ["Title", "title", ["program", "calendar"]],
+      ["Title", "title", ["program", "calendar", "cover"]],
+      ["Image", "image", ["cover"]],
       ["Columns", "columns", ["program"]],
       ["Pagebreak", "pagebreak", []],
       ["Gap", "gap", []]
@@ -704,6 +793,7 @@ export default class EditorView extends Component {
       ["Program", "program"],
       ["Announcements", "announcements"],
       ["Calendar", "calendar"],
+      ["Cover", "cover"],
       ["Leaders", "leaders"],
       ["Missionaries", "missionaries"],
       ["Lessons", "lessons"],
@@ -801,6 +891,10 @@ export default class EditorView extends Component {
 
       case "name":
         item = { label: "", name: "" };
+        break;
+
+      case "image":
+        item = { url: "", align: "center" };
         break;
 
       case "hymn":

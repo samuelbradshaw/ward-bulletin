@@ -5,6 +5,12 @@
   "version": "0.2.0",
   "configurations": [
     {
+      "type": "node",
+      "request": "launch",
+      "name": "Launch Generate Media",
+      "program": "${workspaceFolder}/tools/generate-media.js"
+    },
+    {
       "type": "chrome",
       "request": "launch",
       "name": "Launch Chrome",
