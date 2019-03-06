@@ -29,6 +29,13 @@ firebase deploy --only functions
 npm run test
 ```
 
+# copy Green Ward to Demo Ward
+
+for dev:
+curl "http://localhost.charlesproxy.com:5000/ward-bulletin-9b31d/us-central1/greenToDemo"
+for production:
+curl "https://us-central1-ward-bulletin-9b31d.cloudfunctions.net/greenToDemo"
+
 For detailed explanation on how things work, checkout the [CLI Readme](https://github.com/developit/preact-cli/blob/master/README.md).
 
 ## Fonts

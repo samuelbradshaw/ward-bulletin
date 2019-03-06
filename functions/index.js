@@ -140,6 +140,28 @@ exports.addUnit = functions.https.onRequest((req, res) => {
   });
 });
 
+// copy Green Ward to Demo Ward
+exports.greenToDemo = functions.https.onRequest((req, res) => {
+  return cors(req, res, () => {
+    let db = admin.firestore();
+    let greenRef = db.collection("bulletins").doc("greenward");
+    let demoRef = db.collection("bulletins").doc("demoward");
+
+    return greenRef
+      .get()
+      .then(doc => {
+        let data = doc.data();
+        console.log("Data:", data);
+        return demoRef.set(data);
+      })
+      .then(() => res.status(200).end())
+      .catch(error => {
+        console.log("Error:", error);
+        return res.status(599).send(error);
+      });
+  });
+});
+
 // get firebase
 function getFirebase() {
   if (!getFirebase.firebase) {
