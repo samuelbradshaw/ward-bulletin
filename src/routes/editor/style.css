@@ -39,3 +39,11 @@
   height: 72px;
   object-fit: cover;
 }
+
+.helptitle {
+  margin-bottom: 0px;
+}
+
+.helpbody {
+  margin-bottom: 4px;
+}
