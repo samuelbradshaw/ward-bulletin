@@ -32,8 +32,10 @@ export default class EditorMain extends Component {
             data = BulletinData.getInitialData();
           }
           this.setState({ data });
-          prefs.set(prefs.draftBulletin, data);
-          prefs.set(prefs.draftId, unit);
+          if (!this.props.editdemo) {
+            prefs.set(prefs.draftBulletin, data);
+            prefs.set(prefs.draftId, unit);
+          }
         })
         .catch(function(error) {
           console.log("error:", error);

@@ -16,6 +16,13 @@ export default class Editor extends Component {
   state = { status: "checking" };
 
   componentDidMount() {
+    if (this.props.editdemo) {
+      // editing demo, don't need to be logged in
+      this.unit = "demoward";
+      this.setState({ status: "loggedin" });
+      return;
+    }
+
     // see if we are logged in
     firebase.auth().onAuthStateChanged(
       user => {
@@ -49,7 +56,7 @@ export default class Editor extends Component {
     switch (status) {
       case "loggedin":
         if (this.unit) {
-          return <EditorMain unit={this.unit} />;
+          return <EditorMain unit={this.unit} editdemo={this.props.editdemo} />;
         } else {
           return (
             <Page title="Create New Account">

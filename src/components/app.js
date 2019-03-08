@@ -53,6 +53,7 @@ export default class App extends Component {
           <Home path="/" />
           <Home path="/home/" />
           <Editor path="/editor/" />
+          <Editor path="/editdemo/" editdemo />
           <Locate path="/locate/" />
           <Search path="/search/" />
           <Test path="/test/" />

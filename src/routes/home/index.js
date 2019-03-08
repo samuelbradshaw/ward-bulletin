@@ -33,7 +33,7 @@ const Home = () => {
             closest bulletins or search using the name of your ward.
           </p>
           <div class="w3-row">
-            <div class="w3-quarter w3-section w3-center">
+            <div class="w3-quarter w3-section">
               <button
                 class="w3-btn w3-theme w3-round w3-border"
                 onClick={() => route("/locate")}
@@ -41,7 +41,7 @@ const Home = () => {
                 Find by Location
               </button>
             </div>
-            <div class="w3-quarter w3-section w3-center">
+            <div class="w3-quarter w3-section">
               <button
                 class="w3-btn w3-theme w3-round w3-border"
                 onClick={() => route("/search")}
@@ -107,13 +107,27 @@ const Home = () => {
           >
             Send Us Email
           </button>
-          <p>See an example ward bulletin:</p>
-          <button
-            class="w3-btn w3-theme w3-round w3-border"
-            onClick={() => route("/#demoward")}
-          >
-            Example Bulletin
-          </button>
+          <p>See a sample ward bulletin:</p>
+
+          <div class="w3-row">
+            <div class="w3-quarter w3-section">
+              <button
+                class="w3-btn w3-theme w3-round w3-border"
+                onClick={() => route("/#demoward")}
+              >
+                View Sample Bulletin
+              </button>
+            </div>
+            <div class="w3-quarter w3-section">
+              <button
+                class="w3-btn w3-theme w3-round w3-border"
+                onClick={() => route("/editdemo")}
+              >
+                Edit Sample Bulletin
+              </button>
+            </div>
+          </div>
+
           <p />
           <small class="w3-right w3-text-grey">
             Copyright &copy; 2019 by Alan Bird

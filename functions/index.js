@@ -159,7 +159,17 @@ exports.greenToDemo = functions.https.onRequest((req, res) => {
 
     return greenRef
       .get()
-      .then(doc => demoRef.set(doc.data()))
+      .then(doc => {
+        // rename to Sample Ward
+        let data = doc.data();
+        console.log("Data", data);
+        let text = JSON.stringify(data);
+        text = text.replace(new RegExp("Green Ward", "g"), "Sample Ward");
+        data = JSON.parse(text);
+        console.log("New Data", data);
+
+        return demoRef.set(data);
+      })
       .then(() => res.status(200).end())
       .catch(error => res.status(599).send(error));
   });
