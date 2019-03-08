@@ -35,7 +35,7 @@ const Home = () => {
           <div class="w3-row">
             <div class="w3-quarter w3-section w3-center">
               <button
-                class="w3-btn w3-border-theme w3-round w3-border"
+                class="w3-btn w3-theme w3-round w3-border"
                 onClick={() => route("/locate")}
               >
                 Find by Location
@@ -43,7 +43,7 @@ const Home = () => {
             </div>
             <div class="w3-quarter w3-section w3-center">
               <button
-                class="w3-btn w3-border-theme w3-round w3-border"
+                class="w3-btn w3-theme w3-round w3-border"
                 onClick={() => route("/search")}
               >
                 Search by Name
@@ -80,7 +80,7 @@ const Home = () => {
             account to edit your ward bulletin.
           </p>
           <button
-            class="w3-btn w3-border-theme w3-round w3-border"
+            class="w3-btn w3-theme w3-round w3-border"
             onClick={() => route("/editor")}
           >
             Edit Bulletin
@@ -100,7 +100,7 @@ const Home = () => {
             a problem, please send email to: wardbulletinapp@gmail.com.
           </p>
           <button
-            class="w3-btn w3-border-theme w3-round w3-border"
+            class="w3-btn w3-theme w3-round w3-border"
             onClick={() =>
               (window.location = "mailto:wardbulletinapp@gmail.com")
             }
@@ -109,7 +109,7 @@ const Home = () => {
           </button>
           <p>See an example ward bulletin:</p>
           <button
-            class="w3-btn w3-border-theme w3-round w3-border"
+            class="w3-btn w3-theme w3-round w3-border"
             onClick={() => route("/#demoward")}
           >
             Example Bulletin

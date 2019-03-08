@@ -9,9 +9,10 @@
 
 */
 
-// const functionsURL ="https://us-central1-ward-bulletin-9b31d.cloudfunctions.net"; // production
 const functionsURL =
-  "http://localhost.charlesproxy.com:5000/ward-bulletin-9b31d/us-central1"; // development
+  "https://us-central1-ward-bulletin-9b31d.cloudfunctions.net"; // production
+// const functionsURL =
+// "http://localhost.charlesproxy.com:5000/ward-bulletin-9b31d/us-central1"; // development
 const LOC_RADIUS = 10000; // in kms
 
 const initialBulletinData = {

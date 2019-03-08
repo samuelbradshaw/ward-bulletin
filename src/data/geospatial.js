@@ -310,7 +310,7 @@ let getWardsAtLocation = (location, radius = 3) => {
   for (let geohashQuery of geohashesToQuery) {
     let url = `${getFirebaseURL()}/units.json?orderBy="g"&startAt="${
       geohashQuery[0]
-    }"&endAt="${geohashQuery[1]}"`;
+    }"&endAt="${geohashQuery[1]}"&limitToFirst=20`;
     let promise = fetch(url).then(response => {
       // console.log("Response", response.json());
       return response.json().then(data => {

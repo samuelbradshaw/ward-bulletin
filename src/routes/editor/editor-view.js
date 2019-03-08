@@ -759,7 +759,7 @@ export default class EditorView extends Component {
 
   addItemMenu(index, section) {
     let items = [
-      ["Announcement", "article", ["announcements", "information"]],
+      ["Article", "article", ["announcements", "information"]],
       ["Calendar Event", "event", ["calendar"]],
       ["Person", "name", ["program", "leaders", "missionaries", "classes"]],
       ["Hymn", "hymn", ["program"]],
