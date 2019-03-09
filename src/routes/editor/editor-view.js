@@ -62,9 +62,10 @@ export default class EditorView extends Component {
           <MediaLibrary
             select={item => {
               hideModal("media-modal");
+              let url = item.thumbnail.replace("-thumbnail.", "-mobile.");
               let props = {
                 type: "update",
-                value: item.mobile,
+                value: url,
                 attr: "url",
                 index: this.mediaIndex,
                 section: this.mediaSection

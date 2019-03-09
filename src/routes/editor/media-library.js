@@ -6,17 +6,19 @@ import style from "./style";
 class MediaLibrary extends Component {
   cache = {};
   stack = [];
-  state = { mediaData: [], title: "Media Library" };
+  state = { mediaData: null };
 
   componentDidMount() {
     // fetch top level of media catalog
-    this.getCollection("images:eng", "Media Library");
+    this.getCollection("images");
   }
 
-  render({}, {}) {
+  render({}, { mediaData }) {
     return (
       <div class="w3-display-container">
-        <h5 class="w3-center">{this.state.title}</h5>
+        <h5 class="w3-center">
+          {mediaData ? mediaData.name : "Media Library"}
+        </h5>
         {this.stack.length ? (
           <button
             class="icon-left-open w3-display-topleft w3-btn"
@@ -28,57 +30,57 @@ class MediaLibrary extends Component {
         ) : null}
         <div class="w3-card">
           <div class={style.mediaContainer}>
-            {this.state.mediaData.map(item => {
-              if (item.type === "image") {
-                return (
-                  <div
-                    class="w3-padding"
-                    onClick={e => {
-                      this.props.select(item);
-                      e.stopPropagation();
-                    }}
-                  >
-                    <img
-                      key={item.thumb}
-                      src={item.thumb}
-                      class={style.assetImage}
-                    />
-                  </div>
-                );
-              } else if (item.type === "folder") {
-                return (
-                  <div
-                    class="w3-padding"
-                    onClick={e => {
-                      this.stack.push({
-                        title: item.title,
-                        data: this.state.mediaData
-                      });
-                      this.getCollection(item.id, item.title);
-                      e.stopPropagation();
-                    }}
-                  >
-                    <img
-                      src={item.thumb}
-                      key={item.thumb}
-                      class={"w3-card " + style.folderImage}
-                    />
-                    <div class={"w3-small " + style.folderTitle}>
-                      {item.title}
+            {mediaData &&
+              mediaData.items.map(item => {
+                if ("thumbnail" in item) {
+                  return (
+                    <div
+                      class="w3-padding"
+                      onClick={e => {
+                        this.props.select(item);
+                        e.stopPropagation();
+                      }}
+                    >
+                      <img
+                        key={item.thumbnail}
+                        src={item.thumbnail}
+                        class={style.assetImage}
+                      />
                     </div>
-                  </div>
-                );
-              }
-            })}
+                  );
+                } else if ("id" in item) {
+                  return (
+                    <div
+                      class="w3-padding"
+                      onClick={e => {
+                        this.stack.push({
+                          data: this.state.mediaData
+                        });
+                        this.getCollection(item.id);
+                        e.stopPropagation();
+                      }}
+                    >
+                      <img
+                        src={item.image}
+                        key={item.image}
+                        class={"w3-card " + style.folderImage}
+                      />
+                      <div class={"w3-small " + style.folderTitle}>
+                        {item.name}
+                      </div>
+                    </div>
+                  );
+                }
+              })}
           </div>
         </div>
       </div>
     );
   }
 
-  getCollection(id, title) {
+  getCollection(id) {
     this.fetchMediaData(id).then(mediaData => {
-      this.setState({ mediaData, title });
+      this.setState({ mediaData });
     });
   }
 
@@ -108,7 +110,7 @@ class MediaLibrary extends Component {
   goBack() {
     if (this.stack.length) {
       let item = this.stack.pop();
-      this.setState({ mediaData: item.data, title: item.title });
+      this.setState({ mediaData: item.data });
     }
   }
 }

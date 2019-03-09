@@ -61,40 +61,43 @@ const hideModal = id => {
   document.getElementById(id).style.display = "none";
 };
 
-const Header = ({ title, rightControl, isHome, goBack }) => (
-  <header
-    class=""
-    style={{
-      opacity: 0.9,
-      position: "fixed",
-      top: "0px",
-      width: "100%",
-      height: "44px"
-    }}
-  >
-    <div
-      class="w3-bar w3-content w3-theme-d2 w3-display-container"
-      style={{ height: "44px" }}
+const Header = ({ title, leftControl, rightControl, isHome, goBack }) => {
+  return (
+    <header
+      class=""
+      style={{
+        opacity: 0.9,
+        position: "fixed",
+        top: "0px",
+        width: "100%",
+        height: "44px",
+        zIndex: 10
+      }}
     >
-      {!isHome && (
-        <button
-          class="icon-left-open w3-display-left w3-btn"
-          onClick={() => {
-            if (goBack) {
-              history.back();
-            } else {
-              location.replace("/home");
-            }
-          }}
-        />
-      )}
-      <h3 class="w3-center" style={{ margin: 0, marginTop: 4 }}>
-        {title}
-      </h3>
-      {rightControl && <div class="w3-right">{rightControl}</div>}
-    </div>
-  </header>
-);
+      <div
+        class="w3-bar w3-content w3-theme-d2 w3-display-container"
+        style={{ height: "44px" }}
+      >
+        {!isHome && (
+          <button
+            class="icon-left-open w3-display-left w3-btn"
+            onClick={() => {
+              if (goBack) {
+                history.back();
+              } else {
+                location.replace("/home");
+              }
+            }}
+          />
+        )}
+        <h3 class="w3-center" style={{ margin: 0, marginTop: 4 }}>
+          {title}
+        </h3>
+        {rightControl && <div class="w3-right">{rightControl}</div>}
+      </div>
+    </header>
+  );
+};
 
 const Footer = ({ children }) => (
   <footer
