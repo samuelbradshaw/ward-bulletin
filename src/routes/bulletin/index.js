@@ -58,6 +58,7 @@ export default class Bulletin extends Component {
       let rightControl = (
         <span class="w3-display-right">
           <button
+            title="Settings"
             class="icon-cog w3-btn w3-large w3-padding-small"
             onClick={e => {
               showModal("settings-modal");
@@ -65,6 +66,7 @@ export default class Bulletin extends Component {
             }}
           />
           <button
+            title="Reload Bulletin"
             class="icon-arrows-cw w3-btn w3-large w3-padding-small"
             onClick={e => {
               this.setState({ data: null });
@@ -78,6 +80,7 @@ export default class Bulletin extends Component {
         platform.ios || platform.macos ? "icon-export" : "icon-share";
       let leftControl = (
         <button
+          title="Share with Social Media"
           class={shareIcon + " w3-btn w3-large w3-padding-small"}
           onClick={e => {
             showModal("share-modal");

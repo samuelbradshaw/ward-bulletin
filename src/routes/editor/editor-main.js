@@ -48,6 +48,7 @@ export default class EditorMain extends Component {
       let rightControl = (
         <span class="w3-display-right">
           <button
+            title="settings"
             class="icon-cog w3-btn w3-large w3-padding-small"
             onClick={e => {
               showModal("settings-modal");
@@ -55,6 +56,7 @@ export default class EditorMain extends Component {
             }}
           />
           <button
+            name="Help"
             class="icon-help-circled w3-btn w3-large w3-padding-small"
             onClick={e => {
               showModal("help-modal");
@@ -92,6 +94,7 @@ export default class EditorMain extends Component {
             </div>
             <Footer>
               <button
+                title="Undo Edit"
                 onClick={e => {
                   this.undo();
                   e.stopPropagation();
@@ -104,6 +107,7 @@ export default class EditorMain extends Component {
                 Undo
               </button>
               <button
+                title="Upload Bulletin"
                 onClick={e => {
                   this.publish();
                   e.stopPropagation();
@@ -116,6 +120,7 @@ export default class EditorMain extends Component {
                 Publish
               </button>
               <button
+                title="Logout"
                 onClick={e => {
                   logout();
                   e.stopPropagation();
