@@ -35,7 +35,7 @@ class MediaLibrary extends Component {
                 if ("thumbnail" in item) {
                   return (
                     <div
-                      class="w3-padding"
+                      class={style.paddingImages}
                       onClick={e => {
                         this.props.select(item);
                         e.stopPropagation();

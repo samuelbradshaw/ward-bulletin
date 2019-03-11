@@ -61,16 +61,35 @@ exports.setBulletin = functions.https.onRequest((req, res) => {
       body = JSON.parse(body);
     }
 
-    let db = admin.firestore();
-    var docRef = db.collection("bulletins").doc(id);
-
     const tokenId = req.get("Authorization").split("Bearer ")[1];
     return admin
       .auth()
       .verifyIdToken(tokenId)
       .then(claims => {
         if (claims && claims.unit === id) {
-          return docRef.set(body);
+          // gzip it
+          const zlib = require("zlib");
+          zlib.gzip(JSON.stringify(body), function(error, buffer) {
+            if (error) throw error;
+            const bucket = admin.storage().bucket();
+            const file = bucket.file(id + "/bulletin.json");
+            file.save(
+              buffer,
+              {
+                metadata: {
+                  contentType: "application/json",
+                  contentEncoding: "gzip"
+                }
+              },
+              error => {
+                if (error) {
+                  return res.status(500).send("Unable to upload the image.");
+                }
+                file.makePublic();
+                return res.status(200).end();
+              }
+            );
+          });
         } else {
           return res.status(401).send("Permission denied");
         }
@@ -153,22 +172,37 @@ exports.addUnit = functions.https.onRequest((req, res) => {
 // copy Green Ward to Demo Ward
 exports.greenToDemo = functions.https.onRequest((req, res) => {
   return cors(req, res, () => {
-    let db = admin.firestore();
-    let greenRef = db.collection("bulletins").doc("greenward");
-    let demoRef = db.collection("bulletins").doc("demoward");
-
-    return greenRef
-      .get()
-      .then(doc => {
+    const url = `https://firebasestorage.googleapis.com/v0/b/ward-bulletin-9b31d.appspot.com/o/greenward%2Fbulletin.json?alt=media`;
+    const fetch = require("node-fetch");
+    return fetch(url)
+      .then(response => response.json())
+      .then(data => {
         // rename to Sample Ward
-        let data = doc.data();
-        console.log("Data", data);
         let text = JSON.stringify(data);
         text = text.replace(new RegExp("Green Ward", "g"), "Sample Ward");
-        data = JSON.parse(text);
-        console.log("New Data", data);
 
-        return demoRef.set(data);
+        const zlib = require("zlib");
+        zlib.gzip(text, function(error, buffer) {
+          if (error) throw error;
+          const bucket = admin.storage().bucket();
+          const file = bucket.file("demoward/bulletin.json");
+          return file.save(
+            buffer,
+            {
+              metadata: {
+                contentType: "application/json",
+                contentEncoding: "gzip"
+              }
+            },
+            error => {
+              if (error) {
+                return res.status(500).send("Unable to upload the image.");
+              }
+              file.makePublic();
+              return res.status(200).end();
+            }
+          );
+        });
       })
       .then(() => res.status(200).end())
       .catch(error => res.status(599).send(error));

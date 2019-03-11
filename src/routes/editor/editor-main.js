@@ -239,9 +239,15 @@ export default class EditorMain extends Component {
       })
       .then(response => {
         loader.hide();
+        setTimeout(
+          () =>
+            alert(`The ${this.state.data.settings.name} bulletin is now live!`),
+          10
+        );
       })
       .catch(error => {
         loader.hide();
+        alert("Error while publishing bulletin:", error);
       });
   }
 }

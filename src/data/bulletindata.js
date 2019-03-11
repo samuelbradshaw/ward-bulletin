@@ -231,11 +231,8 @@ let BulletinData = {
 
   // get bulletin
   getBulletin: function(unit) {
-    const convert = require("firebase-firestore-fields");
-    const url = `https://firestore.googleapis.com/v1beta1/projects/ward-bulletin-9b31d/databases/(default)/documents/bulletins/${unit}`;
-    return fetch(url)
-      .then(response => response.json())
-      .then(json => (json.fields ? convert(json.fields) : json));
+    const url = `https://storage.googleapis.com/ward-bulletin-9b31d.appspot.com/${unit}/bulletin.json`;
+    return fetch(url).then(response => response.json());
   },
 
   // save bulletin

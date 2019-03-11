@@ -22,6 +22,9 @@
 .mediaContainer {
   display: flex;
   flex-wrap: wrap;
+  padding: 10px 2px;
+  display: flex;
+  justify-content: center;
 }
 
 .folderImage {
@@ -35,9 +38,11 @@
 }
 
 .assetImage {
-  width: 72px;
   height: 72px;
-  object-fit: cover;
+}
+
+.paddingImages {
+  padding: 4px 4px !important;
 }
 
 .helptitle {
