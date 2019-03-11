@@ -5,6 +5,7 @@ import { Page, Modal, showModal, Footer } from "../../components";
 import BulletinView from "./bulletin-view";
 import prefs from "../../data/prefs";
 import Settings from "./settings";
+import Share from "./share";
 import platform from "mini-platform-detect";
 
 export default class Bulletin extends Component {
@@ -73,6 +74,17 @@ export default class Bulletin extends Component {
           />
         </span>
       );
+      let shareIcon =
+        platform.ios || platform.macos ? "icon-export" : "icon-share";
+      let leftControl = (
+        <button
+          class={shareIcon + " w3-btn w3-large w3-padding-small"}
+          onClick={e => {
+            showModal("share-modal");
+            e.stopPropagation();
+          }}
+        />
+      );
       let installPrompt;
       let device = "device";
       if (this.state.showInstallMessage) {
@@ -104,11 +116,18 @@ export default class Bulletin extends Component {
         setTimeout(() => this.setState({ showInstallMessage: false }), 30000);
       }
       return (
-        <Page title={data.settings.name} rightControl={rightControl}>
+        <Page
+          title={data.settings.name}
+          rightControl={rightControl}
+          leftControl={leftControl}
+        >
           <BulletinView data={data} />
           {installPrompt}
           <Modal id="settings-modal">
             <Settings update={() => this.setState({ data })} />
+          </Modal>
+          <Modal id="share-modal">
+            <Share unit={unit} name={data.settings.name} />
           </Modal>
         </Page>
       );

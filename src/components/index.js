@@ -78,18 +78,22 @@ const Header = ({ title, leftControl, rightControl, isHome, goBack }) => {
         class="w3-bar w3-content w3-theme-d2 w3-display-container"
         style={{ height: "44px" }}
       >
-        {!isHome && (
-          <button
-            class="icon-left-open w3-display-left w3-btn"
-            onClick={() => {
-              if (goBack) {
-                history.back();
-              } else {
-                location.replace("/home");
-              }
-            }}
-          />
-        )}
+        <span class="w3-display-left">
+          {!isHome && (
+            <button
+              class="icon-left-open w3-btn"
+              onClick={() => {
+                if (goBack) {
+                  history.back();
+                } else {
+                  location.replace("/home");
+                }
+              }}
+            />
+          )}
+
+          {leftControl}
+        </span>
         <h3 class="w3-center" style={{ margin: 0, marginTop: 4 }}>
           {title}
         </h3>
@@ -128,6 +132,7 @@ const Page = ({
   children,
   showLoader,
   message,
+  leftControl,
   rightControl,
   isHome,
   goBack
@@ -136,6 +141,7 @@ const Page = ({
     <Header
       title={title}
       rightControl={rightControl}
+      leftControl={leftControl}
       isHome={isHome}
       goBack={goBack}
     />

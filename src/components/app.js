@@ -1,7 +1,6 @@
 import { h, Component } from "preact";
 import { Router } from "preact-router";
 import Match from "preact-router/match";
-import Helmet from "preact-helmet";
 import platform from "mini-platform-detect";
 
 // Code-splitting is automated for routes
@@ -48,7 +47,6 @@ export default class App extends Component {
   render() {
     return (
       <div id="app">
-        <Helmet title="Ward Bulletin" />
         <Router onChange={this.handleRoute}>
           <Home path="/" />
           <Home path="/home/" />

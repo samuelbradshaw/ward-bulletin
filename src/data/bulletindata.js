@@ -9,10 +9,6 @@
 
 */
 
-const functionsURL =
-  "https://us-central1-ward-bulletin-9b31d.cloudfunctions.net"; // production
-// const functionsURL =
-// "http://localhost.charlesproxy.com:5000/ward-bulletin-9b31d/us-central1"; // development
 const LOC_RADIUS = 10000; // in kms
 
 const initialBulletinData = {
@@ -219,6 +215,14 @@ function wardList(data, extra) {
   return wards;
 }
 
+function functionsURL() {
+  let host = location.hostname;
+  let dev = host === "localhost" || host === "127.0.0.1";
+  return dev
+    ? "http://localhost.charlesproxy.com:5000/ward-bulletin-9b31d/us-central1" // development
+    : "https://us-central1-ward-bulletin-9b31d.cloudfunctions.net"; // production
+}
+
 let BulletinData = {
   // get initial bulletin data for new account
   getInitialData: function() {
@@ -237,7 +241,7 @@ let BulletinData = {
 
   // save bulletin
   saveBulletin: function(unit, data, token) {
-    let url = `${functionsURL}/setBulletin?id=${unit}`;
+    let url = `${functionsURL()}/setBulletin?id=${unit}`;
     return fetch(url, {
       method: "POST",
       body: JSON.stringify(data),
@@ -275,7 +279,7 @@ let BulletinData = {
   addUnit: function(id, name, address, user) {
     let regex = /[ \.]/gi;
     let searchname = name.toLowerCase().replace(regex, "");
-    let url = `${functionsURL}/addUnit`;
+    let url = `${functionsURL()}/addUnit`;
     let data = { id, name, address, searchname, user };
     let body = JSON.stringify(data);
 
