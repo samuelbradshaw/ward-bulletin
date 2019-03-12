@@ -79,7 +79,7 @@ exports.setBulletin = functions.https.onRequest((req, res) => {
                 metadata: {
                   contentType: "application/json",
                   contentEncoding: "gzip",
-                  cacheControl: "private"
+                  cacheControl: "no-cache, no-store, must-revalidate"
                 }
               },
               error => {
@@ -193,7 +193,7 @@ exports.greenToDemo = functions.https.onRequest((req, res) => {
               metadata: {
                 contentType: "application/json",
                 contentEncoding: "gzip",
-                cacheControl: "private"
+                cacheControl: "no-cache, no-store, must-revalidate"
               }
             },
             error => {
