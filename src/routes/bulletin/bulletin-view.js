@@ -83,6 +83,35 @@ let createLine = item => {
       break;
 
     case "columns":
+      let { count, data } = item;
+      let cells = data ? data.trim().split("\n") : [];
+      let rowCount = Math.floor((cells.length + count - 1) / count);
+      let rows = [];
+      let className = ["w3-col", "w3-half", "w3-third", "w3-quarter"][
+        count - 1
+      ];
+      for (let rowIdx = 0; rowIdx < rowCount; rowIdx++) {
+        let cols = [];
+        for (let colIdx = 0; colIdx < count; colIdx++) {
+          let value = cells[rowIdx + colIdx * rowCount] || "\xa0";
+          let cell = (
+            <span
+              style={{
+                whiteSpace: "nowrap",
+                overflow: "hidden",
+                textOverflow: "ellipsis"
+              }}
+              class={className}
+            >
+              {value}
+            </span>
+          );
+          cols.push(cell);
+        }
+        let row = <div class="w3-row">{cols}</div>;
+        rows.push(row);
+      }
+      line1 = <div class="w3-container">{rows}</div>;
       break;
 
     case "article":

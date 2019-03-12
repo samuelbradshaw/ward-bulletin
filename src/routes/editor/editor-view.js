@@ -433,6 +433,50 @@ export default class EditorView extends Component {
         break;
 
       case "columns":
+        content = (
+          <div>
+            <div>
+              <HidingLabel name="Column Count" />
+              <input
+                style={{ width: 44 }}
+                class={`${style.textinput} w3-border w3-round`}
+                type="number"
+                value={item.count}
+                onChange={event => {
+                  let value = parseInt(event.target.value);
+                  value = Math.max(1, Math.min(4, value));
+                  let request = {
+                    type: "update",
+                    value,
+                    attr: "count",
+                    index,
+                    section
+                  };
+                  this.props.update(request);
+                }}
+              />
+            </div>
+
+            <HidingLabel name="Column Text" />
+            <textarea
+              rows="5"
+              style={{ width: "100%" }}
+              value={item.data}
+              onInput={event => {
+                this.skipRender = true;
+                this.props.update({
+                  type: "update",
+                  value: event.target.value,
+                  attr: "data",
+                  index,
+                  section
+                });
+              }}
+            />
+          </div>
+        );
+
+        color = "w3-border-aqua";
         break;
 
       case "article":
@@ -914,6 +958,7 @@ export default class EditorView extends Component {
         break;
 
       case "columns":
+        item = { count: 2, data: "" };
         break;
 
       case "article":
