@@ -8,6 +8,7 @@ import { logout } from "../../data/firebase";
 import Help from "./help";
 import Settings from "./settings";
 import firebase from "../../data/firebase";
+import printCheck from "../../misc/print-check";
 
 export default class EditorMain extends Component {
   state = { data: null, update: 0 };
@@ -45,6 +46,11 @@ export default class EditorMain extends Component {
 
   render({ unit }, { data }) {
     if (data) {
+      if (printCheck.printing) {
+        // printing, just show bulletin view
+        return <BulletinView data={data} />;
+      }
+
       let rightControl = (
         <span class="w3-display-right">
           <button
@@ -120,6 +126,19 @@ export default class EditorMain extends Component {
                 Publish
               </button>
               <button
+                title="Upload Bulletin"
+                onClick={e => {
+                  window.print();
+                  e.stopPropagation();
+                }}
+                class={`w3-bar-item w3-btn ${
+                  unit === "demoward" ? "w3-disabled" : ""
+                }`}
+              >
+                <i class="icon-print" />
+                Print
+              </button>
+              <button
                 title="Logout"
                 onClick={e => {
                   logout();
@@ -142,6 +161,7 @@ export default class EditorMain extends Component {
               update={() => {
                 this.setState({ update: 0 });
               }}
+              bulletin={data}
             />
           </Modal>
         </Page>

@@ -227,6 +227,12 @@
       "css": "share",
       "code": 61920,
       "src": "fontawesome"
+    },
+    {
+      "uid": "7277ded7695b2a307a5f9d50097bb64c",
+      "css": "print",
+      "code": 59404,
+      "src": "fontawesome"
     }
   ]
 }

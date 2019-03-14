@@ -6,7 +6,8 @@ import {
   ToolbarButton,
   showModal,
   hideModal,
-  Modal
+  Modal,
+  NumberInput
 } from "../../components";
 import HTMLEditor from "./html-editor";
 import prefs from "../../data/prefs";
@@ -231,7 +232,7 @@ export default class EditorView extends Component {
                     index,
                     section
                   };
-                  this.props.update(request);
+                  this.updateNoRender(request);
                 }}
               />
             </div>
@@ -298,28 +299,8 @@ export default class EditorView extends Component {
       case "image":
         let url = item.url;
         content = (
-          <div class="w3-row">
-            <div class="w3-col w3-right leftmargin" style="width:60px">
-              <HidingLabel name="Align" />
-              {this.alignMenu(item.align, index, section)}
-            </div>
-
-            <div class="w3-col w3-right leftmargin" style="width:60px">
-              <HidingLabel name="Library" />
-              <button
-                class="w3-btn w3-border-theme w3-round w3-border w3-padding-small"
-                style={{ height: 32 }}
-                onClick={() => {
-                  this.mediaSection = section;
-                  this.mediaIndex = index;
-                  showModal("media-modal");
-                }}
-              >
-                Media
-              </button>
-            </div>
-
-            <div class="w3-rest">
+          <div>
+            <div>
               <HidingLabel name="URL" />
               <input
                 class={`${style.textinput} w3-border w3-round`}
@@ -330,6 +311,49 @@ export default class EditorView extends Component {
                   this.handleInputChange(event, index, section, "url")
                 }
               />
+            </div>
+
+            <div class="w3-row">
+              <div class="w3-col w3-colleftmargin" style="width:110px">
+                <HidingLabel name="Library" />
+                <button
+                  class="w3-btn w3-border-theme w3-round w3-border w3-padding-small"
+                  style={{ height: 32 }}
+                  onClick={() => {
+                    this.mediaSection = section;
+                    this.mediaIndex = index;
+                    showModal("media-modal");
+                  }}
+                >
+                  Media Library
+                </button>
+              </div>
+              <div class="w3-col leftmargin" style="width:60px">
+                <HidingLabel name="Align" />
+                {this.alignMenu(item.align, index, section)}
+              </div>
+              <div class="w3-col leftmargin" style="width:120px">
+                <HidingLabel name="Width" />
+                <span>
+                  <NumberInput
+                    postscript="%"
+                    min={0}
+                    max={100}
+                    step={5}
+                    height={32}
+                    value={item.width || 80}
+                    onChange={value =>
+                      this.updateNoRender({
+                        type: "update",
+                        value: value,
+                        attr: "width",
+                        index,
+                        section
+                      })
+                    }
+                  />
+                </span>
+              </div>
             </div>
           </div>
         );
@@ -452,7 +476,7 @@ export default class EditorView extends Component {
                     index,
                     section
                   };
-                  this.props.update(request);
+                  this.updateNoRender(request);
                 }}
               />
             </div>
@@ -464,7 +488,7 @@ export default class EditorView extends Component {
               value={item.data}
               onInput={event => {
                 this.skipRender = true;
-                this.props.update({
+                this.updateNoRender({
                   type: "update",
                   value: event.target.value,
                   attr: "data",
@@ -998,6 +1022,11 @@ export default class EditorView extends Component {
     this.setState({
       selectedSection: item
     });
+  }
+
+  updateNoRender(request) {
+    this.skipRender = true;
+    this.props.update(request);
   }
 }
 

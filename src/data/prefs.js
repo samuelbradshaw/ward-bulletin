@@ -1,4 +1,16 @@
-var prefs = {
+let defaults = {
+  recents: [],
+  "leader-char": " .",
+  "theme-color": "blue",
+  "hide-labels": false,
+  "home-screen-prompt-time": 0,
+  "use-hymns-app": false,
+  "print-columns": 2,
+  "center-margin": 0.5,
+  "edge-margin": 0.0
+};
+
+let prefs = {
   cacheBulletin: "cache-bulletin",
   cacheDate: "cache-date",
   cacheId: "cache-id",
@@ -10,14 +22,22 @@ var prefs = {
   hideLabels: "hide-labels",
   homeScreenPromptTime: "home-screen-prompt-time",
   useHymnsApp: "use-hymns-app",
+  printColumns: "print-columns",
+  centerMargin: "center-margin",
+  edgeMargin: "edge-margin",
 
   get: function(key) {
-    let dataString;
+    let data, dataString;
     if (typeof window !== "undefined") {
-      // avoid pre-rending error
+      // avoid pre-rendierng error
       dataString = localStorage.getItem(key);
     }
-    return dataString === undefined ? undefined : JSON.parse(dataString);
+    if (dataString === undefined || dataString === null) {
+      data = defaults[key];
+    } else {
+      data = JSON.parse(dataString);
+    }
+    return data;
   },
 
   set: function(key, value) {

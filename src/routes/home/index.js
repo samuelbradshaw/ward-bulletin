@@ -52,7 +52,7 @@ const Home = () => {
           </div>
         </div>
 
-        {recents && recents.length && (
+        {recents.length && (
           <div>
             <h5>Recent Ward Bulletins</h5>
             <div class="w3-card w3-container w3-white w3-round">

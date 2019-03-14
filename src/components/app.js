@@ -14,12 +14,16 @@ import Test from "../routes/home/test";
 
 import prefs from "../data/prefs";
 import { setThemeColor } from "../components";
+import printCheck from "../misc/print-check";
 
 export default class App extends Component {
   /** Gets fired when the route changes.
    *	@param {Object} event		"change" event from [preact-router](http://git.io/preact-router)
    *	@param {string} event.url	The newly routed URL
    */
+
+  state = { printing: false };
+
   componentWillMount() {
     let color = prefs.get(prefs.themeColor);
     if (color && color !== "blue") {
@@ -38,6 +42,8 @@ export default class App extends Component {
         // event.userChoice.then(handleInstall);
       });
     }
+
+    printCheck.onChange = printing => this.setState({ printing });
   }
 
   handleRoute = e => {

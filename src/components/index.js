@@ -31,7 +31,9 @@ const Modal = ({ id, children }) => {
       id={id}
       class="w3-modal"
       onClick={e => {
-        hideModal(id);
+        if (e.target.id === id) {
+          hideModal(id);
+        }
         e.stopPropagation();
       }}
     >
@@ -208,6 +210,71 @@ function ToolbarButton({ title, icon, onClick, disabled }) {
   );
 }
 
+let RadioButtons = ({ items, selected, select }) => {
+  let sel = "icon-dot-circled w3-large";
+  let unsel = "icon-circle-empty w3-large";
+  let buttons = items.map((item, index) => (
+    <div class="w3-quarter w3-padding-small">
+      <span
+        class="w3-text-theme"
+        onClick={e => {
+          select(index);
+          e.stopPropagation();
+        }}
+      >
+        <i class={index === selected ? sel : unsel} />
+        {item}
+      </span>
+    </div>
+  ));
+  return <div class="w3-row">{buttons}</div>;
+};
+
+let CheckBox = ({ title, checked, onChange }) => (
+  <p>
+    <input
+      class="w3-check"
+      type="checkbox"
+      checked={checked}
+      onChange={e => {
+        onChange(e.target.checked);
+        e.stopPropagation();
+      }}
+    />
+    <label>{title}</label>
+  </p>
+);
+
+let NumberInput = ({
+  title,
+  postscript,
+  value,
+  onChange,
+  min,
+  max,
+  step,
+  height
+}) => {
+  return (
+    <div>
+      {title && <label style={{ marginRight: 6 }}>{title}</label>}
+      <input
+        class={"w3-border w3-round"}
+        style={{ width: 56, textAlign: "right", height: height }}
+        type="number"
+        value={value}
+        min={min}
+        max={max}
+        step={step}
+        onChange={e => {
+          onChange(parseFloat(e.target.value));
+        }}
+      />
+      {postscript && <label style={{ marginLeft: 6 }}>{postscript}</label>}
+    </div>
+  );
+};
+
 function toggleMenu(menuId) {
   var menu = document.getElementById(menuId);
   if (menu.className.indexOf("w3-show") == -1) {
@@ -258,5 +325,8 @@ export {
   setThemeColor,
   Modal,
   showModal,
-  hideModal
+  hideModal,
+  RadioButtons,
+  CheckBox,
+  NumberInput
 };

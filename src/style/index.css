@@ -69,10 +69,6 @@ body {
     visibility: hidden;
   }
 
-  .pagebreak {
-    page-break-before: always;
-  }
-
   .pagecontent {
     margin-top: 10px;
   }

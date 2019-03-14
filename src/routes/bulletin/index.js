@@ -7,6 +7,7 @@ import prefs from "../../data/prefs";
 import Settings from "./settings";
 import Share from "./share";
 import platform from "mini-platform-detect";
+import printCheck from "../../misc/print-check";
 
 export default class Bulletin extends Component {
   state = {
@@ -45,7 +46,9 @@ export default class Bulletin extends Component {
         let days = (now - then) / 1000 / 60 / 60 / 24;
         if (days >= 0) {
           // let's prompt
-          this.setState({ showInstallMessage: true });
+          this.setState({
+            showInstallMessage: true
+          });
           prefs.set(prefs.homeScreenPromptTime, Date.now());
         }
       }
@@ -104,7 +107,11 @@ export default class Bulletin extends Component {
           >
             <div class="w3-panel">
               <span
-                onClick={e => this.setState({ showInstallMessage: false })}
+                onClick={e =>
+                  this.setState({
+                    showInstallMessage: false
+                  })
+                }
                 class="icon-cancel-circled w3-large w3-padding w3-display-topright"
               />
               <p>
@@ -116,7 +123,17 @@ export default class Bulletin extends Component {
             <p />
           </footer>
         );
-        setTimeout(() => this.setState({ showInstallMessage: false }), 30000);
+        setTimeout(
+          () =>
+            this.setState({
+              showInstallMessage: false
+            }),
+          30000
+        );
+      }
+      if (printCheck.printing) {
+        // printing, just show bulletin view
+        return <BulletinView data={data} />;
       }
       return (
         <Page
@@ -160,10 +177,13 @@ export default class Bulletin extends Component {
       return; // don't add demo ward to recents
     }
     // add unit to recents
-    let recents = prefs.get(prefs.recents) || [];
+    let recents = prefs.get(prefs.recents);
     // filter out this unit
     recents = recents.filter(item => item.id !== unit);
-    recents.unshift({ id: unit, name: data.settings.name });
+    recents.unshift({
+      id: unit,
+      name: data.settings.name
+    });
     prefs.set(prefs.recents, recents);
   }
 

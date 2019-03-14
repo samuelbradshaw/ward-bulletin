@@ -2,11 +2,17 @@ import { h, Component } from "preact";
 import style from "./style";
 import prefs from "../../data/prefs";
 import { route } from "preact-router";
+import printCheck from "../../misc/print-check";
 
 export default class BulletinView extends Component {
   state = { hymn: null };
 
   render({ data }) {
+    if (printCheck.printing && prefs.get(prefs.printColumns) > 1) {
+      // printing
+      return this.renderPrint(data);
+    }
+
     let sections = [];
     for (let section of data.sections) {
       if (sections.length) {
@@ -18,11 +24,106 @@ export default class BulletinView extends Component {
       <div class={style.bulletin + " w3-container w3-white"}>{sections}</div>
     );
   }
+
+  renderPrint(data) {
+    let sections = {};
+    data.sections.forEach(section => {
+      sections[section.type] = section;
+    });
+    let {
+      cover,
+      program,
+      announcements,
+      calendar,
+      leaders,
+      missionaries,
+      lessons,
+      information,
+      classes
+    } = sections;
+
+    // page 1 is cover
+    let page1 = cover ? addSection(cover.data) : [];
+
+    // page 2 is announcements and/or calendar
+    let annSection = announcements ? addSection(announcements.data) : [];
+    let calSection = calendar ? addSection(calendar.data) : [];
+    let page2 = [...annSection, ...calSection];
+
+    // page 3 is program
+    let page3 = addSection(program.data);
+
+    // page 4 is all else
+    let page4 = [];
+    for (let section of [
+      leaders,
+      missionaries,
+      lessons,
+      information,
+      classes
+    ]) {
+      if (section) {
+        page4 = page4.concat(addSection(section.data));
+      }
+    }
+    if (!page4.length) {
+      page4 = [<div>&#160;</div>];
+    }
+
+    // 2 pages per print page
+    let colBreak = <div style={{ breakBefore: "column" }} />;
+    let centerMargin = `${prefs.get(prefs.centerMargin)}in`;
+    let edgeMargin = `${prefs.get(prefs.edgeMargin)}in`;
+    let leftStyle = {
+      paddingLeft: edgeMargin,
+      paddingRight: centerMargin
+    };
+    let rightStyle = {
+      paddingLeft: centerMargin,
+      paddingRight: edgeMargin
+    };
+    let print1 = (
+      <div
+        class="w3-row"
+        style={{
+          pageBreakAfter: "always"
+        }}
+      >
+        <div class="w3-half" style={leftStyle}>
+          {page4}
+        </div>
+        <div class="w3-half" style={rightStyle}>
+          {page1}
+        </div>
+      </div>
+    );
+    let print2 = (
+      <div
+        class="w3-row"
+        style={{
+          pageBreakAfter: "always"
+        }}
+      >
+        <div class="w3-half" style={leftStyle}>
+          {page2}
+        </div>
+        <div class="w3-half" style={rightStyle}>
+          {page3}
+        </div>
+      </div>
+    );
+    return (
+      <div>
+        {print1}
+        {print2}
+      </div>
+    );
+  }
 }
 
 let divider = () => <hr class="w3-border w3-border-theme" />;
 
-let addSection = data => {
+let addSection = (data = []) => {
   let lines = [];
   let events = [];
   for (let i = 0; i < data.length; i++) {
@@ -66,8 +167,16 @@ let createLine = item => {
       break;
 
     case "image":
-      let image = <img src={item.url} class="w3-image w3-round" />;
-      line1 = alignLine(image, null, item.align);
+      const justify = justifyStyle(item.align);
+      line1 = (
+        <div style={{ display: "flex", justifyContent: justify }}>
+          <img
+            src={item.url}
+            class="w3-image w3-round"
+            style={{ width: `${item.width || 80}%`, height: "100%" }}
+          />
+        </div>
+      );
       break;
 
     case "hymn":
@@ -151,6 +260,14 @@ let createLine = item => {
   );
 };
 
+function justifyStyle(alignType) {
+  return alignType === "left"
+    ? "flex-start"
+    : alignType === "right"
+    ? "flex-end"
+    : "center";
+}
+
 function alignLine(title, styleType, alignType, size) {
   let lineStyle = {};
   if (styleType == "bold") {
@@ -158,12 +275,7 @@ function alignLine(title, styleType, alignType, size) {
   } else if (styleType == "italic") {
     lineStyle.fontStyle = "italic";
   }
-  const justify =
-    alignType === "left"
-      ? "flex-start"
-      : alignType === "right"
-      ? "flex-end"
-      : "center";
+  const justify = justifyStyle(alignType);
   if (size) {
     lineStyle.fontSize = size;
   }
@@ -179,7 +291,7 @@ function centerLine(title, styleType) {
 }
 
 function nameLine(label, name) {
-  let leader = (prefs.get(prefs.leaderChar) || " .").repeat(100);
+  let leader = prefs.get(prefs.leaderChar).repeat(100);
   return (
     <div class={style.line}>
       <span class={style.left}>{label}</span>
