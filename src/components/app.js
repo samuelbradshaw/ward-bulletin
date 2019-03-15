@@ -62,7 +62,7 @@ export default class App extends Component {
           <Search path="/search/" />
           <Test path="/test/" />
           <Bulletin path="/#:unit" />
-          <ViewHymn path="/hymn/:uri/:id/:name" />
+          <ViewHymn path="/hymn/:hymn" />
         </Router>
       </div>
     );

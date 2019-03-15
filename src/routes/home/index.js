@@ -32,33 +32,31 @@ const Home = () => {
             View your bulletin by using your current location to find the
             closest bulletins or search using the name of your ward.
           </p>
-          <div class="w3-row">
-            <div class="w3-quarter w3-section">
-              <button
-                class="w3-btn w3-theme w3-round w3-border"
-                onClick={() => route("/locate")}
-              >
-                Find by Location
-              </button>
-            </div>
-            <div class="w3-quarter w3-section">
-              <button
-                class="w3-btn w3-theme w3-round w3-border"
-                onClick={() => route("/search")}
-              >
-                Search by Name
-              </button>
-            </div>
+          <div class="w3-section">
+            <button
+              class="w3-btn w3-theme w3-round w3-border"
+              onClick={() => route("/locate")}
+            >
+              Find by Location
+            </button>
+          </div>
+          <div class="w3-section">
+            <button
+              class="w3-btn w3-theme w3-round w3-border"
+              onClick={() => route("/search")}
+            >
+              Search by Name
+            </button>
           </div>
         </div>
 
-        {recents.length && (
+        {recents.length > 0 && (
           <div>
             <h5>Recent Ward Bulletins</h5>
             <div class="w3-card w3-container w3-white w3-round">
               <ul class="w3-ul w3-margin-bottom">
                 {recents.map(ward => (
-                  <div class="w3-quarter w3-section w3-center">
+                  <div class="w3-quarter w3-section">
                     <span
                       class="w3-btn w3-border-bottom w3-border-theme"
                       style={{ padding: 0 }}
@@ -109,23 +107,21 @@ const Home = () => {
           </button>
           <p>See a sample ward bulletin:</p>
 
-          <div class="w3-row">
-            <div class="w3-quarter w3-section">
-              <button
-                class="w3-btn w3-theme w3-round w3-border"
-                onClick={() => route("/#demoward")}
-              >
-                View Sample Bulletin
-              </button>
-            </div>
-            <div class="w3-quarter w3-section">
-              <button
-                class="w3-btn w3-theme w3-round w3-border"
-                onClick={() => route("/editdemo")}
-              >
-                Edit Sample Bulletin
-              </button>
-            </div>
+          <div class="w3-section">
+            <button
+              class="w3-btn w3-theme w3-round w3-border"
+              onClick={() => route("/#demoward")}
+            >
+              View Sample Bulletin
+            </button>
+          </div>
+          <div class="w3-section">
+            <button
+              class="w3-btn w3-theme w3-round w3-border"
+              onClick={() => route("/editdemo")}
+            >
+              Edit Sample Bulletin
+            </button>
           </div>
 
           <p />

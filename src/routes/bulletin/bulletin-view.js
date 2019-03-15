@@ -301,7 +301,7 @@ function nameLine(label, name) {
   );
 }
 
-function viewHymn({ uri, id, title }) {
+function viewHymn({ uri, hymn }) {
   if (prefs.get(prefs.useHymnsApp)) {
     var iOS = navigator.userAgent.match(/(iPad|iPhone|iPod)/g) ? true : false;
     var Android = navigator.userAgent.match(/Android/g) ? true : false;
@@ -311,6 +311,6 @@ function viewHymn({ uri, id, title }) {
       window.open(`https://www.lds.org/music/library/hymns/${uri}`);
     }
   } else {
-    route(`/hymn/${uri}/${id}/${encodeURI(title)}`);
+    route(`/hymn/${hymn}`);
   }
 }

@@ -259,7 +259,7 @@ let NumberInput = ({
     <div>
       {title && <label style={{ marginRight: 6 }}>{title}</label>}
       <input
-        class={"w3-border w3-round"}
+        class={"w3-border w3-border-theme w3-round"}
         style={{ width: 56, textAlign: "right", height: height }}
         type="number"
         value={value}

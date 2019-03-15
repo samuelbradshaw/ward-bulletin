@@ -132,7 +132,7 @@ export default class EditorView extends Component {
       event.target.value = 1;
     }
 
-    const hymn = hymnList[value.toString()];
+    const hymn = hymnList[value.toString() - 1];
     let requests = [
       {
         type: "update",
@@ -219,7 +219,7 @@ export default class EditorView extends Component {
             <div class="w3-col w3-right" style={{ width: 44, marginLeft: 18 }}>
               <HidingLabel name="Size" />
               <input
-                class={`${style.textinput} w3-border w3-round`}
+                class={`${style.textinput} w3-border w3-border-theme w3-round`}
                 type="number"
                 value={item.size || 15}
                 onChange={event => {
@@ -250,7 +250,7 @@ export default class EditorView extends Component {
             <div class="w3-rest">
               <HidingLabel name="Title" />
               <input
-                class={`${style.textinput} w3-border w3-round`}
+                class={`${style.textinput} w3-border w3-border-theme w3-round`}
                 type="text"
                 placeholder="Title"
                 value={title}
@@ -270,7 +270,7 @@ export default class EditorView extends Component {
             <div class="w3-cell">
               <HidingLabel name="Label" />
               <input
-                class={`${style.textinput} w3-border w3-round`}
+                class={`${style.textinput} w3-border w3-border-theme w3-round`}
                 type="text"
                 placeholder="Label"
                 value={label}
@@ -282,7 +282,7 @@ export default class EditorView extends Component {
             <div class="w3-cell leftpadding">
               <HidingLabel name="Name" />
               <input
-                class={`${style.textinput} w3-border w3-round`}
+                class={`${style.textinput} w3-border w3-border-theme w3-round`}
                 type="text"
                 placeholder="Name"
                 value={name}
@@ -301,9 +301,9 @@ export default class EditorView extends Component {
         content = (
           <div>
             <div>
-              <HidingLabel name="URL" />
+              <HidingLabel name="Image" />
               <input
-                class={`${style.textinput} w3-border w3-round`}
+                class={`${style.textinput} w3-border w3-border-theme w3-round`}
                 type="text"
                 placeholder="Image URL"
                 value={url}
@@ -314,7 +314,7 @@ export default class EditorView extends Component {
             </div>
 
             <div class="w3-row">
-              <div class="w3-col w3-colleftmargin" style="width:110px">
+              <div class="w3-col w3-colleftmargin" style="width:120px">
                 <HidingLabel name="Library" />
                 <button
                   class="w3-btn w3-border-theme w3-round w3-border w3-padding-small"
@@ -328,7 +328,7 @@ export default class EditorView extends Component {
                   Media Library
                 </button>
               </div>
-              <div class="w3-col leftmargin" style="width:60px">
+              <div class="w3-col leftmargin" style="width:56px">
                 <HidingLabel name="Align" />
                 {this.alignMenu(item.align, index, section)}
               </div>
@@ -367,7 +367,9 @@ export default class EditorView extends Component {
               <div class="w3-col w3-right leftmargin" style="width:64px">
                 <HidingLabel name="Hymn" />
                 <input
-                  class={`w3-border w3-round ${style.numberinput}`}
+                  class={`w3-border w3-border-theme w3-round ${
+                    style.numberinput
+                  }`}
                   type="number"
                   placeholder="Hymn Number"
                   value={item.hymn}
@@ -379,7 +381,9 @@ export default class EditorView extends Component {
               <div class="w3-rest">
                 <HidingLabel name="Label" />
                 <input
-                  class={`${style.textinput} w3-border w3-round`}
+                  class={`${
+                    style.textinput
+                  } w3-border w3-border-theme w3-round`}
                   type="text"
                   placeholder="Label"
                   value={label}
@@ -393,7 +397,9 @@ export default class EditorView extends Component {
               <div class="w3-cell">
                 <HidingLabel name="Title" />
                 <input
-                  class={`${style.textinput} w3-border w3-round`}
+                  class={`${
+                    style.textinput
+                  } w3-border w3-border-theme w3-round`}
                   type="text"
                   placeholder="Title"
                   value={title}
@@ -415,7 +421,9 @@ export default class EditorView extends Component {
               <div class="w3-cell">
                 <HidingLabel name="Label" />
                 <input
-                  class={`${style.textinput} w3-border w3-round`}
+                  class={`${
+                    style.textinput
+                  } w3-border w3-border-theme w3-round`}
                   type="text"
                   placeholder="Label"
                   value={label}
@@ -427,7 +435,9 @@ export default class EditorView extends Component {
               <div class="w3-cell leftpadding">
                 <HidingLabel name="Name" />
                 <input
-                  class={`${style.textinput} w3-border w3-round`}
+                  class={`${
+                    style.textinput
+                  } w3-border w3-border-theme w3-round`}
                   type="text"
                   placeholder="Name"
                   value={name}
@@ -441,7 +451,9 @@ export default class EditorView extends Component {
               <div class="w3-cell">
                 <HidingLabel name="Title" />
                 <input
-                  class={`${style.textinput} w3-border w3-round`}
+                  class={`${
+                    style.textinput
+                  } w3-border w3-border-theme w3-round`}
                   type="text"
                   placeholder="Title"
                   value={title}
@@ -463,7 +475,7 @@ export default class EditorView extends Component {
               <HidingLabel name="Column Count" />
               <input
                 style={{ width: 44 }}
-                class={`${style.textinput} w3-border w3-round`}
+                class={`${style.textinput} w3-border w3-border-theme w3-round`}
                 type="number"
                 value={item.count}
                 onChange={event => {
@@ -483,6 +495,7 @@ export default class EditorView extends Component {
 
             <HidingLabel name="Column Text" />
             <textarea
+              class="w3-border w3-border-theme"
               rows="5"
               style={{ width: "100%" }}
               value={item.data}
@@ -510,7 +523,7 @@ export default class EditorView extends Component {
             <div>
               <HidingLabel name="Heading" />
               <input
-                class={`${style.textinput} w3-border w3-round`}
+                class={`${style.textinput} w3-border w3-border-theme w3-round`}
                 type="text"
                 placeholder="Heading"
                 value={heading}
@@ -582,7 +595,7 @@ export default class EditorView extends Component {
             <div class="w3-cell" style={{ width: "32px" }}>
               <HidingLabel name="Day" />
               <input
-                class={`${style.textinput} w3-border w3-round`}
+                class={`${style.textinput} w3-border w3-border-theme w3-round`}
                 type="text"
                 placeholder="Day"
                 value={day}
@@ -594,7 +607,7 @@ export default class EditorView extends Component {
             <div class="w3-cell leftpadding" style={{ width: "36px" }}>
               <HidingLabel name="Weekday" />
               <input
-                class={`${style.textinput} w3-border w3-round`}
+                class={`${style.textinput} w3-border w3-border-theme w3-round`}
                 type="text"
                 placeholder="Weekday"
                 value={weekday}
@@ -606,7 +619,7 @@ export default class EditorView extends Component {
             <div class="w3-cell leftpadding" style={{ width: "72px" }}>
               <HidingLabel name="Time" />
               <input
-                class={`${style.textinput} w3-border w3-round`}
+                class={`${style.textinput} w3-border w3-border-theme w3-round`}
                 type="text"
                 placeholder="Time"
                 value={time}
@@ -618,7 +631,7 @@ export default class EditorView extends Component {
             <div class="w3-cell leftpadding" style={{ width: "auto" }}>
               <HidingLabel name="Event" />
               <input
-                class={`${style.textinput} w3-border w3-round`}
+                class={`${style.textinput} w3-border w3-border-theme w3-round`}
                 type="text"
                 placeholder="Event"
                 value={event}
