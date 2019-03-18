@@ -652,7 +652,7 @@ export default class EditorView extends Component {
     return (
       <li
         key={KEY_INDEX.toString()}
-        class={`toolbar-toggle w3-leftbar w3-round topmargin w3-border ${selectedStyle} ${color} w3-white`}
+        class={`editor-item toolbar-toggle w3-leftbar w3-round topmargin w3-border ${selectedStyle} ${color} w3-white`}
         onClick={event => {
           if (event.target.classList.contains("toolbar-toggle")) {
             const selectedItem = this.state.selectedItem == item ? null : item; // Toggle selected item

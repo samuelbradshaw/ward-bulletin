@@ -253,7 +253,11 @@ let createLine = item => {
   }
 
   return (
-    <div class={style.entry} style={itemStyle} onClick={onClick}>
+    <div
+      class={"bulletin-item " + style.entry}
+      style={itemStyle}
+      onClick={onClick}
+    >
       {line1}
       {line2}
     </div>

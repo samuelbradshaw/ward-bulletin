@@ -13,6 +13,7 @@ import printCheck from "../../misc/print-check";
 export default class EditorMain extends Component {
   state = { data: null, update: 0 };
   undoStack = [];
+  scrollTimer = null;
 
   // gets called when this route is navigated to
   componentDidMount() {
@@ -78,6 +79,7 @@ export default class EditorMain extends Component {
             <div
               class="w3-row-padding w3-half fullheight w3-border"
               style={{ overflow: "auto" }}
+              onScroll={e => this.handleScroll(e.target)}
             >
               <EditorView
                 data={data}
@@ -91,6 +93,7 @@ export default class EditorMain extends Component {
               />
             </div>
             <div
+              id="bulletin-scroller"
               class="w3-hide-small w3-half w3-white fullheight"
               style={{ overflow: "auto" }}
             >
@@ -172,6 +175,47 @@ export default class EditorMain extends Component {
         <Page title="Editor" showLoader={true} message="Downloading Bulletin" />
       );
     }
+  }
+
+  handleScroll(scroller) {
+    // get cached scroll data
+    let data = this.scrollData;
+    if (!data) {
+      // get scroll info
+      data = {
+        editorItems: document.querySelectorAll(".editor-item"),
+        bulletinItems: document.querySelectorAll(".bulletin-item"),
+        bulletinScroller: document.getElementById("bulletin-scroller")
+      };
+      this.scrollData = data;
+    }
+
+    let { editorItems, bulletinItems, bulletinScroller } = data;
+
+    // find edit item at that offset
+    let offset = scroller.scrollTop;
+    let index = -1;
+    for (let i = 0; i < editorItems.length; i++) {
+      let { offsetTop, clientHeight } = editorItems[i];
+      if (offset >= offsetTop && offset <= offsetTop + clientHeight + 10) {
+        index = i;
+      }
+    }
+    if (index === -1) {
+      return; // not found, shouldn't happen
+    }
+    let item = editorItems[index];
+    let itemPercent = (offset - item.offsetTop) / (item.clientHeight + 10);
+    let bulletinItem = bulletinItems[index];
+    let bulletinOffset =
+      bulletinItem.offsetTop + itemPercent * bulletinItem.clientHeight;
+
+    // scroll bulletin item to offset
+    bulletinScroller.scrollTo(0, bulletinOffset);
+
+    // clear scroll data after 2 seconds of no scrolling
+    clearTimeout(this.scrollTimer);
+    this.scrollTimer = setTimeout(() => (this.scrollData = null), 2000);
   }
 
   update(request, undo = false) {

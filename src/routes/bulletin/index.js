@@ -154,7 +154,7 @@ export default class Bulletin extends Component {
     } else if (error) {
       return (
         <Page title="Ward Bulletin">
-          <div class="w3-panel w3-pale-yellow">
+          <div class="w3-panel w3-pale-red">
             <h4>Error</h4>
             <p>{error.toString()}</p>
           </div>
