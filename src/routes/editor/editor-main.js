@@ -161,8 +161,10 @@ export default class EditorMain extends Component {
 
           <Modal id="settings-modal">
             <Settings
+              settings={data.settings}
               update={() => {
                 this.setState({ update: 0 });
+                this.save();
               }}
               bulletin={data}
             />
@@ -283,7 +285,12 @@ export default class EditorMain extends Component {
     this.setState(data);
 
     // save in local storage
-    prefs.set(prefs.draftBulletin, data);
+    this.save();
+  }
+
+  save() {
+    // save in local storage
+    prefs.set(prefs.draftBulletin, this.state.data);
   }
 
   undo() {

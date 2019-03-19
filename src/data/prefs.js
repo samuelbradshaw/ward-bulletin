@@ -4,10 +4,7 @@ let defaults = {
   "theme-color": "blue",
   "hide-labels": false,
   "home-screen-prompt-time": 0,
-  "use-hymns-app": false,
-  "print-columns": 2,
-  "center-margin": 0.5,
-  "edge-margin": 0.0
+  "use-hymns-app": false
 };
 
 let prefs = {
@@ -22,9 +19,6 @@ let prefs = {
   hideLabels: "hide-labels",
   homeScreenPromptTime: "home-screen-prompt-time",
   useHymnsApp: "use-hymns-app",
-  printColumns: "print-columns",
-  centerMargin: "center-margin",
-  edgeMargin: "edge-margin",
 
   get: function(key) {
     let data, dataString;

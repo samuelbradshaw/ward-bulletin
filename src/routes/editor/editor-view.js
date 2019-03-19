@@ -37,6 +37,7 @@ export default class EditorView extends Component {
   }
 
   render({ data }) {
+    this.setupDates();
     let sections = [];
     for (let section of data.sections) {
       sections.push(this.createSection(section));
@@ -214,6 +215,18 @@ export default class EditorView extends Component {
 
     switch (type) {
       case "title":
+      case "date":
+        // title and date are very much the same
+        let titleLabel;
+        if (type === "date") {
+          titleLabel = "Date";
+          if (this.autoDateValue) {
+            title = this.autoDateValue;
+            item.title = title;
+          }
+        } else {
+          titleLabel = "Title";
+        }
         content = (
           <div class="w3-row">
             <div class="w3-col w3-right" style={{ width: 44, marginLeft: 18 }}>
@@ -248,11 +261,11 @@ export default class EditorView extends Component {
             </div>
 
             <div class="w3-rest">
-              <HidingLabel name="Title" />
+              <HidingLabel name={titleLabel} />
               <input
                 class={`${style.textinput} w3-border w3-border-theme w3-round`}
                 type="text"
-                placeholder="Title"
+                placeholder={titleLabel}
                 value={title}
                 onChange={event =>
                   this.handleInputChange(event, index, section, "title")
@@ -847,6 +860,7 @@ export default class EditorView extends Component {
       ["Hymn", "hymn", ["program"]],
       ["Music", "music", ["program"]],
       ["Title", "title", ["program", "calendar", "cover"]],
+      ["Date", "date", ["program", "calendar", "cover"]],
       ["Image", "image", ["cover"]],
       ["Columns", "columns", ["program"]],
       ["Pagebreak", "pagebreak", []],
@@ -975,6 +989,7 @@ export default class EditorView extends Component {
     let item = {};
     switch (type) {
       case "title":
+      case "date":
         item = { style: "bold", title: "" };
         break;
 
@@ -1040,6 +1055,38 @@ export default class EditorView extends Component {
   updateNoRender(request) {
     this.skipRender = true;
     this.props.update(request);
+  }
+
+  setupDates() {
+    let data = this.props.data;
+    let autoDate = data.settings.autoDate || "Sunday";
+    if (autoDate === "Off") {
+      this.autoDateValue = null;
+      return; // auto date is turned off
+    }
+
+    // calculate the date
+    let dayNames = [
+      "Sunday",
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday",
+      "Friday",
+      "Saturday"
+    ];
+    let autoDay = dayNames.indexOf(autoDate);
+    let date = new Date();
+    let today = date.getDay();
+    let offset = today < autoDay ? autoDay - today : autoDay + 7 - today;
+    let dayOfMonth = date.getDate() + offset;
+    date.setDate(dayOfMonth);
+    let options = {
+      day: "numeric",
+      month: "long",
+      year: "numeric"
+    };
+    this.autoDateValue = date.toLocaleDateString(undefined, options);
   }
 }
 

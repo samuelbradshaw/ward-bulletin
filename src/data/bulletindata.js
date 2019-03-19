@@ -13,8 +13,12 @@ const LOC_RADIUS = 10000; // in kms
 
 const initialBulletinData = {
   settings: {
-    leaderchar: ".",
-    name: ""
+    leaderchar: " .",
+    name: "",
+    printColumns: 2,
+    centerMargin: 0.75,
+    edgeMargin: 0.25,
+    autoDate: "Sunday"
   },
   sections: [
     {

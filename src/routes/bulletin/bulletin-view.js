@@ -159,6 +159,7 @@ let createLine = item => {
 
   switch (type) {
     case "title":
+    case "date":
       line1 = alignLine(title, item.style, item.align, item.size);
       break;
 

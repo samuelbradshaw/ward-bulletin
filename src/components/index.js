@@ -214,20 +214,18 @@ let RadioButtons = ({ items, selected, select }) => {
   let sel = "icon-dot-circled w3-large";
   let unsel = "icon-circle-empty w3-large";
   let buttons = items.map((item, index) => (
-    <div class="w3-quarter w3-padding-small">
-      <span
-        class="w3-text-theme"
-        onClick={e => {
-          select(index);
-          e.stopPropagation();
-        }}
-      >
-        <i class={index === selected ? sel : unsel} />
-        {item}
-      </span>
-    </div>
+    <span
+      class="w3-text-theme w3-padding-small"
+      onClick={e => {
+        select(index);
+        e.stopPropagation();
+      }}
+    >
+      <i class={index === selected ? sel : unsel} />
+      {item}
+    </span>
   ));
-  return <div class="w3-row">{buttons}</div>;
+  return <div>{buttons}</div>;
 };
 
 let CheckBox = ({ title, checked, onChange }) => (

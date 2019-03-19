@@ -3,7 +3,8 @@ import prefs from "../../data/prefs";
 import { CheckBox, RadioButtons, NumberInput } from "../../components";
 
 class Settings extends Component {
-  render({ update }, { hideLabels }) {
+  render({ update, settings }, { hideLabels }) {
+    let autoDate = settings.autoDate || "Sunday";
     return (
       <div>
         <h4>Settings</h4>
@@ -19,19 +20,58 @@ class Settings extends Component {
             }}
           />
         </div>
+        <p />
+
+        <div class="w3-card w3-container">
+          <h5>Date</h5>
+          <p>
+            Date items will automatically be set to the next date on the
+            specified day of the week unless turned off
+          </p>
+          <select
+            class="w3-border w3-border-theme"
+            onChange={e => {
+              settings.autoDate = e.target.value;
+              update();
+            }}
+          >
+            {[
+              "Off",
+              "Sunday",
+              "Monday",
+              "Tuesday",
+              "Wednesday",
+              "Thursday",
+              "Friday",
+              "Saturday"
+            ].map(value => (
+              <option value={value} selected={value === autoDate}>
+                {value}
+              </option>
+            ))}
+          </select>
+          <p />
+        </div>
+        <p />
 
         <div class="w3-card w3-container">
           <h5>Print</h5>
-          <ColumnsOptions update={() => this.setState({})} />
+          <ColumnsOptions
+            settings={settings}
+            update={() => {
+              this.setState({});
+              update();
+            }}
+          />
           <p>
             <NumberInput
               title="Center margin:"
               postscript="inches"
-              value={prefs.get(prefs.centerMargin)}
+              value={settings.centerMargin || 0.5}
               step={0.25}
               onChange={value => {
-                prefs.set(prefs.centerMargin, value);
-                console.log("Center margin:", prefs.get(prefs.centerMargin));
+                settings.centerMargin = value;
+                update();
               }}
             />
           </p>
@@ -39,9 +79,12 @@ class Settings extends Component {
             <NumberInput
               title="Edge margin:"
               postscript="inches"
-              value={prefs.get(prefs.edgeMargin)}
+              value={settings.edgeMargin || 0.0}
               step={0.25}
-              onChange={value => prefs.set(prefs.edgeMargin, value)}
+              onChange={value => {
+                settings.edgeMargin = value;
+                update();
+              }}
             />
           </p>
           <p />
@@ -51,14 +94,14 @@ class Settings extends Component {
   }
 }
 
-let ColumnsOptions = ({ update }) => {
-  let printColumns = prefs.get(prefs.printColumns) || 2;
+let ColumnsOptions = ({ settings, update }) => {
+  let printColumns = settings.printColumns || 2;
   return (
     <RadioButtons
       items={["1 column (portrait)", "2 columns (landscape)"]}
       selected={printColumns - 1}
       select={index => {
-        prefs.set(prefs.printColumns, index + 1);
+        settings.printColumns = index + 1;
         update();
       }}
     />
