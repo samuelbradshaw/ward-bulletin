@@ -15,6 +15,7 @@ import Test from "../routes/home/test";
 import prefs from "../data/prefs";
 import { setThemeColor } from "../components";
 import printCheck from "../misc/print-check";
+import "../misc/helper";
 
 export default class App extends Component {
   /** Gets fired when the route changes.

@@ -52,3 +52,33 @@
 .helpbody {
   margin-bottom: 4px;
 }
+
+.popupMenu {
+  border: 1px solid rgba(10, 10, 10, 0.1);
+  box-sizing: border-box;
+}
+
+.popupMenuContent {
+  box-sizing: border-box;
+  height: 150px;
+  outline: 0;
+  overflow-y: auto;
+  padding: 10px;
+}
+
+.popupMenuActionbar {
+  background-color: #fff;
+  border-bottom: 1px solid rgba(10, 10, 10, 0.1);
+}
+
+.popupMenuButton {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  outline: 0;
+  vertical-align: bottom;
+}
+
+.popupMenuButtonSelected {
+  background-color: #f0f0f0;
+}

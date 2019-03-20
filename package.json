@@ -34,7 +34,6 @@
     "firebaseui": "^3.5.2",
     "mini-platform-detect": "^0.1.0",
     "node-fetch": "^2.3.0",
-    "pell": "^1.0.6",
     "preact": "^8.4.2",
     "preact-compat": "^3.18.4",
     "preact-router": "^2.6.1"

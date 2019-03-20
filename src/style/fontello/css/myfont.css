@@ -1,11 +1,11 @@
 @font-face {
   font-family: 'myfont';
-  src: url('../font/myfont.eot?2871949');
-  src: url('../font/myfont.eot?2871949#iefix') format('embedded-opentype'),
-       url('../font/myfont.woff2?2871949') format('woff2'),
-       url('../font/myfont.woff?2871949') format('woff'),
-       url('../font/myfont.ttf?2871949') format('truetype'),
-       url('../font/myfont.svg?2871949#myfont') format('svg');
+  src: url('../font/myfont.eot?66930129');
+  src: url('../font/myfont.eot?66930129#iefix') format('embedded-opentype'),
+       url('../font/myfont.woff2?66930129') format('woff2'),
+       url('../font/myfont.woff?66930129') format('woff'),
+       url('../font/myfont.ttf?66930129') format('truetype'),
+       url('../font/myfont.svg?66930129#myfont') format('svg');
   font-weight: normal;
   font-style: normal;
 }
@@ -15,7 +15,7 @@
 @media screen and (-webkit-min-device-pixel-ratio:0) {
   @font-face {
     font-family: 'myfont';
-    src: url('../font/myfont.svg?2871949#myfont') format('svg');
+    src: url('../font/myfont.svg?66930129#myfont') format('svg');
   }
 }
 */
@@ -79,6 +79,10 @@
 .icon-indent-right:before { content: '\e815'; } /* '' */
 .icon-cw:before { content: '\e816'; } /* '' */
 .icon-cancel-circled:before { content: '\e817'; } /* '' */
+.icon-font:before { content: '\e818'; } /* '' */
+.icon-stop:before { content: '\e819'; } /* '' */
+.icon-adjust:before { content: '\e81a'; } /* '' */
+.icon-fontsize:before { content: '\f088'; } /* '' */
 .icon-menu:before { content: '\f0c9'; } /* '' */
 .icon-list-bullet:before { content: '\f0ca'; } /* '' */
 .icon-list-numbered:before { content: '\f0cb'; } /* '' */
@@ -88,6 +92,7 @@
 .icon-angle-up:before { content: '\f106'; } /* '' */
 .icon-angle-down:before { content: '\f107'; } /* '' */
 .icon-circle-empty:before { content: '\f10c'; } /* '' */
+.icon-circle:before { content: '\f111'; } /* '' */
 .icon-help:before { content: '\f128'; } /* '' */
 .icon-dot-circled:before { content: '\f192'; } /* '' */
 .icon-file-image:before { content: '\f1c5'; } /* '' */

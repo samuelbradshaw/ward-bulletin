@@ -23,6 +23,10 @@
 .icon-indent-right:before { content: '\e815'; } /* '' */
 .icon-cw:before { content: '\e816'; } /* '' */
 .icon-cancel-circled:before { content: '\e817'; } /* '' */
+.icon-font:before { content: '\e818'; } /* '' */
+.icon-stop:before { content: '\e819'; } /* '' */
+.icon-adjust:before { content: '\e81a'; } /* '' */
+.icon-fontsize:before { content: '\f088'; } /* '' */
 .icon-menu:before { content: '\f0c9'; } /* '' */
 .icon-list-bullet:before { content: '\f0ca'; } /* '' */
 .icon-list-numbered:before { content: '\f0cb'; } /* '' */
@@ -32,6 +36,7 @@
 .icon-angle-up:before { content: '\f106'; } /* '' */
 .icon-angle-down:before { content: '\f107'; } /* '' */
 .icon-circle-empty:before { content: '\f10c'; } /* '' */
+.icon-circle:before { content: '\f111'; } /* '' */
 .icon-help:before { content: '\f128'; } /* '' */
 .icon-dot-circled:before { content: '\f192'; } /* '' */
 .icon-file-image:before { content: '\f1c5'; } /* '' */

@@ -1,8 +1,14 @@
 import { h, Component } from "preact";
-import { init, exec } from "pell";
-import "pell/dist/pell.min.css";
+import style from "./style";
+import { shadeColor, hideDropdowns } from "../../misc/helper";
 
 let uniqueId = 1;
+
+var exec = function exec(command) {
+  var value =
+    arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
+  return document.execCommand(command, false, value);
+};
 
 class HTMLEditor extends Component {
   editor = null;
@@ -13,152 +19,313 @@ class HTMLEditor extends Component {
   }
 
   componentDidMount() {
-    this.editor = init({
-      element: document.getElementById(this.editorId),
-      onChange: this.props.onChange,
-      actions: [
-        {
-          name: "undo",
-          icon: '<i class="icon-ccw" />',
-          result: () => exec("undo")
-        },
-        {
-          name: "redo",
-          icon: '<i class="icon-cw" />',
-          result: () => exec("redo")
-        },
-        {
-          name: "bold",
-          icon: '<i class="icon-bold" />',
-          result: () => exec("bold")
-        },
-        {
-          name: "underline",
-          icon: '<i class="icon-underline" />',
-          result: () => exec("underline")
-        },
-        {
-          name: "italic",
-          icon: '<i class="icon-italic" />',
-          result: () => exec("italic")
-        },
-        {
-          name: "strikethrough",
-          icon: '<i class="icon-strike" />',
-          result: () => exec("strikethrough")
-        },
-        {
-          name: "align-left",
-          icon: '<i class="icon-align-left" />',
-          result: () => exec("justifyLeft")
-        },
-        {
-          name: "align-center",
-          icon: '<i class="icon-align-center" />',
-          result: () => exec("justifyCenter")
-        },
-        {
-          name: "align-right",
-          icon: '<i class="icon-align-right" />',
-          result: () => exec("justifyRight")
-        },
-        {
-          name: "align-full",
-          icon: '<i class="icon-align-justify" />',
-          result: () => exec("justifyFull")
-        },
-        {
-          name: "indent-right",
-          icon: '<i class="icon-indent-right" />',
-          result: () => exec("indent")
-        },
-        {
-          name: "indent-left",
-          icon: '<i class="icon-indent-left" />',
-          result: () => exec("outdent")
-        },
-        {
-          name: "olist",
-          icon: '<i class="icon-list-numbered" />',
-          result: () => exec("insertOrderedList")
-        },
-        {
-          name: "ulist",
-          icon: '<i class="icon-list-bullet" />',
-          result: () => exec("insertUnorderedList")
-        },
-        "line",
-        {
-          name: "image",
-          icon: '<i class="icon-file-image" />',
-          result: () => {
-            const url = window.prompt("Enter the image URL");
-            if (url) {
-              let html = `<img src="${url}" class="w3-image" />`;
-              exec("insertHTML", html);
-            }
-          }
-        },
-        {
-          name: "link",
-          icon: '<i class="icon-link" />',
-          result: () => {
-            const url = window.prompt("Enter the link URL");
-            if (url) exec("createLink", url);
-          }
-        },
-        {
-          name: "font",
-          icon: `
-            <select id="font-select" onchange="this.parentElement.onclick(this)">
-              <option selected disabled>Font</option>
-              <option value="Arial">Arial</option>
-              <option value="Helvetica">Helvetica</option>
-              <option value="Times New Roman">Times New Roman</option>
-              <option value="Courier New">Courier New</option>/>
-              <option value="Verdana">Verdana</option>
-              <option value="Georgia">Georgia</option>/>
-              <option value="Palatino">Palatino</option>
-              <option value="Garamond">Garamond</option>
-              <option value="Bookman">Bookman</option>
-              <option value="Comic Sans MS">Comic Sans</option>
-              <option value="Trebuchet MS">Trebuchet MS</option>
-              <option value="Arial Black">Arial Black</option>
-              <option value="Impact">Impact</option>
-            </select>`,
-          result: () => {
-            let value = document.getElementById("font-select").value;
-            exec("fontName", value);
-          }
-        },
-        {
-          name: "size",
-          icon: `
-            <select id="fontsize-select" onchange="this.parentElement.onclick(this)">
-              <option selected disabled>Size</option>
-              <option value="1">Tiny</option>
-              <option value="2">Small</option>
-              <option value="3">Regular</option>
-              <option value="4">Bigger</option>
-              <option value="5">Large</option>
-              <option value="6">X-Large</option>
-              <option value="7">XX-Large</option>
-            </select>`,
-          result: () => {
-            let value = document.getElementById("fontsize-select").value;
-            console.log("Font size", value);
-            exec("fontSize", value);
-          }
-        }
-      ]
-    });
-
-    this.editor.lastChild.innerHTML = this.props.html;
+    this.content.innerHTML = this.props.html || "";
   }
 
   render() {
-    return <div id={this.editorId} className="pell" />;
+    let actionButtons = actions().map(action => (
+      <button
+        class={style.popupMenuButton}
+        type="button"
+        onClick={e => action.result(e) && this.content.focus()}
+        title={action.title}
+      >
+        {action.icon}
+      </button>
+    ));
+
+    let myStyle = style;
+    let popupMenu = style.popupMenu;
+
+    return (
+      <div id={this.editorId} class={style.popupMenu}>
+        <div class={style.popupMenuActionbar}>{actionButtons}</div>
+        <div
+          contentEditable={true}
+          class={style.popupMenuContent}
+          ref={content => (this.content = content)}
+          onInput={ref => {
+            this.props.onChange(this.content.innerHTML);
+          }}
+        />
+      </div>
+    );
   }
+}
+
+function actions() {
+  return [
+    {
+      icon: <i class="icon-ccw" />,
+      title: "Undo",
+      result: () => exec("undo")
+    },
+    {
+      icon: <i class="icon-cw" />,
+      title: "Redo",
+      result: () => exec("redo")
+    },
+    {
+      icon: <i class="icon-bold" />,
+      title: "Bold",
+      result: () => exec("bold")
+    },
+    {
+      icon: <i class="icon-underline" />,
+      title: "Underline",
+      result: () => exec("underline")
+    },
+    {
+      icon: <i class="icon-italic" />,
+      title: "Italic",
+      result: () => exec("italic")
+    },
+    {
+      icon: <i class="icon-strike" />,
+      title: "Strike-through",
+      result: () => exec("strikethrough")
+    },
+    {
+      icon: <i class="icon-align-left" />,
+      title: "Align Left",
+      result: () => exec("justifyLeft")
+    },
+    {
+      icon: <i class="icon-align-center" />,
+      title: "Align Center",
+      result: () => exec("justifyCenter")
+    },
+    {
+      icon: <i class="icon-align-right" />,
+      title: "Align Right",
+      result: () => exec("justifyRight")
+    },
+    {
+      icon: <i class="icon-align-justify" />,
+      title: "Justify",
+      result: () => exec("justifyFull")
+    },
+    {
+      icon: <i class="icon-indent-right" />,
+      title: "Indent",
+      result: () => exec("indent")
+    },
+    {
+      icon: <i class="icon-indent-left" />,
+      title: "Outdent",
+      result: () => exec("outdent")
+    },
+    {
+      icon: <i class="icon-list-numbered" />,
+      title: "Numbered List",
+      result: () => exec("insertOrderedList")
+    },
+    {
+      icon: <i class="icon-list-bullet" />,
+      title: "Bullet List",
+      result: () => exec("insertUnorderedList")
+    },
+    {
+      icon: <i class="icon-file-image" />,
+      title: "Insert Image URL",
+      result: () => {
+        const url = window.prompt("Enter the image URL");
+        if (url) {
+          let html = `<img src="${url}" class="w3-image" />`;
+          exec("insertHTML", html);
+        }
+      }
+    },
+    {
+      icon: <i class="icon-link" />,
+      title: "Create Link",
+      result: () => {
+        const url = window.prompt("Enter the link URL");
+        if (url) exec("createLink", url);
+      }
+    },
+    {
+      icon: (
+        <DropdownMenu
+          icon="icon-font"
+          items={[
+            "Arial",
+            "Helvetica",
+            "Times New Roman",
+            "Courier New",
+            "Verdana",
+            "Georgia",
+            "Palatino",
+            "Garamond",
+            "Bookman",
+            "Comic Sans MS",
+            "Trebuchet MS",
+            "Arial Black",
+            "Impact"
+          ]}
+          result={(font, index) => exec("fontName", font)}
+        />
+      ),
+      title: "Font",
+      result: showDropdownMenu
+    },
+    {
+      icon: (
+        <DropdownMenu
+          icon="icon-fontsize"
+          items={[
+            "Tiny",
+            "Small",
+            "Normal",
+            "Bigger",
+            "Large",
+            "X-Large",
+            "XX-Large"
+          ]}
+          result={(size, index) => exec("fontSize", index + 1)}
+        />
+      ),
+      title: "Font Size",
+      result: showDropdownMenu
+    },
+    {
+      icon: (
+        <DropdownMenu
+          icon="icon-font w3-text-blue"
+          content={<ColorMenu result={color => exec("forecolor", color)} />}
+          offset={-120}
+        />
+      ),
+      title: "Text Color",
+      result: showDropdownMenu
+    },
+    {
+      icon: (
+        <DropdownMenu
+          icon="icon-font w3-blue"
+          content={<ColorMenu result={color => exec("hiliteColor", color)} />}
+          offset={-120}
+        />
+      ),
+      title: "Background Color",
+      result: showDropdownMenu
+    }
+  ];
+}
+
+function ColorMenu({ result }) {
+  let colors = [
+    "4cb9ff",
+    "68fce6",
+    "7df945",
+    "fffb5c",
+    "ff8b82",
+    "ff81be",
+
+    "0098ff",
+    "16e3c9",
+    "56d330",
+    "fadd2d",
+    "ff5845",
+    "ed549d",
+
+    "006bb1",
+    "009e92",
+    "1ca702",
+    "f8b102",
+    "eb1e0f",
+    "c42470",
+
+    "004474",
+    "01706b",
+    "036601",
+    "ff8802",
+    "ac1600",
+    "8e1854",
+
+    "ffffff",
+    "cccccc",
+    "999999",
+    "666666",
+    "333333",
+    "000000"
+  ];
+  let cells = [];
+  let rows = [];
+  colors.forEach((hex, index) => {
+    let color = "#" + hex;
+    let border = shadeColor(color, -20);
+    let cell = (
+      <button
+        class="w3-round"
+        style={{
+          backgroundColor: color,
+          width: 44,
+          height: 28,
+          borderStye: "solid",
+          borderWidth: 1,
+          marginRight: 2,
+          borderColor: border
+        }}
+        onClick={e => {
+          result && result(color);
+          hideDropdowns();
+          e.stopPropagation();
+        }}
+      />
+    );
+    cells.push(cell);
+    if (cells.length === 6) {
+      let row = (
+        <div
+          style={{
+            marginBottom: 2,
+            display: "flex",
+            justifyContent: "space-between"
+          }}
+        >
+          {cells}
+        </div>
+      );
+      rows.push(row);
+      cells = [];
+    }
+  });
+  return <div class="w3-padding-small w3-light-grey">{rows}</div>;
+}
+
+function DropdownMenu({ items, result, icon, content, offset }) {
+  return (
+    <span class={`${icon || ""} dropdown`}>
+      <div class="dropdown-content" style={{ left: offset || 0 }}>
+        {items &&
+          items.map((value, index) => (
+            <div
+              class="w3-padding-small w3-block w3-hover-grey"
+              onClick={e => {
+                result && result(value, index);
+                hideDropdowns();
+                e.stopPropagation();
+              }}
+              style={{
+                whiteSpace: "nowrap",
+                cursor: "pointer",
+                textAlign: "left"
+              }}
+            >
+              {value}
+            </div>
+          ))}
+        {content}
+      </div>
+    </span>
+  );
+}
+
+function showDropdownMenu(e) {
+  let button = e.target;
+  let dropdownContent = button.firstElementChild;
+  dropdownContent.classList.toggle("show");
 }
 
 export default HTMLEditor;

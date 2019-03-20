@@ -233,6 +233,36 @@
       "css": "print",
       "code": 59404,
       "src": "fontawesome"
+    },
+    {
+      "uid": "f9cbf7508cd04145ade2800169959eef",
+      "css": "font",
+      "code": 59416,
+      "src": "fontawesome"
+    },
+    {
+      "uid": "3b6f20ef4c4940aeaed84d973b2f6e64",
+      "css": "fontsize",
+      "code": 61576,
+      "src": "mfglabs"
+    },
+    {
+      "uid": "ca90da02d2c6a3183f2458e4dc416285",
+      "css": "adjust",
+      "code": 59418,
+      "src": "fontawesome"
+    },
+    {
+      "uid": "130380e481a7defc690dfb24123a1f0c",
+      "css": "circle",
+      "code": 61713,
+      "src": "fontawesome"
+    },
+    {
+      "uid": "b624a1e512819d410ddbee84e6918b9d",
+      "css": "stop",
+      "code": 59417,
+      "src": "fontawesome"
     }
   ]
 }
