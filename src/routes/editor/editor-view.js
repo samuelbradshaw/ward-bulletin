@@ -207,7 +207,7 @@ export default class EditorView extends Component {
   }
 
   createLine(item, index, section, selected) {
-    let { type, label, name, title } = item;
+    let { type, label, name, title, body } = item;
     let content;
     let color = "";
     let toolbar = selected ? this.itemToolBar(item, section) : null;
@@ -530,7 +530,7 @@ export default class EditorView extends Component {
         break;
 
       case "article":
-        const { heading, body } = item;
+        let { heading } = item;
         content = (
           <div>
             <div>
@@ -564,6 +564,30 @@ export default class EditorView extends Component {
           </div>
         );
         color = "w3-border-teal";
+        break;
+
+      case "styledtext":
+        content = (
+          <div>
+            <HidingLabel name="Styled Text" />
+
+            <HTMLEditor
+              html={body}
+              onChange={value => {
+                let props = {
+                  type: "update",
+                  value,
+                  attr: "body",
+                  index,
+                  section
+                };
+                this.skipRender = true;
+                this.props.change(props);
+              }}
+            />
+          </div>
+        );
+        color = "w3-border-indigo";
         break;
 
       case "pagebreak":
@@ -861,6 +885,11 @@ export default class EditorView extends Component {
       ["Music", "music", ["program"]],
       ["Title", "title", ["program", "calendar", "cover"]],
       ["Date", "date", ["program", "calendar", "cover"]],
+      [
+        "Styled Text",
+        "styledtext",
+        ["cover, program, announcements", "information"]
+      ],
       ["Image", "image", ["cover"]],
       ["Columns", "columns", ["program"]],
       ["Pagebreak", "pagebreak", []],
@@ -1014,7 +1043,11 @@ export default class EditorView extends Component {
         break;
 
       case "article":
-        item = { heading: "", name: "" };
+        item = { heading: "", body: "" };
+        break;
+
+      case "styledtext":
+        item = { body: "" };
         break;
 
       case "event":

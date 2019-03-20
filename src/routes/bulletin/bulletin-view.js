@@ -225,6 +225,7 @@ let createLine = item => {
       break;
 
     case "article":
+    case "styledtext":
       let { heading, body } = item;
       line1 = heading && <div class={style.heading}>{heading}</div>;
       line2 = <div dangerouslySetInnerHTML={{ __html: body }} />;

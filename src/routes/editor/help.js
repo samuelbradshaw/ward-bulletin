@@ -24,10 +24,10 @@ const Help = () => {
         <Title>Sections</Title>
         <Body>
           The ward bulletin is divided up into separate sections such as
-          Program, Articles, and Calendar. Tap the <i class="icon-angle-down" />{" "}
-          indicator to the right of the section name to show the section
-          toolbar. Use the toolbar to add, delete, or move the section up or
-          down.
+          Program, Announcements, and Calendar. Tap the{" "}
+          <i class="icon-angle-down" /> indicator to the right of the section
+          name to show the section toolbar. Use the toolbar to add, delete, or
+          move the section up or down.
         </Body>
         <Title>Items</Title>
         <Body>
@@ -66,10 +66,14 @@ const Help = () => {
           title will be filled in automatically. This works currently only for
           the English hymns.
         </Body>
-        <Title>Article Item</Title>
+        <Title>Styled Text</Title>
         <Body>
-          An Article item allows you to enter styled text, images, and links. To
-          insert an image, tap the Image button, then enter the URL for the
+          Article and Styled Text items allow you to enter styled text, images,
+          and links. You can also paste styled text that is copied from other
+          sources such as web browser, word processor, email, etc.
+        </Body>
+        <Body>
+          To insert an image, tap the Image button, then enter the URL for the
           image. To enter a link, select the text that will be the link, then
           tap the Link button to enter the URL.
         </Body>
