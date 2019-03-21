@@ -1,4 +1,5 @@
 import { h } from "preact";
+import Sidebar, { toggleSidebar, closeSidebar } from "./sidebar";
 
 const Loader = ({ showLoader, message }) => {
   return (
@@ -63,7 +64,7 @@ const hideModal = id => {
   document.getElementById(id).style.display = "none";
 };
 
-const Header = ({ title, leftControl, rightControl, isHome, goBack }) => {
+const Header = ({ title, leftControl, rightControl, goBack, sidebarItems }) => {
   return (
     <header
       class=""
@@ -81,17 +82,13 @@ const Header = ({ title, leftControl, rightControl, isHome, goBack }) => {
         style={{ height: "44px" }}
       >
         <span class="w3-display-left">
-          {!isHome && (
+          {goBack ? (
             <button
               class="icon-left-open w3-btn"
-              onClick={() => {
-                if (goBack) {
-                  history.back();
-                } else {
-                  location.replace("/home");
-                }
-              }}
+              onClick={() => history.back()}
             />
+          ) : (
+            <button class="icon-menu w3-btn" onClick={toggleSidebar} />
           )}
 
           {leftControl}
@@ -136,16 +133,22 @@ const Page = ({
   message,
   leftControl,
   rightControl,
-  isHome,
-  goBack
+  goBack,
+  sidebarItems
 }) => (
   <div class="fullheight" style={{ paddingTop: "44px" }}>
     <Header
       title={title}
       rightControl={rightControl}
       leftControl={leftControl}
-      isHome={isHome}
       goBack={goBack}
+    />
+    <Sidebar items={sidebarItems} />
+    <div
+      id="sidebarOverlay"
+      class="w3-overlay w3-animate-opacity"
+      onClick={closeSidebar}
+      style="cursor:pointer"
     />
     <div class="w3-content fullheight w3-display-container">{children}</div>
     <Loader showLoader={showLoader} message={message} />

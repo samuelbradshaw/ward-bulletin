@@ -8,6 +8,7 @@ import Settings from "./settings";
 import Share from "./share";
 import platform from "mini-platform-detect";
 import printCheck from "../../misc/print-check";
+import { route } from "preact-router";
 
 export default class Bulletin extends Component {
   state = {
@@ -58,39 +59,6 @@ export default class Bulletin extends Component {
   // Note: `user` comes from the URL, courtesy of our router
   render({ unit }, { data, error }) {
     if (data) {
-      let rightControl = (
-        <span class="w3-display-right">
-          <button
-            title="Settings"
-            class="icon-cog w3-btn w3-large w3-padding-small"
-            onClick={e => {
-              showModal("settings-modal");
-              e.stopPropagation();
-            }}
-          />
-          <button
-            title="Reload Bulletin"
-            class="icon-arrows-cw w3-btn w3-large w3-padding-small"
-            onClick={e => {
-              this.setState({ data: null });
-              this.reload(unit);
-              e.stopPropagation();
-            }}
-          />
-        </span>
-      );
-      let shareIcon =
-        platform.ios || platform.macos ? "icon-export" : "icon-share";
-      let leftControl = (
-        <button
-          title="Share with Social Media"
-          class={shareIcon + " w3-btn w3-large w3-padding-small"}
-          onClick={e => {
-            showModal("share-modal");
-            e.stopPropagation();
-          }}
-        />
-      );
       let installPrompt;
       let device = "device";
       if (this.state.showInstallMessage) {
@@ -135,12 +103,27 @@ export default class Bulletin extends Component {
         // printing, just show bulletin view
         return <BulletinView data={data} />;
       }
+      let sidebarItems = [
+        {
+          title: "Reload",
+          icon: "icon-arrows-cw",
+          action: () => this.reload(unit)
+        },
+        {
+          title: "Settings",
+          icon: "icon-cog",
+          action: () => showModal("settings-modal")
+        },
+        {
+          title: "Share",
+          icon: platform.ios || platform.macos ? "icon-export" : "icon-share",
+          action: () => showModal("share-modal")
+        },
+        { divider: true },
+        { title: "Home", icon: "icon-home", action: () => route("/home") }
+      ];
       return (
-        <Page
-          title={data.settings.name}
-          rightControl={rightControl}
-          leftControl={leftControl}
-        >
+        <Page title={data.settings.name} sidebarItems={sidebarItems}>
           <BulletinView data={data} />
           {installPrompt}
           <Modal id="settings-modal">

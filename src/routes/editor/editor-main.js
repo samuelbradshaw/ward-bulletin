@@ -9,10 +9,12 @@ import Help from "./help";
 import Settings from "./settings";
 import firebase from "../../data/firebase";
 import printCheck from "../../misc/print-check";
+import { route } from "preact-router";
 
 export default class EditorMain extends Component {
   state = { data: null, update: 0 };
   undoStack = [];
+  redoStack = [];
   scrollTimer = null;
 
   // gets called when this route is navigated to
@@ -27,21 +29,7 @@ export default class EditorMain extends Component {
       this.setState({ data });
     } else {
       // download bulletin
-      BulletinData.getBulletin(unit)
-        .then(data => {
-          if (data.error) {
-            // an error happened. return initial data
-            data = BulletinData.getInitialData();
-          }
-          this.setState({ data });
-          if (!this.props.editdemo) {
-            prefs.set(prefs.draftBulletin, data);
-            prefs.set(prefs.draftId, unit);
-          }
-        })
-        .catch(function(error) {
-          console.log("error:", error);
-        });
+      this.download(unit);
     }
   }
 
@@ -52,30 +40,69 @@ export default class EditorMain extends Component {
         return <BulletinView data={data} />;
       }
 
-      let rightControl = (
-        <span class="w3-display-right">
-          <button
-            title="settings"
-            class="icon-cog w3-btn w3-large w3-padding-small"
-            onClick={e => {
-              showModal("settings-modal");
-              e.stopPropagation();
-            }}
-          />
-          <button
-            name="Help"
-            class="icon-help-circled w3-btn w3-large w3-padding-small"
-            onClick={e => {
-              showModal("help-modal");
-              e.stopPropagation();
-            }}
-          />
-        </span>
-      );
+      let sidebarItems = [
+        {
+          title: "Undo Edit",
+          icon: "icon-ccw",
+          action: () => this.undo(),
+          disabled: !this.undoStack.length
+        },
+        {
+          title: "Redo Edit",
+          icon: "icon-cw",
+          action: () => this.redo(),
+          disabled: !this.redoStack.length
+        },
+        {
+          title: "Publish",
+          icon: "icon-upload-cloud",
+          action: () => this.publish()
+        },
+        {
+          title: "Print",
+          icon: "icon-print",
+          action: () => window.print()
+        },
+        { divider: true },
+        {
+          title: "Help",
+          icon: "icon-help",
+          action: () => showModal("help-modal")
+        },
+        {
+          title: "Settings",
+          icon: "icon-cog",
+          action: () => showModal("settings-modal")
+        },
+        {
+          title: "Reload",
+          icon: "icon-arrows-cw",
+          action: () => {
+            if (
+              confirm(
+                "Are you sure you want to download the most recent bulletin and overwrite any changes you might have made?"
+              )
+            ) {
+              this.download(unit);
+            }
+          }
+        },
+        {
+          title: "Logout",
+          icon: "icon-logout",
+          action: () => {
+            if (confirm("Are you sure you want to log out?")) {
+              logout();
+            }
+          }
+        },
+        { divider: true },
+        { title: "Home", icon: "icon-home", action: () => route("/home") }
+      ];
 
       return (
-        <Page title={data.settings.name} rightControl={rightControl}>
-          <div class="fullheight" style={{ paddingBottom: "44px" }}>
+        <Page title={data.settings.name} sidebarItems={sidebarItems}>
+          <div class="fullheight">
             <div
               class="w3-row-padding w3-half fullheight w3-border"
               style={{ overflow: "auto" }}
@@ -86,6 +113,7 @@ export default class EditorMain extends Component {
                 update={request => {
                   this.update(request);
                   this.undoStack.push(request);
+                  this.redoStack.length = 0;
                 }}
                 change={request => {
                   this.update(request);
@@ -101,58 +129,6 @@ export default class EditorMain extends Component {
                 <BulletinView data={data} />
               </div>
             </div>
-            <Footer>
-              <button
-                title="Undo Edit"
-                onClick={e => {
-                  this.undo();
-                  e.stopPropagation();
-                }}
-                class={`w3-bar-item w3-btn ${
-                  this.undoStack.length ? "" : "w3-disabled"
-                }`}
-              >
-                <i class="icon-ccw" />
-                Undo
-              </button>
-              <button
-                title="Upload Bulletin"
-                onClick={e => {
-                  this.publish();
-                  e.stopPropagation();
-                }}
-                class={`w3-bar-item w3-btn ${
-                  unit === "demoward" ? "w3-disabled" : ""
-                }`}
-              >
-                <i class="icon-upload-cloud" />
-                Publish
-              </button>
-              <button
-                title="Upload Bulletin"
-                onClick={e => {
-                  window.print();
-                  e.stopPropagation();
-                }}
-                class={`w3-bar-item w3-btn ${
-                  unit === "demoward" ? "w3-disabled" : ""
-                }`}
-              >
-                <i class="icon-print" />
-                Print
-              </button>
-              <button
-                title="Logout"
-                onClick={e => {
-                  logout();
-                  e.stopPropagation();
-                }}
-                class="w3-bar-item w3-btn"
-              >
-                <i class="icon-logout" />
-                Logout
-              </button>
-            </Footer>
           </div>
 
           <Modal id="help-modal">
@@ -174,7 +150,12 @@ export default class EditorMain extends Component {
     } else {
       // no data yet, show loader
       return (
-        <Page title="Editor" showLoader={true} message="Downloading Bulletin" />
+        <Page
+          title="Editor"
+          showLoader={true}
+          message="Downloading Bulletin"
+          goBack
+        />
       );
     }
   }
@@ -288,17 +269,46 @@ export default class EditorMain extends Component {
     this.save();
   }
 
+  download(unit) {
+    loader.show("Downloading Bulletin");
+    BulletinData.getBulletin(unit)
+      .then(data => {
+        loader.hide();
+        if (data.error) {
+          // an error happened. return initial data
+          data = BulletinData.getInitialData();
+        }
+        this.setState({ data });
+        if (!this.props.editdemo) {
+          prefs.set(prefs.draftBulletin, data);
+          prefs.set(prefs.draftId, unit);
+        }
+      })
+      .catch(function(error) {
+        console.log("error:", error);
+      });
+  }
+
   save() {
     // save in local storage
     prefs.set(prefs.draftBulletin, this.state.data);
   }
 
   undo() {
-    let request = this.undoStack.pop();
+    this.undoRedo(this.undoStack, this.redoStack, true);
+  }
+
+  redo() {
+    this.undoRedo(this.redoStack, this.undoStack, false);
+  }
+
+  undoRedo(fromStack, toStack, isUndo) {
+    let request = fromStack.pop();
     if (!request) {
       return;
     }
-    this.update(request, true);
+    this.update(request, isUndo);
+    toStack.push(request);
   }
 
   publish() {

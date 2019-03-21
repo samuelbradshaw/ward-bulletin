@@ -21,7 +21,7 @@ const Home = () => {
 
   let recents = prefs.get(prefs.recents);
   return (
-    <Page title="Ward Bulletin App" isHome>
+    <Page title="Ward Bulletin App">
       <div
         class="w3-light-grey w3-container"
         style={{ paddingBottom: "300px" }}
