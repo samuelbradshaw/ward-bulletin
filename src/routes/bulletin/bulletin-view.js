@@ -299,7 +299,7 @@ function centerLine(title, styleType) {
 }
 
 function nameLine(label, name) {
-  let leader = prefs.get(prefs.leaderChar).repeat(100);
+  let leader = prefs.get(prefs.leaderChar).repeat(200);
   return (
     <div class={style.line}>
       <span class={style.left}>{label}</span>

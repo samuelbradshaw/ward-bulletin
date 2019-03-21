@@ -78,7 +78,7 @@ const Header = ({ title, leftControl, rightControl, goBack, sidebarItems }) => {
       }}
     >
       <div
-        class="w3-bar w3-content w3-theme-d2 w3-display-container"
+        class="w3-bar w3-theme-d2 w3-display-container"
         style={{ height: "44px" }}
       >
         <span class="w3-display-left">
@@ -115,7 +115,7 @@ const Footer = ({ children }) => (
     }}
   >
     <div
-      class="w3-bar w3-content w3-theme-d2 w3-display-container"
+      class="w3-bar w3-theme-d2 w3-display-container"
       style={{
         display: "flex",
         justifyContent: "space-around"
@@ -150,7 +150,7 @@ const Page = ({
       onClick={closeSidebar}
       style="cursor:pointer"
     />
-    <div class="w3-content fullheight w3-display-container">{children}</div>
+    <div class="fullheight w3-display-container">{children}</div>
     <Loader showLoader={showLoader} message={message} />
   </div>
 );
