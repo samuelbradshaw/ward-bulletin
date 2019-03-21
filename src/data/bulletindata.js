@@ -9,7 +9,7 @@
 
 */
 
-const LOC_RADIUS = 10000; // in kms
+const LOC_RADIUS = 1; // in kms
 
 const initialBulletinData = {
   settings: {
@@ -240,7 +240,15 @@ let BulletinData = {
   // get bulletin
   getBulletin: function(unit) {
     const url = `https://storage.googleapis.com/ward-bulletin-9b31d.appspot.com/${unit}/bulletin.json`;
-    return fetch(url).then(response => response.json());
+    return fetch(url).then(response => {
+      if (response.ok) {
+        return response.json();
+      }
+      if (response.status === 403) {
+        throw `Bulletin not found (${unit})`;
+      }
+      throw "Unknown error: " + response.status;
+    });
   },
 
   // save bulletin

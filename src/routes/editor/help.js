@@ -28,7 +28,7 @@ const Help = () => {
           icon to the right of the section name to show the section toolbar. Use
           the toolbar to add, delete, or move the section up or down. Tap the{" "}
           <i class="icon-angle-down" /> indicator to hide the section while
-          editing.
+          editing so it's easier to edit other sections that are lower.
         </Body>
         <Title>Items</Title>
         <Body>

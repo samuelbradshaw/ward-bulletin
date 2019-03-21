@@ -1,9 +1,10 @@
 import { h, Component } from "preact";
 import { route } from "preact-router";
-import { Page } from "../../components";
+import { Page, Modal, showModal } from "../../components";
 import prefs from "../../data/prefs";
 import Bulletin from "../bulletin";
 import style from "./style";
+import Settings from "./settings";
 
 const Home = () => {
   let hash = location.hash;
@@ -20,8 +21,17 @@ const Home = () => {
   }
 
   let recents = prefs.get(prefs.recents);
+
+  let sidebarItems = [
+    {
+      title: "Settings",
+      icon: "icon-cog",
+      action: () => showModal("settings-modal")
+    }
+  ];
+
   return (
-    <Page title="Ward Bulletin App">
+    <Page title="Ward Bulletin App" sidebarItems={sidebarItems}>
       <div
         class="w3-light-grey w3-container"
         style={{ paddingBottom: "300px" }}
@@ -110,7 +120,7 @@ const Home = () => {
           <div class="w3-section">
             <button
               class="w3-btn w3-theme w3-round w3-border"
-              onClick={() => route("/#demoward")}
+              onClick={() => route("/#sampleward")}
             >
               View Sample Bulletin
             </button>
@@ -132,6 +142,10 @@ const Home = () => {
           <br />
         </div>
       </div>
+
+      <Modal id="settings-modal">
+        <Settings update={() => this.setState({ data })} />
+      </Modal>
     </Page>
   );
 };

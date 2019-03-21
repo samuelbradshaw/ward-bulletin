@@ -156,7 +156,7 @@ export default class Bulletin extends Component {
   }
 
   addRecent(unit, data) {
-    if (unit === "demoward") {
+    if (unit === "sampleward") {
       return; // don't add demo ward to recents
     }
     // add unit to recents

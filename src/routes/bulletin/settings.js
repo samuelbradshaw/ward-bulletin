@@ -116,3 +116,4 @@ const ColorMenu = () => {
 };
 
 export default Settings;
+export { ColorMenu };

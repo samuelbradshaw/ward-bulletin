@@ -18,7 +18,7 @@ export default class Editor extends Component {
   componentDidMount() {
     if (this.props.editdemo) {
       // editing demo, don't need to be logged in
-      this.unit = "demoward";
+      this.unit = "sampleward";
       this.setState({ status: "loggedin" });
       return;
     }

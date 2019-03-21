@@ -49,7 +49,7 @@ exports.setBulletin = functions.https.onRequest((req, res) => {
     if (!id) {
       return res.status(400).send("Missing unit id");
     }
-    if (id === "demoward") {
+    if (id === "sampleward") {
       return res.status(401).send("Permission denied"); // don't publish demo ward
     }
     let body = req.body;
@@ -186,7 +186,7 @@ exports.greenToDemo = functions.https.onRequest((req, res) => {
         zlib.gzip(text, function(error, buffer) {
           if (error) throw error;
           const bucket = admin.storage().bucket();
-          const file = bucket.file("demoward/bulletin.json");
+          const file = bucket.file("sampleward/bulletin.json");
           return file.save(
             buffer,
             {

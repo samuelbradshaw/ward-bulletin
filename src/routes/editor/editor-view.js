@@ -191,7 +191,10 @@ export default class EditorView extends Component {
             justifyContent: "space-between"
           }}
         >
-          <div class="w3-xlarge" style={{ flexGrow: 1 }}>
+          <div
+            class={section.hidden ? "w3-large" : "w3-xlarge"}
+            style={{ flexGrow: 1 }}
+          >
             {section.title}
           </div>
           <span
