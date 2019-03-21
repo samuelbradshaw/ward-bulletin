@@ -274,18 +274,26 @@ export default class EditorMain extends Component {
     BulletinData.getBulletin(unit)
       .then(data => {
         loader.hide();
-        if (data.error) {
-          // an error happened. return initial data
-          data = BulletinData.getInitialData();
-        }
         this.setState({ data });
         if (!this.props.editdemo) {
           prefs.set(prefs.draftBulletin, data);
           prefs.set(prefs.draftId, unit);
         }
       })
-      .catch(function(error) {
-        console.log("error:", error);
+      .catch(error => {
+        loader.hide();
+        // an error happened
+        if (error.status === 403) {
+          // not found. use initial data
+          let data = BulletinData.getInitialData();
+          this.setState({ data });
+          if (!this.props.editdemo) {
+            prefs.set(prefs.draftBulletin, data);
+            prefs.set(prefs.draftId, unit);
+          }
+        } else {
+          alert(`Error: ${error.message}`);
+        }
       });
   }
 

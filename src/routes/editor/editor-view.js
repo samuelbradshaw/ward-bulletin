@@ -708,7 +708,6 @@ export default class EditorView extends Component {
 
     return (
       <li
-        draggable
         key={KEY_INDEX.toString()}
         class={`editor-item toolbar-toggle w3-leftbar w3-round topmargin w3-border ${selectedStyle} ${color} w3-white`}
         onClick={event => {
@@ -780,14 +779,17 @@ export default class EditorView extends Component {
           title="Delete"
           icon="icon-minus-circled"
           onClick={e => {
-            this.state.selectedItem = null;
-            this.props.update({
-              type: "delete",
-              index,
-              section
-            });
+            if (section.data.length > 1) {
+              this.state.selectedItem = null;
+              this.props.update({
+                type: "delete",
+                index,
+                section
+              });
+            }
             e.stopPropagation();
           }}
+          disabled={section.data.length <= 1}
         />
 
         <ToolbarButton
@@ -845,18 +847,21 @@ export default class EditorView extends Component {
           title="Delete"
           icon="icon-minus-circled"
           onClick={e => {
-            if (confirm(`Delete "${section.title}"?`)) {
-              // delete section
-              this.state.selectedSection = null;
-              this.props.update({
-                type: "delete",
-                index,
-                section,
-                isSection
-              });
+            if (this.props.data.sections.length > 1) {
+              if (confirm(`Delete "${section.title}"?`)) {
+                // delete section
+                this.state.selectedSection = null;
+                this.props.update({
+                  type: "delete",
+                  index,
+                  section,
+                  isSection
+                });
+              }
             }
             e.stopPropagation();
           }}
+          disabled={this.props.data.sections.length <= 1}
         />
 
         <ToolbarButton

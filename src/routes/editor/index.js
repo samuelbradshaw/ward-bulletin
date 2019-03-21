@@ -104,6 +104,10 @@ export default class Editor extends Component {
         data = BulletinData.getInitialData();
         data.settings.name = wardName;
         data.settings.address = wardAddress;
+
+        prefs.set(prefs.draftBulletin, data);
+        prefs.set(prefs.draftId, wardId);
+
         return BulletinData.saveBulletin(wardId, data, token);
       })
       .then(() => user.getIdToken(true))

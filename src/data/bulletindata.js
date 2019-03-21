@@ -22,12 +22,33 @@ const initialBulletinData = {
   },
   sections: [
     {
+      title: "Cover",
+      data: [
+        { size: 28, style: "bold", title: "This Ward", type: "title" },
+        { type: "gap", gap: "5" },
+        {
+          align: "",
+          type: "image",
+          url:
+            "https://media.ldscdn.org/images/media-library/gospel-art/new-testament/christ-teaching-the-people-39554-mobile.jpg",
+          width: 80
+        },
+        { type: "gap", gap: "8" },
+        {
+          size: 25,
+          style: "italic",
+          title: "March 24, 2019",
+          type: "date"
+        }
+      ],
+      type: "cover"
+    },
+    {
       title: "Program",
       type: "program",
-      template: "Sacrament",
       data: [
         { type: "title", title: "Sacrament Meeting", style: "bold" },
-        { type: "title", title: "January 1, 2019", style: "italic" },
+        { type: "date", style: "italic", title: "March 24, 2019" },
         { type: "gap" },
         {
           type: "name",
@@ -94,6 +115,44 @@ const initialBulletinData = {
           body: "This is an announcement"
         }
       ]
+    },
+    {
+      title: "Calendar",
+      data: [
+        { type: "title", style: "bold", title: "Calendar" },
+        { type: "title", align: "left", style: "bold", title: "June" },
+        {
+          day: "23",
+          time: "7:00pm",
+          event: "Youth Fireside",
+          type: "event",
+          date: "",
+          weekday: "Sun"
+        },
+        {
+          day: "25",
+          time: "7:00pm",
+          event: "Combined Youth Activity",
+          type: "event",
+          date: "",
+          weekday: "Tue"
+        },
+        {
+          time: "",
+          event: "Relief Society Meeting",
+          day: "",
+          type: "event",
+          date: ""
+        },
+        {
+          date: "",
+          time: "",
+          event: "Self Reliance Group",
+          day: "",
+          type: "event"
+        }
+      ],
+      type: "calendar"
     }
   ]
 };
@@ -244,10 +303,14 @@ let BulletinData = {
       if (response.ok) {
         return response.json();
       }
-      if (response.status === 403) {
-        throw `Bulletin not found (${unit})`;
-      }
-      throw "Unknown error: " + response.status;
+      let error = {
+        status: response.status,
+        message:
+          response.status === 403
+            ? `Bulletin not found (${unit})`
+            : "Unknown error: " + response.status
+      };
+      throw error;
     });
   },
 

@@ -103,6 +103,7 @@ const ColorMenu = () => {
           marginBottom: "8px",
           display: "inline-block"
         }}
+        title={name.replace("-", " ")}
         onClick={e => {
           prefs.set(prefs.themeColor, name);
           setThemeColor(name);

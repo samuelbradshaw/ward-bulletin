@@ -182,7 +182,7 @@ export default class Bulletin extends Component {
         prefs.set(prefs.cacheId, unit);
       })
       .catch(error => {
-        this.setState({ error });
+        this.setState({ error: error.message });
       });
   }
 }
