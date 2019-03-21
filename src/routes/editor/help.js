@@ -24,10 +24,11 @@ const Help = () => {
         <Title>Sections</Title>
         <Body>
           The ward bulletin is divided up into separate sections such as
-          Program, Announcements, and Calendar. Tap the{" "}
-          <i class="icon-angle-down" /> indicator to the right of the section
-          name to show the section toolbar. Use the toolbar to add, delete, or
-          move the section up or down.
+          Program, Announcements, and Calendar. Tap the <i class="icon-menu" />{" "}
+          icon to the right of the section name to show the section toolbar. Use
+          the toolbar to add, delete, or move the section up or down. Tap the{" "}
+          <i class="icon-angle-down" /> indicator to hide the section while
+          editing.
         </Body>
         <Title>Items</Title>
         <Body>
@@ -36,10 +37,11 @@ const Help = () => {
           item and you will see those changes in the preview pane on the right.
         </Body>
         <Body>
-          To add a new item, tap the <i class="icon-angle-down" /> indicator to
-          the right of the item and tap the Add button. Items you can add that
-          are relevant to the section you are working in will be listed at the
-          top.
+          Tap the <i class="icon-menu" /> icon to the right of the item to show
+          the toolbar. Use the toolbar to add, clone, delete, or move the item
+          up or down. When adding, items you can add that are relevant to the
+          section you are working in will be listed at the top. Tap the Clone
+          button to make a copy of the item.
         </Body>
         <Title>Cover Section</Title>
         <Body>

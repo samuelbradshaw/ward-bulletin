@@ -7,7 +7,7 @@ import printCheck from "../../misc/print-check";
 export default class BulletinView extends Component {
   state = { hymn: null };
 
-  render({ data }) {
+  render({ data, hideSections }) {
     if (printCheck.printing && prefs.get(prefs.printColumns) > 1) {
       // printing
       return this.renderPrint(data);
@@ -15,10 +15,12 @@ export default class BulletinView extends Component {
 
     let sections = [];
     for (let section of data.sections) {
-      if (sections.length) {
-        sections.push(divider());
+      if (!(hideSections && section.hidden)) {
+        if (sections.length) {
+          sections.push(divider());
+        }
+        sections.push(addSection(section.data));
       }
-      sections.push(addSection(section.data));
     }
     return (
       <div class={style.bulletin + " w3-container w3-white"}>{sections}</div>

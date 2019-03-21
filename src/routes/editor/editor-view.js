@@ -41,14 +41,15 @@ export default class EditorView extends Component {
     let sections = [];
     for (let section of data.sections) {
       sections.push(this.createSection(section));
-      let rows = [];
-      for (let item of section.data) {
-        const selected = item === this.state.selectedItem;
-        const index = section.data.indexOf(item);
-        rows.push(this.createLine(item, index, section, selected));
+      if (!section.hidden) {
+        let rows = [];
+        for (let item of section.data) {
+          const selected = item === this.state.selectedItem;
+          const index = section.data.indexOf(item);
+          rows.push(this.createLine(item, index, section, selected));
+        }
+        sections.push(<ul class="w3-ul">{rows}</ul>);
       }
-
-      sections.push(<ul class="w3-ul">{rows}</ul>);
     }
 
     return (
@@ -171,9 +172,10 @@ export default class EditorView extends Component {
   createSection(section) {
     const selected = section === this.state.selectedSection;
     let toolbar = selected ? this.sectionToolBar(section) : null;
+    const index = this.props.data.sections.indexOf(section);
     return (
       <div
-        class="w3-padding-8 w3-margin-top"
+        class={!section.hidden && "w3-section"}
         onClick={event => {
           const selectedSection =
             this.state.selectedSection == section ? null : section; // Toggle selected section
@@ -192,13 +194,28 @@ export default class EditorView extends Component {
           <div class="w3-xlarge" style={{ flexGrow: 1 }}>
             {section.title}
           </div>
-          <i
+          <span
             class={`${
-              selected ? "icon-angle-up" : "icon-angle-down"
-            } w3-margin-left w3-large ${
+              section.hidden ? "icon-angle-up" : "icon-angle-down"
+            } w3-xlarge`}
+            style={{ alignSelf: "center" }}
+            onClick={e => {
+              this.props.update({
+                type: "update",
+                value: section.hidden ? undefined : true,
+                attr: "hidden",
+                index,
+                section,
+                isSection: true
+              });
+              e.stopPropagation();
+            }}
+          />
+          <i
+            class={`icon-menu w3-margin-left ${
               this.state.selectedSection == section ? "w3-text-theme" : ""
             }`}
-            style={{ alignSelf: "center" }}
+            style={{ alignSelf: "center", marginRight: 8 }}
           />
         </div>
         {toolbar}
@@ -688,6 +705,7 @@ export default class EditorView extends Component {
 
     return (
       <li
+        draggable
         key={KEY_INDEX.toString()}
         class={`editor-item toolbar-toggle w3-leftbar w3-round topmargin w3-border ${selectedStyle} ${color} w3-white`}
         onClick={event => {
@@ -710,9 +728,7 @@ export default class EditorView extends Component {
         >
           <div style={{ flexGrow: 1 }}>{content}</div>
           <i
-            class={`${
-              selected ? "icon-angle-up" : "icon-angle-down"
-            } w3-large toolbar-toggle ${
+            class={`icon-menu toolbar-toggle ${
               this.state.selectedItem == item ? "w3-text-theme" : ""
             }`}
             style={{ alignSelf: "center", marginLeft: 4 }}

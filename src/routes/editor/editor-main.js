@@ -126,7 +126,7 @@ export default class EditorMain extends Component {
               style={{ overflow: "auto" }}
             >
               <div class="w3-padding w3-white fullheight">
-                <BulletinView data={data} />
+                <BulletinView data={data} hideSections />
               </div>
             </div>
           </div>
