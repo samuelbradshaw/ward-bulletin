@@ -46,6 +46,7 @@ const Modal = ({ id, children }) => {
               e.stopPropagation();
             }}
             class="icon-cancel-circled w3-large w3-btn w3-display-topright"
+            style={{ zIndex: 5 }}
           />
 
           {children}
