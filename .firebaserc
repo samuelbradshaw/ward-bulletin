@@ -1,5 +1,17 @@
 {
   "projects": {
     "default": "ward-bulletin-9b31d"
+  },
+  "targets": {
+    "ward-bulletin-9b31d": {
+      "hosting": {
+        "media": [
+          "ward-bulletin-media-library"
+        ],
+        "bulletin": [
+          "ward-bulletin-9b31d"
+        ]
+      }
+    }
   }
 }

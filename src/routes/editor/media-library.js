@@ -13,7 +13,10 @@ class MediaLibrary extends Component {
     this.getCollection("images");
   }
 
-  render({}, { mediaData }) {
+  render({ visible }, { mediaData }) {
+    if (!visible) {
+      return null;
+    }
     return (
       <div class="w3-display-container">
         <h5 class="w3-center">
@@ -92,7 +95,7 @@ class MediaLibrary extends Component {
     }
 
     loader.show();
-    const url = `assets/media-library/${collection}.json`;
+    const url = `https://ward-bulletin-media-library.firebaseapp.com/${collection}.json`;
     return fetch(url)
       .then(response => response.json())
       .then(data => {

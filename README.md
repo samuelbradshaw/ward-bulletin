@@ -16,20 +16,31 @@ npm run build	# or preact build --no-prerender
 npm run serve
 
 # serve functions locally
-cd functions
 firebase serve --only functions
 
-# deploy website to Firebase (after build)
+# deploy all: bulletin and media websites and functions
 firebase deploy
+
+# deploy website to Firebase (after build)
+firebase deploy --only hosting:bulletin
+
+# deploy media library website
+firebase deploy --only hosting:media
 
 # deploy functions (from "functions" folder)
 firebase deploy --only functions
+
+# generate src/assets/hymns.json file
+node tools/generate-hymns.js
+
+# generate media-library files to media-library folder
+node tools/generate-media.js
 
 # run tests with jest and preact-render-spy
 npm run test
 ```
 
-# copy Green Ward to Demo Ward
+# copy Green Ward to Sample Ward
 
 for dev:
 curl "http://localhost.charlesproxy.com:5000/ward-bulletin-9b31d/us-central1/greenToDemo"

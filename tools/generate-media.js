@@ -52,10 +52,7 @@ async function processCollection(coll) {
 function saveCollection(coll) {
   const fs = require("fs");
   // console.log(title, id);
-  fs.writeFileSync(
-    `src/assets/media-library/${coll.id}.json`,
-    JSON.stringify(coll)
-  );
+  fs.writeFileSync(`media-library/${coll.id}.json`, JSON.stringify(coll));
   //   console.log(JSON.stringify(items));
 }
 

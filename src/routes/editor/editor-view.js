@@ -26,7 +26,8 @@ export default class EditorView extends Component {
     this.state = {
       selectedItem: null,
       selectedSection: null,
-      section: null
+      section: null,
+      mediaLibraryVisible: false
     };
   }
 
@@ -36,7 +37,7 @@ export default class EditorView extends Component {
     return !skipRender;
   }
 
-  render({ data }) {
+  render({ data }, { mediaLibraryVisible }) {
     this.setupDates();
     let sections = [];
     for (let section of data.sections) {
@@ -63,8 +64,10 @@ export default class EditorView extends Component {
 
         <Modal id="media-modal">
           <MediaLibrary
+            visible={mediaLibraryVisible}
             select={item => {
               hideModal("media-modal");
+              this.setState({ mediaLibraryVisible: false });
               let url = item.thumbnail.replace("-thumbnail.", "-mobile.");
               let props = {
                 type: "update",
@@ -355,6 +358,7 @@ export default class EditorView extends Component {
                   onClick={() => {
                     this.mediaSection = section;
                     this.mediaIndex = index;
+                    this.setState({ mediaLibraryVisible: true });
                     showModal("media-modal");
                   }}
                 >
