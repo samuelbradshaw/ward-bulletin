@@ -15,7 +15,7 @@ export default class Locate extends Component {
       /* geolocation is available */
 
       // get location
-      this.state.geoLocationError = false;
+      this.state.geoLocationError = null;
 
       // !! test
       // this.getLocationData(32.9681155, -117.1398259);
@@ -31,7 +31,7 @@ export default class Locate extends Component {
         },
         // error
         error => {
-          this.setState({ geoLocationError: true });
+          this.setState({ geoLocationError: error });
         }
       );
     }
@@ -47,9 +47,17 @@ export default class Locate extends Component {
     let content;
     let showLoader = false;
 
-    if (this.state.geoLocationError || !("geolocation" in navigator)) {
+    let geoLocationError = this.state.geoLocationError;
+    let error = geoLocationError
+      ? `${geoLocationError.message} (${geoLocationError.code})`
+      : !("geolocation" in navigator)
+      ? "Geolocation not available on this device"
+      : null;
+    if (error) {
       /* geolocation IS NOT available */
-      content = <Alert text="Unable to get current location" />;
+      content = (
+        <Alert text={`Unable to get current location: ${error.toString()}`} />
+      );
     } else if (wards != undefined) {
       if (wards.length) {
         content = (

@@ -99,9 +99,11 @@ const Home = () => {
         <h5>About Ward Bulletin</h5>
         <div class="w3-card w3-container w3-white w3-round">
           <p>
-            The Ward Bulletin App is provided as a free service to ward and
-            stake bulletin editors and members of The Church of Jesus Christ of
-            Latter-day Saints. It is not an official app of the Church.
+            The Ward Bulletin App is provided as a free service to ward bulletin
+            editors and members of The Church of Jesus Christ of Latter-day
+            Saints. It can also be used for stake bulletins, conferences, youth
+            groups, or any purpose for which information needs to be distributed
+            to ward members.
           </p>
           <p>
             If you have questions about the app, suggestions, or need to report
@@ -134,6 +136,10 @@ const Home = () => {
             </button>
           </div>
 
+          <p>
+            This app is not an official app of The Church of Jesus Christ of
+            Latter-day Saints.
+          </p>
           <p />
           <small class="w3-right w3-text-grey">
             Copyright &copy; 2019 by Alan Bird
