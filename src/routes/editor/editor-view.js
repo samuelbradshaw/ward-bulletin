@@ -294,7 +294,7 @@ export default class EditorView extends Component {
             </div>
           </div>
         );
-        color = "w3-border-black";
+        color = type === "title" ? "w3-border-black" : "w3-border-light-blue";
         break;
 
       case "name":
@@ -326,7 +326,7 @@ export default class EditorView extends Component {
             </div>
           </div>
         );
-        color = "w3-border-green";
+        color = "w3-border-indigo";
         break;
 
       case "image":
@@ -390,14 +390,14 @@ export default class EditorView extends Component {
             </div>
           </div>
         );
-        color = "w3-border-black";
+        color = "w3-border-amber";
         break;
 
       case "hymn":
         content = (
           <div>
             <div class="w3-row">
-              <div class="w3-col w3-right leftmargin" style="width:64px">
+              <div class="w3-col w3-right leftmargin" style={{ width: 72 }}>
                 <HidingLabel name="Hymn" />
                 <input
                   class={`w3-border w3-border-theme w3-round ${
@@ -406,7 +406,7 @@ export default class EditorView extends Component {
                   type="number"
                   placeholder="Hymn Number"
                   value={item.hymn}
-                  onInput={event =>
+                  onChange={event =>
                     this.handleHymnChange(event, index, section)
                   }
                 />
@@ -444,7 +444,7 @@ export default class EditorView extends Component {
             </div>
           </div>
         );
-        color = "w3-border-pink";
+        color = "w3-border-green";
         break;
 
       case "music":
@@ -498,7 +498,7 @@ export default class EditorView extends Component {
             </div>
           </div>
         );
-        color = "w3-border-orange";
+        color = "w3-border-red";
         break;
 
       case "columns":
@@ -546,7 +546,7 @@ export default class EditorView extends Component {
           </div>
         );
 
-        color = "w3-border-aqua";
+        color = "w3-border-orange";
         break;
 
       case "article":
@@ -607,12 +607,12 @@ export default class EditorView extends Component {
             />
           </div>
         );
-        color = "w3-border-indigo";
+        color = "w3-border-pink";
         break;
 
       case "pagebreak":
         content = <HidingLabel name="Print" />;
-        color = "w3-border-blue";
+        color = "w3-border-grey";
         break;
 
       case "gap":
@@ -642,7 +642,7 @@ export default class EditorView extends Component {
             />
           </div>
         );
-        color = "w3-border-brown";
+        color = "w3-border-blue-grey";
         break;
 
       case "event":
