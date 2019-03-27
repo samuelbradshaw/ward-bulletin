@@ -8,7 +8,7 @@ export default class BulletinView extends Component {
   state = { hymn: null };
 
   render({ data, hideSections }) {
-    if (printCheck.printing && prefs.get(prefs.printColumns) > 1) {
+    if (printCheck.printing && data.settings.printColumns != 1) {
       // printing
       return this.renderPrint(data);
     }

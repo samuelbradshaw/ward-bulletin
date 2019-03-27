@@ -56,7 +56,8 @@ export default class EditorMain extends Component {
         {
           title: "Publish",
           icon: "icon-upload-cloud",
-          action: () => this.publish()
+          action: () => unit !== "sampleward" && this.publish(),
+          disabled: unit === "sampleward"
         },
         {
           title: "Print",
