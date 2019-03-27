@@ -118,9 +118,7 @@ export default class Bulletin extends Component {
           title: "Share",
           icon: platform.ios || platform.macos ? "icon-export" : "icon-share",
           action: () => showModal("share-modal")
-        },
-        { divider: true },
-        { title: "Home", icon: "icon-home", action: () => route("/home") }
+        }
       ];
       return (
         <Page title={data.settings.name} sidebarItems={sidebarItems}>

@@ -65,7 +65,7 @@ const hideModal = id => {
   document.getElementById(id).style.display = "none";
 };
 
-const Header = ({ title, leftControl, rightControl, goBack, sidebarItems }) => {
+const Header = ({ title, goBack, showBack, showMenu }) => {
   return (
     <header
       class=""
@@ -82,22 +82,28 @@ const Header = ({ title, leftControl, rightControl, goBack, sidebarItems }) => {
         class="w3-bar w3-theme-d2 w3-display-container"
         style={{ height: "44px" }}
       >
-        <span class="w3-display-left">
-          {goBack ? (
+        {showBack && (
+          <span class="w3-display-left">
             <button
               class="icon-left-open w3-btn"
-              onClick={() => history.back()}
+              onClick={() => {
+                if (goBack) {
+                  history.back();
+                } else {
+                  location.replace("/home");
+                }
+              }}
             />
-          ) : (
-            <button class="icon-menu w3-btn" onClick={toggleSidebar} />
-          )}
-
-          {leftControl}
-        </span>
+          </span>
+        )}
         <h3 class="w3-center" style={{ margin: 0, marginTop: 4 }}>
           {title}
         </h3>
-        {rightControl && <div class="w3-right">{rightControl}</div>}
+        {showMenu && (
+          <span class="w3-display-right">
+            <button class="icon-menu w3-btn" onClick={toggleSidebar} />
+          </span>
+        )}
       </div>
     </header>
   );
@@ -132,19 +138,18 @@ const Page = ({
   children,
   showLoader,
   message,
-  leftControl,
-  rightControl,
   goBack,
+  isHome,
   sidebarItems
 }) => (
   <div class="fullheight" style={{ paddingTop: "44px" }}>
     <Header
       title={title}
-      rightControl={rightControl}
-      leftControl={leftControl}
       goBack={goBack}
+      showBack={!isHome}
+      showMenu={Boolean(sidebarItems)}
     />
-    <Sidebar items={sidebarItems} />
+    {sidebarItems && sidebarItems.length && <Sidebar items={sidebarItems} />}
     <div
       id="sidebarOverlay"
       class="w3-overlay w3-animate-opacity"

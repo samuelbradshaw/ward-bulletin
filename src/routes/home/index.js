@@ -31,7 +31,7 @@ const Home = () => {
   ];
 
   return (
-    <Page title="Ward Bulletin App" sidebarItems={sidebarItems}>
+    <Page title="Ward Bulletin App" sidebarItems={sidebarItems} isHome>
       <div
         class="w3-light-grey w3-container"
         style={{ paddingBottom: "300px" }}

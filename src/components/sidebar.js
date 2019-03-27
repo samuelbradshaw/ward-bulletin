@@ -2,16 +2,10 @@ import { h } from "preact";
 import { route } from "preact-router";
 
 const Sidebar = ({ items }) => {
-  if (!items) {
-    // no items, add Home item
-    items = [
-      { title: "Home", icon: "icon-home", action: () => route("/home") }
-    ];
-  }
   return (
     <div
-      class="w3-sidebar w3-bar-block w3-animate-left w3-theme-d2"
-      style="display:none;z-index:5"
+      class="w3-sidebar w3-bar-block w3-animate-right w3-theme-d2"
+      style={{ display: "none", zIndex: 5, right: 0 }}
       id="mainSidebar"
     >
       <button

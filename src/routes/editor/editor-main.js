@@ -96,9 +96,7 @@ export default class EditorMain extends Component {
               logout();
             }
           }
-        },
-        { divider: true },
-        { title: "Home", icon: "icon-home", action: () => route("/home") }
+        }
       ];
 
       return (
