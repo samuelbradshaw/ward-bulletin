@@ -44,20 +44,22 @@ export default class BulletinView extends Component {
       classes
     } = sections;
 
-    // page 1 is cover
-    let page1 = cover ? addSection(cover.data) : [];
+    // right column is program and cover
+    let pageBreak = <div style={{ pageBreakAfter: "always" }} />;
+    let colBreak = <div style={{ breakBefore: "column" }} />;
+    let programSection = program ? addSection(program.data) : [];
+    let coverSection = cover ? addSection(cover.data) : [];
+    let rightColumn = [
+      ...programSection,
+      pageBreak,
+      <div style={{ breakInside: "avoid" }}>{coverSection}</div>
+    ];
 
-    // page 2 is announcements and/or calendar
-    let annSection = announcements ? addSection(announcements.data) : [];
-    let calSection = calendar ? addSection(calendar.data) : [];
-    let page2 = [...annSection, ...calSection];
-
-    // page 3 is program
-    let page3 = addSection(program.data);
-
-    // page 4 is all else
-    let page4 = [];
+    // left column is everything else
+    let leftColumn = [];
     for (let section of [
+      announcements,
+      calendar,
       leaders,
       missionaries,
       lessons,
@@ -65,15 +67,14 @@ export default class BulletinView extends Component {
       classes
     ]) {
       if (section) {
-        page4 = page4.concat(addSection(section.data));
+        leftColumn = leftColumn.concat(addSection(section.data));
       }
     }
-    if (!page4.length) {
-      page4 = [<div>&#160;</div>];
+    if (!leftColumn.length) {
+      leftColumn = [<div>&#160;</div>];
     }
 
     // 2 pages per print page
-    let colBreak = <div style={{ breakBefore: "column" }} />;
     let centerMargin = `${prefs.get(prefs.centerMargin)}in`;
     let edgeMargin = `${prefs.get(prefs.edgeMargin)}in`;
     let leftStyle = {
@@ -84,40 +85,14 @@ export default class BulletinView extends Component {
       paddingLeft: centerMargin,
       paddingRight: edgeMargin
     };
-    let print1 = (
-      <div
-        class="w3-row"
-        style={{
-          pageBreakAfter: "always"
-        }}
-      >
-        <div class="w3-half" style={leftStyle}>
-          {page4}
-        </div>
-        <div class="w3-half" style={rightStyle}>
-          {page1}
-        </div>
-      </div>
-    );
-    let print2 = (
-      <div
-        class="w3-row"
-        style={{
-          pageBreakAfter: "always"
-        }}
-      >
-        <div class="w3-half" style={leftStyle}>
-          {page2}
-        </div>
-        <div class="w3-half" style={rightStyle}>
-          {page3}
-        </div>
-      </div>
-    );
     return (
-      <div>
-        {print1}
-        {print2}
+      <div class="w3-row">
+        <div class="w3-half" style={leftStyle}>
+          {leftColumn}
+        </div>
+        <div class="w3-half" style={rightStyle}>
+          {rightColumn}
+        </div>
       </div>
     );
   }
