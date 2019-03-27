@@ -213,7 +213,7 @@ let createLine = item => {
       break;
 
     case "gap":
-      let gap = item.gap || 1.0;
+      let gap = printCheck.printing ? item.printgap || 0 : item.gap || 0;
       itemStyle = { marginTop: `${gap / 4.0}em` };
       break;
 

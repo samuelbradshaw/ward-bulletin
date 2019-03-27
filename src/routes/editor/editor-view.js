@@ -19,7 +19,6 @@ export default class EditorView extends Component {
   constructor(props) {
     super(props);
     this.handleInputChange = this.handleInputChange.bind(this);
-    this.startGap = null;
     this.skipRender = false;
     this.mediaSection = null;
     this.mediaIndex = 0;
@@ -620,30 +619,40 @@ export default class EditorView extends Component {
         break;
 
       case "gap":
-        const gap = item.gap >= 1 ? item.gap : 1;
-        if (!this.startGap) {
-          this.startGap = gap; // save for undo
-        }
+        const gap = item.gap || 1;
+        const printgap = item.printgap !== undefined ? item.printgap || 1 : gap;
         content = (
-          <div>
-            <HidingLabel name="Gap" />
-            <input
-              type="range"
-              value={gap}
-              min="1"
-              max="32"
-              onChange={event => {
-                // final update
-                item.gap = this.startGap;
-                this.startGap = null;
-                this.handleInputChange(event, index, section, "gap");
-              }}
-              onInput={event => {
-                // continuous updates
-                this.handleInputChange(event, index, section, "gap", true);
-              }}
-              class="slider w3-margin-left w3-cell-middle"
-            />
+          <div class="w3-cell-row">
+            <div class="w3-cell">
+              <HidingLabel name="Gap" />
+              <RangeSlider
+                value={gap}
+                handler={(event, final) => {
+                  if (final) {
+                    item.gap = gap; // restore to original value for undo
+                  }
+                  this.handleInputChange(event, index, section, "gap", !final);
+                }}
+              />
+            </div>
+            <div class="w3-cell">
+              <HidingLabel name="Print Gap" />
+              <RangeSlider
+                value={printgap}
+                handler={(event, final) => {
+                  if (final) {
+                    item.printgap = printgap; // restore to original value for undo
+                  }
+                  this.handleInputChange(
+                    event,
+                    index,
+                    section,
+                    "printgap",
+                    !final
+                  );
+                }}
+              />
+            </div>
           </div>
         );
         color = "w3-border-blue-grey";
@@ -1154,5 +1163,25 @@ export default class EditorView extends Component {
 function HidingLabel({ name }) {
   return prefs.get(prefs.hideLabels) ? null : (
     <label class={`${style.label} w3-block`}>{name}</label>
+  );
+}
+
+function RangeSlider({ value, handler }) {
+  return (
+    <input
+      type="range"
+      value={value}
+      min="1"
+      max="32"
+      onChange={event => {
+        // final update
+        handler(event, true);
+      }}
+      onInput={event => {
+        // continuous updates
+        handler(event);
+      }}
+      class="slider w3-margin-left w3-cell-middle"
+    />
   );
 }
