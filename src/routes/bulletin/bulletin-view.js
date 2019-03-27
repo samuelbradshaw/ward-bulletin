@@ -75,8 +75,8 @@ export default class BulletinView extends Component {
     }
 
     // 2 pages per print page
-    let centerMargin = `${prefs.get(prefs.centerMargin)}in`;
-    let edgeMargin = `${prefs.get(prefs.edgeMargin)}in`;
+    let centerMargin = `${data.settings.centerMargin}in`;
+    let edgeMargin = `${data.settings.edgeMargin}in`;
     let leftStyle = {
       paddingLeft: edgeMargin,
       paddingRight: centerMargin
