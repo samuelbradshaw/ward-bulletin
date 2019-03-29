@@ -9,6 +9,7 @@ import {
   Modal,
   NumberInput
 } from "../../components";
+import { getAutoDate } from "../../misc/helper";
 import HTMLEditor from "./html-editor";
 import prefs from "../../data/prefs";
 import MediaLibrary from "./media-library";
@@ -28,6 +29,7 @@ export default class EditorView extends Component {
       section: null,
       mediaLibraryVisible: false
     };
+    this.clipboard = null;
   }
 
   shouldComponentUpdate() {
@@ -56,6 +58,9 @@ export default class EditorView extends Component {
       <div
         id="keyhandler"
         onKeyDown={event => this.handleKeyEvent(event)}
+        onCopy={event => this.clipboardEvent(event)}
+        onCut={event => this.clipboardEvent(event)}
+        onPaste={event => this.clipboardEvent(event)}
         tabIndex="-1"
         style={{ outline: "none" }}
       >
@@ -84,25 +89,83 @@ export default class EditorView extends Component {
   }
 
   handleKeyEvent(event) {
-    if (event.target.id == "keyhandler") {
-      let item = this.state.selectedItem;
-      if (item) {
-        const updateMap = {
-          ArrowUp: "moveUp",
-          ArrowDown: "moveDown",
-          Backspace: "delete"
-        };
-        const action = updateMap[event.key];
-        if (action) {
-          const section = this.state.section;
-          const index = section.data.indexOf(item);
+    // up, down delete
+    let item = this.state.selectedItem;
+    if (item) {
+      const updateMap = {
+        ArrowUp: "moveUp",
+        ArrowDown: "moveDown",
+        Backspace: "delete"
+      };
+      const action = updateMap[event.key];
+      if (action) {
+        const section = this.state.section;
+        const index = section.data.indexOf(item);
+        this.props.update({
+          type: action,
+          index,
+          section
+        });
+        event.stopPropagation();
+        return;
+      }
+    }
+
+    // undo, redo
+    if (event.metaKey || event.ctrlKey) {
+      let key = event.key;
+      // redo on Mac is cmd-shift-z
+      if (event.metaKey && event.shiftKey) {
+        key = "y";
+      }
+      if (key === "z") {
+        // undo
+        this.props.change({
+          type: "undo"
+        });
+        event.stopPropagation();
+      } else if (key === "y") {
+        // redo
+        this.props.change({
+          type: "redo"
+        });
+        event.stopPropagation();
+      }
+    }
+  }
+
+  clipboardEvent(event) {
+    console.log("Clipboard event", JSON.stringify(event));
+    let item = this.state.selectedItem;
+    const section = this.state.section;
+    const index = section.data.indexOf(item);
+    if (item) {
+      switch (event.type) {
+        case "cut":
+          // delete, then copy
           this.props.update({
-            type: action,
+            type: "delete",
             index,
             section
           });
-          event.stopPropagation();
-        }
+          this.state.selectedItem = null;
+        // fall thru
+        case "copy":
+          this.clipboard = JSON.parse(JSON.stringify(item));
+          break;
+        case "paste":
+          if (this.clipboard) {
+            this.state.selectedItem = JSON.parse(
+              JSON.stringify(this.clipboard)
+            );
+            this.props.update({
+              type: "add",
+              item,
+              index,
+              section
+            });
+          }
+          break;
       }
     }
   }
@@ -619,8 +682,8 @@ export default class EditorView extends Component {
         break;
 
       case "gap":
-        const gap = item.gap || 1;
-        const printgap = item.printgap !== undefined ? item.printgap || 1 : gap;
+        const gap = item.gap || 0;
+        const printgap = item.printgap !== undefined ? item.printgap || 0 : gap;
         content = (
           <div class="w3-cell-row">
             <div class="w3-cell">
@@ -1129,28 +1192,11 @@ export default class EditorView extends Component {
 
   setupDates() {
     let data = this.props.data;
-    let autoDate = data.settings.autoDate || "Sunday";
-    if (autoDate === "Off") {
+    let date = getAutoDate(data.settings.autoDate);
+    if (!date) {
       this.autoDateValue = null;
       return; // auto date is turned off
     }
-
-    // calculate the date
-    let dayNames = [
-      "Sunday",
-      "Monday",
-      "Tuesday",
-      "Wednesday",
-      "Thursday",
-      "Friday",
-      "Saturday"
-    ];
-    let autoDay = dayNames.indexOf(autoDate);
-    let date = new Date();
-    let today = date.getDay();
-    let offset = today < autoDay ? autoDay - today : autoDay + 7 - today;
-    let dayOfMonth = date.getDate() + offset;
-    date.setDate(dayOfMonth);
     let options = {
       day: "numeric",
       month: "long",
@@ -1171,7 +1217,7 @@ function RangeSlider({ value, handler }) {
     <input
       type="range"
       value={value}
-      min="1"
+      min="0"
       max="32"
       onChange={event => {
         // final update

@@ -36,4 +36,28 @@ function shadeColor(color, percent) {
   return "#" + RR + GG + BB;
 }
 
-export { shadeColor, hideDropdowns };
+function getAutoDate(autoDate = "Sunday") {
+  if (autoDate === "Off") {
+    return null; // auto date is turned off
+  }
+
+  // calculate the date
+  let dayNames = [
+    "Sunday",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday"
+  ];
+  let autoDay = dayNames.indexOf(autoDate);
+  let date = new Date();
+  let today = date.getDay();
+  let offset = today < autoDay ? autoDay - today : autoDay + 7 - today;
+  let dayOfMonth = date.getDate() + offset;
+  date.setDate(dayOfMonth);
+  return date;
+}
+
+export { shadeColor, hideDropdowns, getAutoDate };

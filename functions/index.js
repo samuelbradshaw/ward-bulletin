@@ -87,16 +87,40 @@ exports.setBulletin = functions.https.onRequest((req, res) => {
                   return res.status(500).send("Unable to upload the image.");
                 }
                 file.makePublic();
-                return res.status(200).end();
+
+                // save a copy for history
+                let date = new Date();
+                let historyname =
+                  req.query.historyname ||
+                  `${date.getFullYear()}-${(date.getMonth() + 1)
+                    .toString()
+                    .padStart(2, "0")}-${date
+                    .getDate()
+                    .toString()
+                    .padStart(2, "0")}`;
+                let url = `https://www.googleapis.com/storage/v1/b/ward-bulletin-9b31d.appspot.com/o/${id}%2Fbulletin.json/copyTo/b/ward-bulletin-9b31d.appspot.com/o/${id}%2Fhistory%2F${historyname}`;
+
+                // Need to get a auth token
+                admin.credential
+                  .applicationDefault()
+                  .getAccessToken()
+                  .then(token => {
+                    const auth = `Bearer ${token.access_token}`;
+                    const fetch = require("node-fetch");
+                    return fetch(url, {
+                      method: "POST",
+                      headers: {
+                        Authorization: auth,
+                        "Content-Type": "application/json"
+                      }
+                    }).then(response => res.status(200).end());
+                  });
               }
             );
           });
         } else {
           return res.status(401).send("Permission denied");
         }
-      })
-      .then(function(doc) {
-        return res.status(200).end();
       })
       .catch(function(error) {
         return res.status(599).send(error);

@@ -9,7 +9,7 @@ import Help from "./help";
 import Settings from "./settings";
 import firebase from "../../data/firebase";
 import printCheck from "../../misc/print-check";
-import { route } from "preact-router";
+import { getAutoDate } from "../../misc/helper";
 
 export default class EditorMain extends Component {
   state = { data: null, update: 0 };
@@ -213,7 +213,7 @@ export default class EditorMain extends Component {
 
   updateRequest(request, undo = false) {
     const { type, index, section, attr, isSection } = request;
-    let data = isSection ? this.state.data.sections : section.data;
+    let data = isSection ? this.state.data.sections : section && section.data;
 
     switch (type) {
       case "add":
@@ -258,6 +258,14 @@ export default class EditorMain extends Component {
           request.oldValue = item;
           data.splice(index, 1);
         }
+        break;
+
+      case "undo":
+        this.undo();
+        break;
+
+      case "redo":
+        this.redo();
         break;
     }
 
@@ -320,14 +328,25 @@ export default class EditorMain extends Component {
 
   publish() {
     loader.show("Publishing Bulletin");
+
+    let data = this.state.data;
+    let date = getAutoDate(data.settings.autoDate) || new Date();
+    let historyname = `${date.getFullYear()}-${(date.getMonth() + 1)
+      .toString()
+      .padStart(2, "0")}-${date
+      .getDate()
+      .toString()
+      .padStart(2, "0")}`;
+
     firebase
       .auth()
       .currentUser.getIdToken()
       .then(token => {
         return BulletinData.saveBulletin(
           this.props.unit,
-          this.state.data,
-          token
+          data,
+          token,
+          historyname
         );
       })
       .then(response => {

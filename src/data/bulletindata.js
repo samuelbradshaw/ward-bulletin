@@ -315,8 +315,8 @@ let BulletinData = {
   },
 
   // save bulletin
-  saveBulletin: function(unit, data, token) {
-    let url = `${functionsURL()}/setBulletin?id=${unit}`;
+  saveBulletin: function(unit, data, token, historyname) {
+    let url = `${functionsURL()}/setBulletin?id=${unit}&historyname=${historyname}`;
     return fetch(url, {
       method: "POST",
       body: JSON.stringify(data),
