@@ -1,6 +1,6 @@
 import { h, Component } from "preact";
 import BulletinData from "../../data/bulletindata";
-import { Page, loader, Modal, showModal, Footer } from "../../components";
+import { Page, loader, Modal, showModal, hideModal } from "../../components";
 import BulletinView from "../bulletin/bulletin-view";
 import EditorView from "./editor-view";
 import prefs from "../../data/prefs";
@@ -10,9 +10,14 @@ import Settings from "./settings";
 import firebase from "../../data/firebase";
 import printCheck from "../../misc/print-check";
 import { getAutoDate } from "../../misc/helper";
+import Recents from "../bulletin/recents";
 
 export default class EditorMain extends Component {
-  state = { data: null, update: 0 };
+  state = {
+    data: null,
+    update: 0,
+    recentsVisible: false
+  };
   undoStack = [];
   redoStack = [];
   scrollTimer = null;
@@ -33,7 +38,7 @@ export default class EditorMain extends Component {
     }
   }
 
-  render({ unit }, { data }) {
+  render({ unit }, { data, recentsVisible }) {
     if (data) {
       if (printCheck.printing) {
         // printing, just show bulletin view
@@ -53,6 +58,7 @@ export default class EditorMain extends Component {
           action: () => this.redo(),
           disabled: !this.redoStack.length
         },
+        { divider: true },
         {
           title: "Publish",
           icon: "icon-upload-cloud",
@@ -60,9 +66,39 @@ export default class EditorMain extends Component {
           disabled: unit === "sampleward"
         },
         {
+          title: "Reload",
+          icon: "icon-arrows-cw",
+          action: () => {
+            this.download(unit);
+          }
+        },
+        {
+          title: "Recent Bulletins",
+          icon: "icon-history",
+          action: () => {
+            this.setState({
+              recentsVisible: true
+            });
+            showModal("recents-modal");
+          }
+        },
+        {
           title: "Print",
           icon: "icon-print",
           action: () => window.print()
+        },
+        { divider: true },
+        {
+          title: "Save Template",
+          icon: "icon-upload-cloud",
+          action: () => unit !== "sampleward" && this.publish(),
+          disabled: unit === "sampleward"
+        },
+        {
+          title: "Load Te",
+          icon: "icon-upload-cloud",
+          action: () => unit !== "sampleward" && this.publish(),
+          disabled: unit === "sampleward"
         },
         { divider: true },
         {
@@ -74,19 +110,6 @@ export default class EditorMain extends Component {
           title: "Settings",
           icon: "icon-cog",
           action: () => showModal("settings-modal")
-        },
-        {
-          title: "Reload",
-          icon: "icon-arrows-cw",
-          action: () => {
-            if (
-              confirm(
-                "Are you sure you want to download the most recent bulletin and overwrite any changes you might have made?"
-              )
-            ) {
-              this.download(unit);
-            }
-          }
         },
         {
           title: "Logout",
@@ -142,6 +165,18 @@ export default class EditorMain extends Component {
                 this.save();
               }}
               bulletin={data}
+            />
+          </Modal>
+
+          <Modal id="recents-modal">
+            <Recents
+              unit={this.props.unit}
+              visible={recentsVisible}
+              select={item => {
+                hideModal("recents-modal");
+                this.setState({ recentsVisible: false });
+                this.loadRecent(unit, item);
+              }}
             />
           </Modal>
         </Page>
@@ -267,6 +302,14 @@ export default class EditorMain extends Component {
       case "redo":
         this.redo();
         break;
+
+      case "reload":
+        if (undo) {
+          this.setState({ data: request.oldValue });
+        } else {
+          request.oldValue = this.state.data;
+          this.setState({ data: request.data });
+        }
     }
 
     data = this.state.data;
@@ -281,7 +324,7 @@ export default class EditorMain extends Component {
     BulletinData.getBulletin(unit)
       .then(data => {
         loader.hide();
-        this.setState({ data });
+        this.updateRequest({ type: "reload", data });
         if (!this.props.editdemo) {
           prefs.set(prefs.draftBulletin, data);
           prefs.set(prefs.draftId, unit);
@@ -360,6 +403,22 @@ export default class EditorMain extends Component {
       .catch(error => {
         loader.hide();
         alert("Error while publishing bulletin:", error);
+      });
+  }
+
+  loadRecent(unit, item) {
+    loader.show();
+    BulletinData.getRecent(unit, item)
+      .then(data => {
+        this.updateRequest({ type: "reload", data });
+        if (!this.props.editdemo) {
+          prefs.set(prefs.draftBulletin, data);
+        }
+        loader.hide();
+      })
+      .catch(error => {
+        loader.hide();
+        this.setState({ error: error.message });
       });
   }
 }

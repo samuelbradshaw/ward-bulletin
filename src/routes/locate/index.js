@@ -38,7 +38,7 @@ export default class Locate extends Component {
   }
 
   getLocationData(lat, long) {
-    let wards = BulletinData.getBulletinsAtLocation(lat, long).then(wards =>
+    BulletinData.getBulletinsAtLocation(lat, long).then(wards =>
       this.setState({ wards })
     );
   }

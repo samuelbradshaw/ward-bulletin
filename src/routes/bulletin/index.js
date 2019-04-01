@@ -1,10 +1,11 @@
 import { h, Component } from "preact";
 import style from "./style";
 import BulletinData from "../../data/bulletindata";
-import { Page, Modal, showModal, Footer } from "../../components";
+import { Page, Modal, showModal, hideModal, loader } from "../../components";
 import BulletinView from "./bulletin-view";
 import prefs from "../../data/prefs";
 import Settings from "./settings";
+import Recents from "./recents";
 import Share from "./share";
 import platform from "mini-platform-detect";
 import printCheck from "../../misc/print-check";
@@ -14,7 +15,8 @@ export default class Bulletin extends Component {
   state = {
     data: null,
     error: null,
-    showInstallMessage: false
+    showInstallMessage: false,
+    recentsVisible: false
   };
 
   // gets called when this route is navigated to
@@ -57,7 +59,7 @@ export default class Bulletin extends Component {
   }
 
   // Note: `user` comes from the URL, courtesy of our router
-  render({ unit }, { data, error }) {
+  render({ unit }, { data, error, recentsVisible }) {
     if (data) {
       let installPrompt;
       let device = "device";
@@ -110,6 +112,17 @@ export default class Bulletin extends Component {
           action: () => this.reload(unit)
         },
         {
+          title: "Recent Bulletins",
+          icon: "icon-history",
+          action: () => {
+            this.setState({
+              recentsVisible: true
+            });
+            showModal("recents-modal");
+          }
+        },
+        { divider: true },
+        {
           title: "Settings",
           icon: "icon-cog",
           action: () => showModal("settings-modal")
@@ -129,6 +142,17 @@ export default class Bulletin extends Component {
           </Modal>
           <Modal id="share-modal">
             <Share unit={unit} name={data.settings.name} />
+          </Modal>
+          <Modal id="recents-modal">
+            <Recents
+              unit={this.props.unit}
+              visible={recentsVisible}
+              select={item => {
+                hideModal("recents-modal");
+                this.setState({ recentsVisible: false });
+                this.showRecent(unit, item);
+              }}
+            />
           </Modal>
         </Page>
       );
@@ -169,17 +193,33 @@ export default class Bulletin extends Component {
   }
 
   reload(unit) {
-    let today = new Date().toLocaleDateString();
+    loader.show();
     BulletinData.getBulletin(unit)
       .then(data => {
         this.addRecent(unit, data);
         this.setState({ data });
         // cache
+        let today = new Date().toLocaleDateString();
         prefs.set(prefs.cacheBulletin, data);
         prefs.set(prefs.cacheDate, today);
         prefs.set(prefs.cacheId, unit);
+        loader.hide();
       })
       .catch(error => {
+        loader.hide();
+        this.setState({ error: error.message });
+      });
+  }
+
+  showRecent(unit, item) {
+    loader.show();
+    BulletinData.getRecent(unit, item)
+      .then(data => {
+        this.setState({ data });
+        loader.hide();
+      })
+      .catch(error => {
+        loader.hide();
         this.setState({ error: error.message });
       });
   }

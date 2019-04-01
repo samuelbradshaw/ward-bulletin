@@ -1,0 +1,5 @@
+{
+	"search.exclude": {
+		"media-library": true
+	}
+}

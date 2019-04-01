@@ -62,6 +62,7 @@ exports.setBulletin = functions.https.onRequest((req, res) => {
     }
 
     const tokenId = req.get("Authorization").split("Bearer ")[1];
+    const fetch = require("node-fetch");
     return admin
       .auth()
       .verifyIdToken(tokenId)
@@ -92,13 +93,10 @@ exports.setBulletin = functions.https.onRequest((req, res) => {
                 let date = new Date();
                 let historyname =
                   req.query.historyname ||
-                  `${date.getFullYear()}-${(date.getMonth() + 1)
-                    .toString()
-                    .padStart(2, "0")}-${date
-                    .getDate()
-                    .toString()
-                    .padStart(2, "0")}`;
-                let url = `https://www.googleapis.com/storage/v1/b/ward-bulletin-9b31d.appspot.com/o/${id}%2Fbulletin.json/copyTo/b/ward-bulletin-9b31d.appspot.com/o/${id}%2Fhistory%2F${historyname}`;
+                  `${date.getFullYear()}-${twoDigitNumber(
+                    date.getMonth() + 1
+                  )}-${twoDigitNumber(date.getDate())}`;
+                let url = `https://www.googleapis.com/storage/v1/b/ward-bulletin-9b31d.appspot.com/o/${id}%2Fbulletin.json/copyTo/b/ward-bulletin-history/o/${id}%2F${historyname}?destinationPredefinedAcl=publicRead`;
 
                 // Need to get a auth token
                 admin.credential
@@ -106,7 +104,6 @@ exports.setBulletin = functions.https.onRequest((req, res) => {
                   .getAccessToken()
                   .then(token => {
                     const auth = `Bearer ${token.access_token}`;
-                    const fetch = require("node-fetch");
                     return fetch(url, {
                       method: "POST",
                       headers: {
@@ -235,6 +232,35 @@ exports.greenToDemo = functions.https.onRequest((req, res) => {
   });
 });
 
+// get recents
+exports.getRecents = functions.https.onRequest((req, res) => {
+  return cors(req, res, () => {
+    let id = req.query.id;
+    if (!id) {
+      res.status(400).send("Missing unit id");
+      return;
+    }
+
+    let prefix = id + "/";
+    const bucket = admin.storage().bucket("ward-bulletin-history");
+    bucket
+      .getFiles({
+        prefix: prefix,
+        delimiter: "/"
+      })
+      .then(([files]) => {
+        let data = [];
+        if (files) {
+          // console.log("files:", JSON.stringify(files));
+          data = files.map(file => {
+            return file.name.split("/").pop();
+          });
+        }
+        return res.json(data);
+      });
+  });
+});
+
 // get firebase
 function getFirebase() {
   if (!getFirebase.firebase) {
@@ -278,4 +304,9 @@ function geoCode(address, handler) {
       handler(location, err);
     }
   );
+}
+
+function twoDigitNumber(n) {
+  let s = n.toString;
+  return s.length < 2 ? "0" + s : s;
 }

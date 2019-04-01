@@ -8,9 +8,11 @@ class MediaLibrary extends Component {
   stack = [];
   state = { mediaData: null };
 
-  componentDidMount() {
-    // fetch top level of media catalog
-    this.getCollection("images");
+  componentDidUpdate() {
+    if (!this.state.mediaData && this.props.visible) {
+      // fetch top level of media catalog
+      this.getCollection("images");
+    }
   }
 
   render({ visible }, { mediaData }) {

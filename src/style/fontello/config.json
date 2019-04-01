@@ -263,6 +263,12 @@
       "css": "stop",
       "code": 59417,
       "src": "fontawesome"
+    },
+    {
+      "uid": "d4816c0845aa43767213d45574b3b145",
+      "css": "history",
+      "code": 61914,
+      "src": "fontawesome"
     }
   ]
 }

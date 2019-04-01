@@ -372,6 +372,28 @@ let BulletinData = {
       }
       return response;
     });
+  },
+
+  getRecents: function(unit) {
+    let url = `${functionsURL()}/getRecents?id=${unit}`;
+    return fetch(url).then(response => response.json());
+  },
+
+  getRecent: function(unit, item) {
+    const url = `https://storage.googleapis.com/ward-bulletin-history/${unit}/${item}`;
+    return fetch(url).then(response => {
+      if (response.ok) {
+        return response.json();
+      }
+      let error = {
+        status: response.status,
+        message:
+          response.status === 403
+            ? `Bulletin not found (${unit})`
+            : "Unknown error: " + response.status
+      };
+      throw error;
+    });
   }
 };
 

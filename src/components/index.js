@@ -5,7 +5,9 @@ const Loader = ({ showLoader, message }) => {
   return (
     <div
       id="page-loader"
-      class={"w3-modal w3-animate-opacity" + (showLoader ? " w3-show" : "")}
+      class={
+        "w3-modal w3-animate-opacity" + (showLoader ? " w3-show" : " w3-hide")
+      }
     >
       <div class="w3-modal-content w3-transparent">
         <div
@@ -141,25 +143,27 @@ const Page = ({
   goBack,
   isHome,
   sidebarItems
-}) => (
-  <div class="fullheight" style={{ paddingTop: "44px" }}>
-    <Header
-      title={title}
-      goBack={goBack}
-      showBack={!isHome}
-      showMenu={Boolean(sidebarItems)}
-    />
-    {sidebarItems && sidebarItems.length && <Sidebar items={sidebarItems} />}
-    <div
-      id="sidebarOverlay"
-      class="w3-overlay w3-animate-opacity"
-      onClick={closeSidebar}
-      style="cursor:pointer"
-    />
-    <div class="fullheight w3-display-container">{children}</div>
-    <Loader showLoader={showLoader} message={message} />
-  </div>
-);
+}) => {
+  return (
+    <div class="fullheight" style={{ paddingTop: "44px" }}>
+      <Header
+        title={title}
+        goBack={goBack}
+        showBack={!isHome}
+        showMenu={Boolean(sidebarItems)}
+      />
+      {sidebarItems && sidebarItems.length && <Sidebar items={sidebarItems} />}
+      <div
+        id="sidebarOverlay"
+        class="w3-overlay w3-animate-opacity"
+        onClick={closeSidebar}
+        style="cursor:pointer"
+      />
+      <div class="fullheight w3-display-container">{children}</div>
+      <Loader showLoader={showLoader} message={message} />
+    </div>
+  );
+};
 
 const Alert = ({ text }) => (
   <div class="w3-padding-large">

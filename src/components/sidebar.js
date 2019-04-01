@@ -8,16 +8,17 @@ const Sidebar = ({ items }) => {
       style={{ display: "none", zIndex: 5, right: 0 }}
       id="mainSidebar"
     >
+      <Divider />
       <button
         onClick={e => closeSidebar()}
         class="w3-center-align w3-btn w3-block"
       >
         Main Menu
       </button>
-      <hr style={{ margin: 4 }} />
+      <Divider />
       {items.map(item => {
         if (item.divider) {
-          return <hr style={{ margin: 4 }} />;
+          return <Divider />;
         }
         return (
           <div>
@@ -38,6 +39,10 @@ const Sidebar = ({ items }) => {
     </div>
   );
 };
+
+function Divider() {
+  return <hr style={{ margin: 4 }} />;
+}
 
 function getStyle(id) {
   return document.getElementById(id).style;
