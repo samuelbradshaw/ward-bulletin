@@ -1,7 +1,7 @@
 import { h, Component } from "preact";
 import style from "./style";
 import BulletinData from "../../data/bulletindata";
-import { Page, Modal, showModal, hideModal, loader } from "../../components";
+import { Page, Modal, loader } from "../../components";
 import BulletinView from "./bulletin-view";
 import prefs from "../../data/prefs";
 import Settings from "./settings";
@@ -16,7 +16,7 @@ export default class Bulletin extends Component {
     data: null,
     error: null,
     showInstallMessage: false,
-    recentsVisible: false
+    modal: null
   };
 
   // gets called when this route is navigated to
@@ -59,7 +59,7 @@ export default class Bulletin extends Component {
   }
 
   // Note: `user` comes from the URL, courtesy of our router
-  render({ unit }, { data, error, recentsVisible }) {
+  render({ unit }, { data, error, modal }) {
     if (data) {
       let installPrompt;
       let device = "device";
@@ -115,45 +115,46 @@ export default class Bulletin extends Component {
           title: "Recent Bulletins",
           icon: "icon-history",
           action: () => {
-            this.setState({
-              recentsVisible: true
-            });
-            showModal("recents-modal");
+            this.setState({ modal: "recents" });
           }
         },
         { divider: true },
         {
           title: "Settings",
           icon: "icon-cog",
-          action: () => showModal("settings-modal")
+          action: () => this.setState({ modal: "settings" })
         },
         {
           title: "Share",
           icon: platform.ios || platform.macos ? "icon-export" : "icon-share",
-          action: () => showModal("share-modal")
+          action: () => this.setState({ modal: "share" })
         }
       ];
       return (
         <Page title={data.settings.name} sidebarItems={sidebarItems}>
           <BulletinView data={data} />
           {installPrompt}
-          <Modal id="settings-modal">
-            <Settings update={() => this.setState({ data })} />
-          </Modal>
-          <Modal id="share-modal">
-            <Share unit={unit} name={data.settings.name} />
-          </Modal>
-          <Modal id="recents-modal">
-            <Recents
-              unit={this.props.unit}
-              visible={recentsVisible}
-              select={item => {
-                hideModal("recents-modal");
-                this.setState({ recentsVisible: false });
-                this.showRecent(unit, item);
-              }}
-            />
-          </Modal>
+          {modal === "settings" && (
+            <Modal close={() => this.setState({ modal: null })}>
+              <Settings update={() => this.setState({ data })} />
+            </Modal>
+          )}
+          {modal === "share" && (
+            <Modal close={() => this.setState({ modal: null })}>
+              <Share unit={unit} name={data.settings.name} />
+            </Modal>
+          )}
+          {modal === "recents" && (
+            <Modal close={() => this.setState({ modal: null })}>
+              <Recents
+                unit={this.props.unit}
+                select={item => {
+                  this.setState({ modal: null });
+                  this.showRecent(unit, item);
+                }}
+              />
+            </Modal>
+          )}
         </Page>
       );
     } else if (error) {

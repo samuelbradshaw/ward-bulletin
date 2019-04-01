@@ -1,6 +1,6 @@
 import { h, Component } from "preact";
 import BulletinData from "../../data/bulletindata";
-import { Page, loader, Modal, showModal, hideModal } from "../../components";
+import { Page, loader, Modal } from "../../components";
 import BulletinView from "../bulletin/bulletin-view";
 import EditorView from "./editor-view";
 import prefs from "../../data/prefs";
@@ -18,7 +18,8 @@ export default class EditorMain extends Component {
     update: 0,
     recentsVisible: false,
     undoEnabled: false,
-    redoEnabled: false
+    redoEnabled: false,
+    modal: null
   };
   undoStack = [];
   redoStack = [];
@@ -40,7 +41,7 @@ export default class EditorMain extends Component {
     }
   }
 
-  render({ unit }, { data, recentsVisible, undoEnabled, redoEnabled }) {
+  render({ unit }, { data, recentsVisible, undoEnabled, redoEnabled, modal }) {
     if (data) {
       if (printCheck.printing) {
         // printing, just show bulletin view
@@ -79,9 +80,9 @@ export default class EditorMain extends Component {
           icon: "icon-history",
           action: () => {
             this.setState({
-              recentsVisible: true
+              recentsVisible: true,
+              modal: "recents"
             });
-            showModal("recents-modal");
           }
         },
         {
@@ -106,12 +107,12 @@ export default class EditorMain extends Component {
         {
           title: "Help",
           icon: "icon-help",
-          action: () => showModal("help-modal")
+          action: () => this.setState({ modal: "help" })
         },
         {
           title: "Settings",
           icon: "icon-cog",
-          action: () => showModal("settings-modal")
+          action: () => this.setState({ modal: "settings" })
         },
         {
           title: "Logout",
@@ -153,34 +154,40 @@ export default class EditorMain extends Component {
             </div>
           </div>
 
-          <Modal id="help-modal">
-            <Help />
-          </Modal>
+          {modal === "help" && (
+            <Modal close={() => this.closeModal()}>
+              <Help />
+            </Modal>
+          )}
 
-          <Modal id="settings-modal">
-            <Settings
-              settings={data.settings}
-              update={() => {
-                this.setState({ update: 0 });
-                this.save();
-              }}
-              bulletin={data}
-            />
-          </Modal>
+          {modal === "settings" && (
+            <Modal close={() => this.closeModal()}>
+              <Settings
+                settings={data.settings}
+                update={() => {
+                  this.setState({ update: 0 });
+                  this.save();
+                }}
+                bulletin={data}
+              />
+            </Modal>
+          )}
 
-          <Modal id="recents-modal">
-            <Recents
-              unit={this.props.unit}
-              visible={recentsVisible}
-              select={item => {
-                hideModal("recents-modal");
-                this.setState({
-                  recentsVisible: false
-                });
-                this.loadRecent(unit, item);
-              }}
-            />
-          </Modal>
+          {modal === "recents" && (
+            <Modal close={() => this.closeModal()}>
+              <Recents
+                unit={this.props.unit}
+                visible={recentsVisible}
+                select={item => {
+                  this.closeModal();
+                  this.setState({
+                    recentsVisible: false
+                  });
+                  this.loadRecent(unit, item);
+                }}
+              />
+            </Modal>
+          )}
         </Page>
       );
     } else {
@@ -450,4 +457,12 @@ export default class EditorMain extends Component {
       this.setState({ undoEnabled, redoEnabled });
     }
   }
+
+  closeModal() {
+    this.setState({ modal: null });
+  }
+
+  saveTemplate() {}
+
+  loadTemplate() {}
 }

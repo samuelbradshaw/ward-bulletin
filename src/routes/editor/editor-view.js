@@ -1,14 +1,7 @@
 import { h, Component } from "preact";
 import style from "./style";
 import hymnList from "../../assets/hymns.json";
-import {
-  PopupMenu,
-  ToolbarButton,
-  showModal,
-  hideModal,
-  Modal,
-  NumberInput
-} from "../../components";
+import { PopupMenu, ToolbarButton, Modal, NumberInput } from "../../components";
 import { getAutoDate } from "../../misc/helper";
 import HTMLEditor from "./html-editor";
 import prefs from "../../data/prefs";
@@ -27,7 +20,7 @@ export default class EditorView extends Component {
       selectedItem: null,
       selectedSection: null,
       section: null,
-      mediaLibraryVisible: false
+      modal: null
     };
     this.clipboard = null;
   }
@@ -38,7 +31,7 @@ export default class EditorView extends Component {
     return !skipRender;
   }
 
-  render({ data }, { mediaLibraryVisible }) {
+  render({ data }, { modal }) {
     this.setupDates();
     let sections = [];
     for (let section of data.sections) {
@@ -66,24 +59,24 @@ export default class EditorView extends Component {
       >
         <div class="w3-content">{sections}</div>
 
-        <Modal id="media-modal">
-          <MediaLibrary
-            visible={mediaLibraryVisible}
-            select={item => {
-              hideModal("media-modal");
-              this.setState({ mediaLibraryVisible: false });
-              let url = item.thumbnail.replace("-thumbnail.", "-mobile.");
-              let props = {
-                type: "update",
-                value: url,
-                attr: "url",
-                index: this.mediaIndex,
-                section: this.mediaSection
-              };
-              this.props.update(props);
-            }}
-          />
-        </Modal>
+        {modal === "media" && (
+          <Modal close={() => this.setState({ modal: null })}>
+            <MediaLibrary
+              select={item => {
+                this.setState({ modal: null });
+                let url = item.thumbnail.replace("-thumbnail.", "-mobile.");
+                let props = {
+                  type: "update",
+                  value: url,
+                  attr: "url",
+                  index: this.mediaIndex,
+                  section: this.mediaSection
+                };
+                this.props.update(props);
+              }}
+            />
+          </Modal>
+        )}
       </div>
     );
   }
@@ -430,8 +423,7 @@ export default class EditorView extends Component {
                   onClick={() => {
                     this.mediaSection = section;
                     this.mediaIndex = index;
-                    this.setState({ mediaLibraryVisible: true });
-                    showModal("media-modal");
+                    this.setState({ modal: "media" });
                   }}
                 >
                   Media Library

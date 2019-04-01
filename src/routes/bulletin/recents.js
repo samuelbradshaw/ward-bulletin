@@ -9,21 +9,15 @@ class Recents extends Component {
   };
   unit;
 
-  // gets called when this route is navigated to
-  componentDidUpdate() {
-    if (this.props.visible && !this.state.recents) {
-      BulletinData.getRecents(this.props.unit).then(recents => {
-        recents.sort().reverse();
-        this.setState({ recents });
-      });
-    }
+  componentDidMount() {
+    this.getRecents();
   }
 
-  render({ visible, select, unit }, { recents }) {
-    if (!visible) {
-      return null;
-    }
+  componentDidUpdate() {
+    this.getRecents();
+  }
 
+  render({ select, unit }, { recents }) {
     if (unit !== this.unit) {
       // different unit
       recents = null;
@@ -61,6 +55,15 @@ class Recents extends Component {
         <p />
       </Page>
     );
+  }
+
+  getRecents() {
+    if (!this.state.recents) {
+      BulletinData.getRecents(this.props.unit).then(recents => {
+        recents.sort().reverse();
+        this.setState({ recents });
+      });
+    }
   }
 }
 

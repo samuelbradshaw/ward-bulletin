@@ -28,14 +28,15 @@ const Loader = ({ showLoader, message }) => {
   );
 };
 
-const Modal = ({ id, children }) => {
+const Modal = ({ close, children }) => {
+  let id = "modal" + Math.floor(Math.random() * 1000000);
   return (
     <div
       id={id}
-      class="w3-modal"
+      class="w3-modal w3-show"
       onClick={e => {
         if (e.target.id === id) {
-          hideModal(id);
+          close();
         }
         e.stopPropagation();
       }}
@@ -44,7 +45,7 @@ const Modal = ({ id, children }) => {
         <div class="w3-container">
           <span
             onClick={e => {
-              hideModal(id);
+              close();
               e.stopPropagation();
             }}
             class="icon-cancel-circled w3-large w3-btn w3-display-topright"
@@ -57,14 +58,6 @@ const Modal = ({ id, children }) => {
       </div>
     </div>
   );
-};
-
-const showModal = id => {
-  document.getElementById(id).style.display = "block";
-};
-
-const hideModal = id => {
-  document.getElementById(id).style.display = "none";
 };
 
 const Header = ({ title, goBack, showBack, showMenu }) => {
@@ -323,8 +316,6 @@ export {
   toggleMenu,
   setThemeColor,
   Modal,
-  showModal,
-  hideModal,
   RadioButtons,
   CheckBox,
   NumberInput

@@ -8,17 +8,14 @@ class MediaLibrary extends Component {
   stack = [];
   state = { mediaData: null };
 
-  componentDidUpdate() {
-    if (!this.state.mediaData && this.props.visible) {
+  componentDidMount() {
+    if (!this.state.mediaData) {
       // fetch top level of media catalog
       this.getCollection("images");
     }
   }
 
-  render({ visible }, { mediaData }) {
-    if (!visible) {
-      return null;
-    }
+  render({}, { mediaData }) {
     return (
       <div class="w3-display-container">
         <h5 class="w3-center">
