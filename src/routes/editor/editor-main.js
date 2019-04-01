@@ -16,7 +16,9 @@ export default class EditorMain extends Component {
   state = {
     data: null,
     update: 0,
-    recentsVisible: false
+    recentsVisible: false,
+    undoEnabled: false,
+    redoEnabled: false
   };
   undoStack = [];
   redoStack = [];
@@ -38,7 +40,7 @@ export default class EditorMain extends Component {
     }
   }
 
-  render({ unit }, { data, recentsVisible }) {
+  render({ unit }, { data, recentsVisible, undoEnabled, redoEnabled }) {
     if (data) {
       if (printCheck.printing) {
         // printing, just show bulletin view
@@ -50,13 +52,13 @@ export default class EditorMain extends Component {
           title: "Undo Edit",
           icon: "icon-ccw",
           action: () => this.undo(),
-          disabled: !this.undoStack.length
+          disabled: !undoEnabled
         },
         {
           title: "Redo Edit",
           icon: "icon-cw",
           action: () => this.redo(),
-          disabled: !this.redoStack.length
+          disabled: !redoEnabled
         },
         { divider: true },
         {
@@ -133,9 +135,7 @@ export default class EditorMain extends Component {
               <EditorView
                 data={data}
                 update={request => {
-                  this.update(request);
-                  this.undoStack.push(request);
-                  this.redoStack.length = 0;
+                  this.updateWithUndo(request);
                 }}
                 change={request => {
                   this.update(request);
@@ -174,7 +174,9 @@ export default class EditorMain extends Component {
               visible={recentsVisible}
               select={item => {
                 hideModal("recents-modal");
-                this.setState({ recentsVisible: false });
+                this.setState({
+                  recentsVisible: false
+                });
                 this.loadRecent(unit, item);
               }}
             />
@@ -233,6 +235,13 @@ export default class EditorMain extends Component {
     // clear scroll data after 2 seconds of no scrolling
     clearTimeout(this.scrollTimer);
     this.scrollTimer = setTimeout(() => (this.scrollData = null), 2000);
+  }
+
+  updateWithUndo(request) {
+    this.update(request);
+    this.undoStack.push(request);
+    this.redoStack.length = 0;
+    this.setupUndoStatus();
   }
 
   update(request, undo = false) {
@@ -305,7 +314,9 @@ export default class EditorMain extends Component {
 
       case "reload":
         if (undo) {
-          this.setState({ data: request.oldValue });
+          this.setState({
+            data: request.oldValue
+          });
         } else {
           request.oldValue = this.state.data;
           this.setState({ data: request.data });
@@ -324,7 +335,10 @@ export default class EditorMain extends Component {
     BulletinData.getBulletin(unit)
       .then(data => {
         loader.hide();
-        this.updateRequest({ type: "reload", data });
+        this.updateWithUndo({
+          type: "reload",
+          data
+        });
         if (!this.props.editdemo) {
           prefs.set(prefs.draftBulletin, data);
           prefs.set(prefs.draftId, unit);
@@ -367,6 +381,7 @@ export default class EditorMain extends Component {
     }
     this.update(request, isUndo);
     toStack.push(request);
+    this.setupUndoStatus();
   }
 
   publish() {
@@ -410,7 +425,10 @@ export default class EditorMain extends Component {
     loader.show();
     BulletinData.getRecent(unit, item)
       .then(data => {
-        this.updateRequest({ type: "reload", data });
+        this.updateWithUndo({
+          type: "reload",
+          data
+        });
         if (!this.props.editdemo) {
           prefs.set(prefs.draftBulletin, data);
         }
@@ -420,5 +438,16 @@ export default class EditorMain extends Component {
         loader.hide();
         this.setState({ error: error.message });
       });
+  }
+
+  setupUndoStatus() {
+    let undoEnabled = this.undoStack.length > 0;
+    let redoEnabled = this.redoStack.length > 0;
+    if (
+      undoEnabled != this.state.undoEnabled ||
+      redoEnabled != this.state.redoEnabled
+    ) {
+      this.setState({ undoEnabled, redoEnabled });
+    }
   }
 }
