@@ -134,6 +134,11 @@ export default class EditorView extends Component {
     }
   }
 
+  handleFocus = event => {
+    setTimeout(() => event.target.select(), 100);
+    event.stopPropagation();
+  };
+
   clipboardEvent(event) {
     console.log("Clipboard event", JSON.stringify(event));
     let item = this.state.selectedItem;
@@ -332,6 +337,7 @@ export default class EditorView extends Component {
                   };
                   this.updateNoRender(request);
                 }}
+                onFocus={this.handleFocus}
               />
             </div>
 
@@ -355,6 +361,7 @@ export default class EditorView extends Component {
                 onChange={event =>
                   this.handleInputChange(event, index, section, "title")
                 }
+                onFocus={this.handleFocus}
               />
             </div>
           </div>
@@ -375,6 +382,7 @@ export default class EditorView extends Component {
                 onChange={event =>
                   this.handleInputChange(event, index, section, "label")
                 }
+                onFocus={this.handleFocus}
               />
             </div>
             <div class="w3-cell leftpadding">
@@ -387,6 +395,7 @@ export default class EditorView extends Component {
                 onChange={event =>
                   this.handleInputChange(event, index, section, "name")
                 }
+                onFocus={this.handleFocus}
               />
             </div>
           </div>
@@ -408,6 +417,7 @@ export default class EditorView extends Component {
                 onChange={event =>
                   this.handleInputChange(event, index, section, "url")
                 }
+                onFocus={this.handleFocus}
               />
             </div>
 
@@ -450,6 +460,7 @@ export default class EditorView extends Component {
                         section
                       })
                     }
+                    onFocus={this.handleFocus}
                   />
                 </span>
               </div>
@@ -475,6 +486,7 @@ export default class EditorView extends Component {
                   onChange={event =>
                     this.handleHymnChange(event, index, section)
                   }
+                  onFocus={this.handleFocus}
                 />
               </div>
               <div class="w3-rest">
@@ -489,6 +501,7 @@ export default class EditorView extends Component {
                   onChange={event =>
                     this.handleInputChange(event, index, section, "label")
                   }
+                  onFocus={this.handleFocus}
                 />
               </div>
             </div>
@@ -505,6 +518,7 @@ export default class EditorView extends Component {
                   onChange={event =>
                     this.handleInputChange(event, index, section, "title")
                   }
+                  onFocus={this.handleFocus}
                 />
               </div>
             </div>
@@ -529,6 +543,7 @@ export default class EditorView extends Component {
                   onChange={event =>
                     this.handleInputChange(event, index, section, "label")
                   }
+                  onFocus={this.handleFocus}
                 />
               </div>
               <div class="w3-cell leftpadding">
@@ -543,6 +558,7 @@ export default class EditorView extends Component {
                   onChange={event =>
                     this.handleInputChange(event, index, section, "name")
                   }
+                  onFocus={this.handleFocus}
                 />
               </div>
             </div>
@@ -559,6 +575,7 @@ export default class EditorView extends Component {
                   onChange={event =>
                     this.handleInputChange(event, index, section, "title")
                   }
+                  onFocus={this.handleFocus}
                 />
               </div>
             </div>
@@ -589,6 +606,7 @@ export default class EditorView extends Component {
                   };
                   this.updateNoRender(request);
                 }}
+                onFocus={this.handleFocus}
               />
             </div>
 
@@ -629,6 +647,7 @@ export default class EditorView extends Component {
                 onChange={event =>
                   this.handleInputChange(event, index, section, "heading")
                 }
+                onFocus={this.handleFocus}
               />
             </div>
             <HidingLabel name="Article" />
@@ -677,7 +696,7 @@ export default class EditorView extends Component {
         break;
 
       case "pagebreak":
-        content = <HidingLabel name="Print" />;
+        content = <HidingLabel name="Print Page Break" />;
         color = "w3-border-grey";
         break;
 
@@ -735,6 +754,7 @@ export default class EditorView extends Component {
                 onChange={event =>
                   this.handleInputChange(event, index, section, "day")
                 }
+                onFocus={this.handleFocus}
               />
             </div>
             <div class="w3-cell leftpadding" style={{ width: "36px" }}>
@@ -747,6 +767,7 @@ export default class EditorView extends Component {
                 onChange={event =>
                   this.handleInputChange(event, index, section, "weekday")
                 }
+                onFocus={this.handleFocus}
               />
             </div>
             <div class="w3-cell leftpadding" style={{ width: "72px" }}>
@@ -759,6 +780,7 @@ export default class EditorView extends Component {
                 onChange={event =>
                   this.handleInputChange(event, index, section, "time")
                 }
+                onFocus={this.handleFocus}
               />
             </div>
             <div class="w3-cell leftpadding" style={{ width: "auto" }}>
@@ -771,6 +793,7 @@ export default class EditorView extends Component {
                 onChange={event =>
                   this.handleInputChange(event, index, section, "event")
                 }
+                onFocus={this.handleFocus}
               />
             </div>
           </div>

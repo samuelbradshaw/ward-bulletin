@@ -256,16 +256,7 @@ let CheckBox = ({ title, checked, onChange }) => (
   </p>
 );
 
-let NumberInput = ({
-  title,
-  postscript,
-  value,
-  onChange,
-  min,
-  max,
-  step,
-  height
-}) => {
+let NumberInput = ({ title, postscript, onChange, height, ...rest }) => {
   return (
     <div>
       {title && <label style={{ marginRight: 6 }}>{title}</label>}
@@ -273,10 +264,7 @@ let NumberInput = ({
         class={"w3-border w3-border-theme w3-round"}
         style={{ width: 56, textAlign: "right", height: height }}
         type="number"
-        value={value}
-        min={min}
-        max={max}
-        step={step}
+        {...rest}
         onChange={e => {
           onChange(parseFloat(e.target.value));
         }}

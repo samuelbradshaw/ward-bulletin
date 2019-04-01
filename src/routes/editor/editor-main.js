@@ -93,13 +93,13 @@ export default class EditorMain extends Component {
         {
           title: "Save Template",
           icon: "icon-upload-cloud",
-          action: () => unit !== "sampleward" && this.publish(),
+          action: () => unit !== "sampleward" && this.saveTemplate(),
           disabled: unit === "sampleward"
         },
         {
-          title: "Load Te",
+          title: "Load Template",
           icon: "icon-upload-cloud",
-          action: () => unit !== "sampleward" && this.publish(),
+          action: () => unit !== "sampleward" && this.loadTemplate(),
           disabled: unit === "sampleward"
         },
         { divider: true },
