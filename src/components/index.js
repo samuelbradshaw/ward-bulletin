@@ -312,6 +312,7 @@ export {
   Alert,
   PopupMenu,
   ToolbarButton,
+  Loader,
   loader,
   toggleMenu,
   setThemeColor,

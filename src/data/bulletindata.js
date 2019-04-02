@@ -394,6 +394,18 @@ let BulletinData = {
       };
       throw error;
     });
+  },
+
+  saveTemplate: function(unit, title, data, token) {
+    let url = `${functionsURL()}/saveTemplate?id=${unit}&title=${title}`;
+    return fetch(url, {
+      method: "POST",
+      body: JSON.stringify(data),
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token
+      }
+    });
   }
 };
 

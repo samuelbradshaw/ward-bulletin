@@ -11,6 +11,8 @@ import firebase from "../../data/firebase";
 import printCheck from "../../misc/print-check";
 import { getAutoDate } from "../../misc/helper";
 import Recents from "../bulletin/recents";
+import SaveTemplate from "./save-template";
+import LoadTemplate from "./load-template";
 
 export default class EditorMain extends Component {
   state = {
@@ -94,13 +96,15 @@ export default class EditorMain extends Component {
         {
           title: "Save Template",
           icon: "icon-upload-cloud",
-          action: () => unit !== "sampleward" && this.saveTemplate(),
+          action: () =>
+            unit !== "sampleward" && this.setState({ modal: "save-template" }),
           disabled: unit === "sampleward"
         },
         {
           title: "Load Template",
           icon: "icon-upload-cloud",
-          action: () => unit !== "sampleward" && this.loadTemplate(),
+          action: () =>
+            unit !== "sampleward" && this.setState({ modal: "load-template" }),
           disabled: unit === "sampleward"
         },
         { divider: true },
@@ -186,6 +190,23 @@ export default class EditorMain extends Component {
                   this.loadRecent(unit, item);
                 }}
               />
+            </Modal>
+          )}
+
+          {modal == "save-template" && (
+            <Modal close={() => this.closeModal()}>
+              <SaveTemplate
+                unit={unit}
+                data={data}
+                complete={() => this.setState({ modal: null })}
+                firebase={firebase}
+              />
+            </Modal>
+          )}
+
+          {modal == "load-template" && (
+            <Modal close={() => this.closeModal()}>
+              <LoadTemplate />
             </Modal>
           )}
         </Page>
@@ -461,8 +482,4 @@ export default class EditorMain extends Component {
   closeModal() {
     this.setState({ modal: null });
   }
-
-  saveTemplate() {}
-
-  loadTemplate() {}
 }

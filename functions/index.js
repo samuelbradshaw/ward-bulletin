@@ -44,85 +44,7 @@ exports.helloWorld = functions.https.onRequest((req, res) => {
 
 // set bulletin
 exports.setBulletin = functions.https.onRequest((req, res) => {
-  return cors(req, res, () => {
-    let id = req.query.id;
-    if (!id) {
-      return res.status(400).send("Missing unit id");
-    }
-    if (id === "sampleward") {
-      return res.status(401).send("Permission denied"); // don't publish demo ward
-    }
-    let body = req.body;
-    if (!body) {
-      return res.status(400).send("Missing body");
-    }
-    if (typeof body === "string") {
-      // body didn't get converted to JSON object
-      body = JSON.parse(body);
-    }
-
-    const tokenId = req.get("Authorization").split("Bearer ")[1];
-    const fetch = require("node-fetch");
-    return admin
-      .auth()
-      .verifyIdToken(tokenId)
-      .then(claims => {
-        if (claims && claims.unit === id) {
-          // gzip it
-          const zlib = require("zlib");
-          zlib.gzip(JSON.stringify(body), function(error, buffer) {
-            if (error) throw error;
-            const bucket = admin.storage().bucket();
-            const file = bucket.file(id + "/bulletin.json");
-            file.save(
-              buffer,
-              {
-                metadata: {
-                  contentType: "application/json",
-                  contentEncoding: "gzip",
-                  cacheControl: "no-cache, no-store, must-revalidate"
-                }
-              },
-              error => {
-                if (error) {
-                  return res.status(500).send("Unable to upload the image.");
-                }
-                file.makePublic();
-
-                // save a copy for history
-                let date = new Date();
-                let historyname =
-                  req.query.historyname ||
-                  `${date.getFullYear()}-${twoDigitNumber(
-                    date.getMonth() + 1
-                  )}-${twoDigitNumber(date.getDate())}`;
-                let url = `https://www.googleapis.com/storage/v1/b/ward-bulletin-9b31d.appspot.com/o/${id}%2Fbulletin.json/copyTo/b/ward-bulletin-history/o/${id}%2F${historyname}?destinationPredefinedAcl=publicRead`;
-
-                // Need to get a auth token
-                admin.credential
-                  .applicationDefault()
-                  .getAccessToken()
-                  .then(token => {
-                    const auth = `Bearer ${token.access_token}`;
-                    return fetch(url, {
-                      method: "POST",
-                      headers: {
-                        Authorization: auth,
-                        "Content-Type": "application/json"
-                      }
-                    }).then(response => res.status(200).end());
-                  });
-              }
-            );
-          });
-        } else {
-          return res.status(401).send("Permission denied");
-        }
-      })
-      .catch(function(error) {
-        return res.status(599).send(error);
-      });
-  });
+  return uploadFile(req, res, "/bulletin.json", true);
 });
 
 /*
@@ -260,6 +182,99 @@ exports.getRecents = functions.https.onRequest((req, res) => {
       });
   });
 });
+
+// save template
+exports.saveTemplate = functions.https.onRequest((req, res) => {
+  let title = req.query.title;
+  return uploadFile(req, res, "/templates/" + title, false);
+});
+
+function uploadFile(req, res, path, doHistory) {
+  return cors(req, res, () => {
+    let id = req.query.id;
+    if (!id) {
+      return res.status(400).send("Missing unit id");
+    }
+    if (id === "sampleward") {
+      return res.status(401).send("Permission denied"); // don't publish demo ward
+    }
+    let body = req.body;
+    if (!body) {
+      return res.status(400).send("Missing body");
+    }
+    if (typeof body === "string") {
+      // body didn't get converted to JSON object
+      body = JSON.parse(body);
+    }
+
+    const tokenId = req.get("Authorization").split("Bearer ")[1];
+    const fetch = require("node-fetch");
+    return admin
+      .auth()
+      .verifyIdToken(tokenId)
+      .then(claims => {
+        if (claims && claims.unit === id) {
+          // gzip it
+          const zlib = require("zlib");
+          zlib.gzip(JSON.stringify(body), function(error, buffer) {
+            if (error) throw error;
+            const bucket = admin.storage().bucket();
+            const file = bucket.file(id + path);
+            file.save(
+              buffer,
+              {
+                metadata: {
+                  contentType: "application/json",
+                  contentEncoding: "gzip",
+                  cacheControl: "no-cache, no-store, must-revalidate"
+                }
+              },
+              error => {
+                if (error) {
+                  return res.status(500).send("Unable to upload the image.");
+                }
+                file.makePublic();
+
+                if (doHistory) {
+                  // save a copy for history
+                  let date = new Date();
+                  let historyname =
+                    req.query.historyname ||
+                    `${date.getFullYear()}-${twoDigitNumber(
+                      date.getMonth() + 1
+                    )}-${twoDigitNumber(date.getDate())}`;
+                  let url = `https://www.googleapis.com/storage/v1/b/ward-bulletin-9b31d.appspot.com/o/${id}%2Fbulletin.json/copyTo/b/ward-bulletin-history/o/${id}%2F${historyname}?destinationPredefinedAcl=publicRead`;
+
+                  // Need to get a auth token
+                  admin.credential
+                    .applicationDefault()
+                    .getAccessToken()
+                    .then(token => {
+                      const auth = `Bearer ${token.access_token}`;
+                      return fetch(url, {
+                        method: "POST",
+                        headers: {
+                          Authorization: auth,
+                          "Content-Type": "application/json"
+                        }
+                      }).then(response => res.status(200).end());
+                    });
+                } else {
+                  // no history
+                  return res.status(200).end();
+                }
+              }
+            );
+          });
+        } else {
+          return res.status(401).send("Permission denied");
+        }
+      })
+      .catch(function(error) {
+        return res.status(599).send(error);
+      });
+  });
+}
 
 // get firebase
 function getFirebase() {
