@@ -1,7 +1,14 @@
 import { h, Component } from "preact";
 import style from "./style";
 import hymnList from "../../assets/hymns.json";
-import { PopupMenu, ToolbarButton, Modal, NumberInput } from "../../components";
+import {
+  PopupMenu,
+  ToolbarButton,
+  Modal,
+  NumberInput,
+  Label,
+  TextInput
+} from "../../components";
 import { getAutoDate } from "../../misc/helper";
 import HTMLEditor from "./html-editor";
 import prefs from "../../data/prefs";
@@ -312,11 +319,9 @@ export default class EditorView extends Component {
         }
         content = (
           <div class="w3-row">
-            <div class="w3-col w3-right" style={{ width: 44, marginLeft: 18 }}>
+            <div class="w3-col w3-right" style={{ width: 56, marginLeft: 18 }}>
               <HidingLabel name="Size" />
-              <input
-                class={`${style.textinput} w3-border w3-border-theme w3-round`}
-                type="number"
+              <NumberInput
                 value={item.size || 15}
                 onChange={event => {
                   let value = parseInt(event.target.value);
@@ -331,6 +336,7 @@ export default class EditorView extends Component {
                   this.updateNoRender(request);
                 }}
                 onFocus={this.handleFocus}
+                height={32}
               />
             </div>
 
@@ -346,9 +352,7 @@ export default class EditorView extends Component {
 
             <div class="w3-rest">
               <HidingLabel name={titleLabel} />
-              <input
-                class={`${style.textinput} w3-border w3-border-theme w3-round`}
-                type="text"
+              <TextInput
                 placeholder={titleLabel}
                 value={title}
                 onChange={event =>
@@ -367,9 +371,7 @@ export default class EditorView extends Component {
           <div class="w3-cell-row">
             <div class="w3-cell">
               <HidingLabel name="Label" />
-              <input
-                class={`${style.textinput} w3-border w3-border-theme w3-round`}
-                type="text"
+              <TextInput
                 placeholder="Label"
                 value={label}
                 onChange={event =>
@@ -380,9 +382,7 @@ export default class EditorView extends Component {
             </div>
             <div class="w3-cell leftpadding">
               <HidingLabel name="Name" />
-              <input
-                class={`${style.textinput} w3-border w3-border-theme w3-round`}
-                type="text"
+              <TextInput
                 placeholder="Name"
                 value={name}
                 onChange={event =>
@@ -402,9 +402,7 @@ export default class EditorView extends Component {
           <div>
             <div>
               <HidingLabel name="Image" />
-              <input
-                class={`${style.textinput} w3-border w3-border-theme w3-round`}
-                type="text"
+              <TextInput
                 placeholder="Image URL"
                 value={url}
                 onChange={event =>
@@ -483,11 +481,7 @@ export default class EditorView extends Component {
               </div>
               <div class="w3-rest">
                 <HidingLabel name="Label" />
-                <input
-                  class={`${
-                    style.textinput
-                  } w3-border w3-border-theme w3-round`}
-                  type="text"
+                <TextInput
                   placeholder="Label"
                   value={label}
                   onChange={event =>
@@ -500,11 +494,7 @@ export default class EditorView extends Component {
             <div class="w3-cell-row">
               <div class="w3-cell">
                 <HidingLabel name="Title" />
-                <input
-                  class={`${
-                    style.textinput
-                  } w3-border w3-border-theme w3-round`}
-                  type="text"
+                <TextInput
                   placeholder="Title"
                   value={title}
                   onChange={event =>
@@ -525,11 +515,7 @@ export default class EditorView extends Component {
             <div class="w3-cell-row">
               <div class="w3-cell">
                 <HidingLabel name="Label" />
-                <input
-                  class={`${
-                    style.textinput
-                  } w3-border w3-border-theme w3-round`}
-                  type="text"
+                <TextInput
                   placeholder="Label"
                   value={label}
                   onChange={event =>
@@ -540,11 +526,7 @@ export default class EditorView extends Component {
               </div>
               <div class="w3-cell leftpadding">
                 <HidingLabel name="Name" />
-                <input
-                  class={`${
-                    style.textinput
-                  } w3-border w3-border-theme w3-round`}
-                  type="text"
+                <TextInput
                   placeholder="Name"
                   value={name}
                   onChange={event =>
@@ -557,11 +539,7 @@ export default class EditorView extends Component {
             <div class="w3-cell-row">
               <div class="w3-cell">
                 <HidingLabel name="Title" />
-                <input
-                  class={`${
-                    style.textinput
-                  } w3-border w3-border-theme w3-round`}
-                  type="text"
+                <TextInput
                   placeholder="Title"
                   value={title}
                   onChange={event =>
@@ -631,9 +609,7 @@ export default class EditorView extends Component {
           <div>
             <div>
               <HidingLabel name="Heading" />
-              <input
-                class={`${style.textinput} w3-border w3-border-theme w3-round`}
-                type="text"
+              <TextInput
                 placeholder="Heading"
                 value={heading}
                 onChange={event =>
@@ -738,9 +714,7 @@ export default class EditorView extends Component {
           <div class="w3-cell-row">
             <div class="w3-cell" style={{ width: "32px" }}>
               <HidingLabel name="Day" />
-              <input
-                class={`${style.textinput} w3-border w3-border-theme w3-round`}
-                type="text"
+              <TextInput
                 placeholder="Day"
                 value={day}
                 onChange={event =>
@@ -751,9 +725,7 @@ export default class EditorView extends Component {
             </div>
             <div class="w3-cell leftpadding" style={{ width: "36px" }}>
               <HidingLabel name="Weekday" />
-              <input
-                class={`${style.textinput} w3-border w3-border-theme w3-round`}
-                type="text"
+              <TextInput
                 placeholder="Weekday"
                 value={weekday}
                 onChange={event =>
@@ -764,9 +736,7 @@ export default class EditorView extends Component {
             </div>
             <div class="w3-cell leftpadding" style={{ width: "72px" }}>
               <HidingLabel name="Time" />
-              <input
-                class={`${style.textinput} w3-border w3-border-theme w3-round`}
-                type="text"
+              <TextInput
                 placeholder="Time"
                 value={time}
                 onChange={event =>
@@ -777,9 +747,7 @@ export default class EditorView extends Component {
             </div>
             <div class="w3-cell leftpadding" style={{ width: "auto" }}>
               <HidingLabel name="Event" />
-              <input
-                class={`${style.textinput} w3-border w3-border-theme w3-round`}
-                type="text"
+              <TextInput
                 placeholder="Event"
                 value={event}
                 onChange={event =>
@@ -1222,9 +1190,7 @@ export default class EditorView extends Component {
 }
 
 function HidingLabel({ name }) {
-  return prefs.get(prefs.hideLabels) ? null : (
-    <label class={`${style.label} w3-block`}>{name}</label>
-  );
+  return prefs.get(prefs.hideLabels) ? null : <Label name={name} />;
 }
 
 function RangeSlider({ value, handler }) {

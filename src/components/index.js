@@ -1,5 +1,6 @@
 import { h } from "preact";
 import Sidebar, { toggleSidebar, closeSidebar } from "./sidebar";
+import style from "./style";
 
 const Loader = ({ showLoader, message }) => {
   return (
@@ -249,6 +250,19 @@ let CheckBox = ({ title, checked, onChange }) => (
   </p>
 );
 
+let TextInput = ({ title, ...rest }) => {
+  return (
+    <input
+      class={`${
+        style.textinput
+      } w3-border w3-border-theme w3-round bottommargin`}
+      type="text"
+      value={title}
+      {...rest}
+    />
+  );
+};
+
 let NumberInput = ({ title, postscript, onChange, height, ...rest }) => {
   return (
     <div>
@@ -266,6 +280,16 @@ let NumberInput = ({ title, postscript, onChange, height, ...rest }) => {
     </div>
   );
 };
+
+let Label = ({ name }) => (
+  <label class={`${style.label} w3-block`}>{name}</label>
+);
+
+let Button = ({ children, ...rest }) => (
+  <button {...rest} class="w3-btn w3-theme w3-round w3-border">
+    {children}
+  </button>
+);
 
 function toggleMenu(menuId) {
   var menu = document.getElementById(menuId);
@@ -319,5 +343,8 @@ export {
   Modal,
   RadioButtons,
   CheckBox,
-  NumberInput
+  NumberInput,
+  Label,
+  TextInput,
+  Button
 };

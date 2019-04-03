@@ -1,6 +1,6 @@
 import { h, Component } from "preact";
 import { route } from "preact-router";
-import { Page, Modal } from "../../components";
+import { Page, Modal, Button } from "../../components";
 import prefs from "../../data/prefs";
 import Bulletin from "../bulletin";
 import style from "./style";
@@ -52,20 +52,10 @@ class Home extends Component {
               closest bulletins or search using the name of your ward.
             </p>
             <div class="w3-section">
-              <button
-                class="w3-btn w3-theme w3-round w3-border"
-                onClick={() => route("/locate")}
-              >
-                Find by Location
-              </button>
+              <Button onClick={() => route("/locate")}>Find by Location</Button>
             </div>
             <div class="w3-section">
-              <button
-                class="w3-btn w3-theme w3-round w3-border"
-                onClick={() => route("/search")}
-              >
-                Search by Name
-              </button>
+              <Button onClick={() => route("/search")}>Search by Name</Button>
             </div>
           </div>
 
@@ -96,12 +86,7 @@ class Home extends Component {
               If you are a bulletin editor for your ward, login or create a new
               account to edit your ward bulletin.
             </p>
-            <button
-              class="w3-btn w3-theme w3-round w3-border"
-              onClick={() => route("/editor")}
-            >
-              Edit Bulletin
-            </button>
+            <Button onClick={() => route("/editor")}>Edit Bulletin</Button>
             <p />
           </div>
 
@@ -118,31 +103,24 @@ class Home extends Component {
               If you have questions about the app, suggestions, or need to
               report a problem, please send email to: wardbulletinapp@gmail.com.
             </p>
-            <button
-              class="w3-btn w3-theme w3-round w3-border"
+            <Button
               onClick={() =>
                 (window.location = "mailto:wardbulletinapp@gmail.com")
               }
             >
               Send Us Email
-            </button>
+            </Button>
             <p>See a sample ward bulletin:</p>
 
             <div class="w3-section">
-              <button
-                class="w3-btn w3-theme w3-round w3-border"
-                onClick={() => route("/#sampleward")}
-              >
+              <Button onClick={() => route("/#sampleward")}>
                 View Sample Bulletin
-              </button>
+              </Button>
             </div>
             <div class="w3-section">
-              <button
-                class="w3-btn w3-theme w3-round w3-border"
-                onClick={() => route("/editdemo")}
-              >
+              <Button onClick={() => route("/editdemo")}>
                 Edit Sample Bulletin
-              </button>
+              </Button>
             </div>
 
             <p>
