@@ -19,8 +19,6 @@ export default class EditorMain extends Component {
     data: null,
     update: 0,
     recentsVisible: false,
-    undoEnabled: false,
-    redoEnabled: false,
     modal: null
   };
   undoStack = [];
@@ -43,94 +41,18 @@ export default class EditorMain extends Component {
     }
   }
 
-  render({ unit }, { data, recentsVisible, undoEnabled, redoEnabled, modal }) {
+  render({ unit }, { data, recentsVisible, modal }) {
     if (data) {
       if (printCheck.printing) {
         // printing, just show bulletin view
         return <BulletinView data={data} />;
       }
 
-      let sidebarItems = [
-        {
-          title: "Undo Edit",
-          icon: "icon-ccw",
-          action: () => this.undo(),
-          disabled: !undoEnabled
-        },
-        {
-          title: "Redo Edit",
-          icon: "icon-cw",
-          action: () => this.redo(),
-          disabled: !redoEnabled
-        },
-        { divider: true },
-        {
-          title: "Publish",
-          icon: "icon-upload-cloud",
-          action: () => unit !== "sampleward" && this.publish(),
-          disabled: unit === "sampleward"
-        },
-        {
-          title: "Reload",
-          icon: "icon-arrows-cw",
-          action: () => {
-            this.download(unit);
-          }
-        },
-        {
-          title: "Recent Bulletins",
-          icon: "icon-history",
-          action: () => {
-            this.setState({
-              recentsVisible: true,
-              modal: "recents"
-            });
-          }
-        },
-        {
-          title: "Print",
-          icon: "icon-print",
-          action: () => window.print()
-        },
-        { divider: true },
-        {
-          title: "Save Template",
-          icon: "icon-upload-cloud",
-          action: () =>
-            unit !== "sampleward" && this.setState({ modal: "save-template" }),
-          disabled: unit === "sampleward"
-        },
-        {
-          title: "Load Template",
-          icon: "icon-upload-cloud",
-          action: () =>
-            unit !== "sampleward" && this.setState({ modal: "load-template" }),
-          disabled: unit === "sampleward"
-        },
-        { divider: true },
-        {
-          title: "Help",
-          icon: "icon-help",
-          action: () => this.setState({ modal: "help" })
-        },
-        {
-          title: "Settings",
-          icon: "icon-cog",
-          action: () => this.setState({ modal: "settings" })
-        },
-        {
-          title: "Logout",
-          icon: "icon-logout",
-          action: () => {
-            if (confirm("Are you sure you want to log out?")) {
-              logout();
-            }
-          }
-        }
-      ];
-
       return (
-        <Page title={data.settings.name} sidebarItems={sidebarItems}>
+        <Page
+          title={data.settings.name}
+          sidebarItems={() => this.sidebarItems()}
+        >
           <div class="fullheight">
             <div
               class="w3-row-padding w3-half fullheight w3-border"
@@ -510,5 +432,105 @@ export default class EditorMain extends Component {
 
   closeModal() {
     this.setState({ modal: null });
+  }
+
+  labelForUndo(label, stack) {
+    let request = stack[stack.length - 1];
+    if (request) {
+      let map = {
+        add: "Add",
+        update: "Edit",
+        moveUp: "Move Up",
+        moveDown: "Move Down",
+        delete: "Delete",
+        undo: "Undo",
+        redo: "Redo",
+        reload: "Load"
+      };
+      label += " " + map[request.type] || "Edit";
+    }
+    return label;
+  }
+
+  sidebarItems() {
+    let { unit } = this.props;
+    return [
+      {
+        title: this.labelForUndo("Undo", this.undoStack),
+        icon: "icon-ccw",
+        action: () => this.undo(),
+        disabled: this.undoStack.length == 0
+      },
+      {
+        title: this.labelForUndo("Redo", this.redoStack),
+        icon: "icon-cw",
+        action: () => this.redo(),
+        disabled: this.redoStack.length == 0
+      },
+      { divider: true },
+      {
+        title: "Publish",
+        icon: "icon-upload-cloud",
+        action: () => unit !== "sampleward" && this.publish(),
+        disabled: unit === "sampleward"
+      },
+      {
+        title: "Reload",
+        icon: "icon-arrows-cw",
+        action: () => {
+          this.download(unit);
+        }
+      },
+      {
+        title: "Recent Bulletins",
+        icon: "icon-history",
+        action: () => {
+          this.setState({
+            recentsVisible: true,
+            modal: "recents"
+          });
+        }
+      },
+      {
+        title: "Print",
+        icon: "icon-print",
+        action: () => window.print()
+      },
+      { divider: true },
+      {
+        title: "Save Template",
+        icon: "icon-upload-cloud",
+        action: () =>
+          unit !== "sampleward" && this.setState({ modal: "save-template" }),
+        disabled: unit === "sampleward"
+      },
+      {
+        title: "Load Template",
+        icon: "icon-upload-cloud",
+        action: () =>
+          unit !== "sampleward" && this.setState({ modal: "load-template" }),
+        disabled: unit === "sampleward"
+      },
+      { divider: true },
+      {
+        title: "Help",
+        icon: "icon-help",
+        action: () => this.setState({ modal: "help" })
+      },
+      {
+        title: "Settings",
+        icon: "icon-cog",
+        action: () => this.setState({ modal: "settings" })
+      },
+      {
+        title: "Logout",
+        icon: "icon-logout",
+        action: () => {
+          if (confirm("Are you sure you want to log out?")) {
+            logout();
+          }
+        }
+      }
+    ];
   }
 }

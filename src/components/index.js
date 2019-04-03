@@ -145,7 +145,7 @@ const Page = ({
         showBack={!isHome}
         showMenu={Boolean(sidebarItems)}
       />
-      {sidebarItems && sidebarItems.length && <Sidebar items={sidebarItems} />}
+      {sidebarItems && <Sidebar items={sidebarItems} />}
       <div
         id="sidebarOverlay"
         class="w3-overlay w3-animate-opacity"
