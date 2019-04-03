@@ -276,6 +276,33 @@ function uploadFile(req, res, path, doHistory) {
   });
 }
 
+// get templates
+exports.getTemplates = functions.https.onRequest((req, res) => {
+  return cors(req, res, () => {
+    let id = req.query.id;
+    if (!id) {
+      res.status(400).send("Missing unit id");
+      return;
+    }
+
+    let prefix = id + "/templates/";
+    const bucket = admin.storage().bucket("ward-bulletin-9b31d.appspot.com");
+    bucket
+      .getFiles({
+        prefix: prefix,
+        delimiter: "/"
+      })
+      .then(([files]) => {
+        let data = [];
+        if (files) {
+          data = files.map(file => file.name.split("/").pop());
+        }
+        return res.json(data);
+      })
+      .catch(error => res.status(599).send(error));
+  });
+});
+
 // get firebase
 function getFirebase() {
   if (!getFirebase.firebase) {

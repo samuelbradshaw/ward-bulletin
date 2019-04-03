@@ -406,6 +406,28 @@ let BulletinData = {
         Authorization: "Bearer " + token
       }
     });
+  },
+
+  getTemplates: function(unit) {
+    let url = `${functionsURL()}/getTemplates?id=${unit}`;
+    return fetch(url).then(response => response.json());
+  },
+
+  getTemplate: function(unit, title) {
+    const url = `https://storage.googleapis.com/ward-bulletin-9b31d.appspot.com/${unit}/templates/${title}`;
+    return fetch(url).then(response => {
+      if (response.ok) {
+        return response.json();
+      }
+      let error = {
+        status: response.status,
+        message:
+          response.status === 403
+            ? `Template not found (${unit})`
+            : "Unknown error: " + response.status
+      };
+      throw error;
+    });
   }
 };
 

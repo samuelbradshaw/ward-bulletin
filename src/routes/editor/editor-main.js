@@ -206,7 +206,13 @@ export default class EditorMain extends Component {
 
           {modal == "load-template" && (
             <Modal close={() => this.closeModal()}>
-              <LoadTemplate />
+              <LoadTemplate
+                unit={unit}
+                select={data => {
+                  this.closeModal();
+                  this.loadTemplate(data);
+                }}
+              />
             </Modal>
           )}
         </Page>
@@ -466,6 +472,29 @@ export default class EditorMain extends Component {
         loader.hide();
         this.setState({ error: error.message });
       });
+  }
+
+  loadTemplate(template) {
+    let data = JSON.parse(JSON.stringify(this.state.data)); // make copy of data
+    let sections = data.sections;
+    template.forEach(templateSection => {
+      let title = templateSection.title;
+      let found = false;
+      for (let index = 0; index < sections.length; index++) {
+        if (sections[index].title === title) {
+          sections[index] = templateSection;
+          found = true;
+          break;
+        }
+      }
+      if (!found) {
+        sections.push(templateSection);
+      }
+    });
+    this.updateWithUndo({
+      type: "reload",
+      data
+    });
   }
 
   setupUndoStatus() {
