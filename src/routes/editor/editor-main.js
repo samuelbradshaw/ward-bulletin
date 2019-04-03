@@ -499,14 +499,14 @@ export default class EditorMain extends Component {
       { divider: true },
       {
         title: "Save Template",
-        icon: "icon-upload-cloud",
+        icon: "icon-upload",
         action: () =>
           unit !== "sampleward" && this.setState({ modal: "save-template" }),
         disabled: unit === "sampleward"
       },
       {
         title: "Load Template",
-        icon: "icon-upload-cloud",
+        icon: "icon-download",
         action: () =>
           unit !== "sampleward" && this.setState({ modal: "load-template" }),
         disabled: unit === "sampleward"

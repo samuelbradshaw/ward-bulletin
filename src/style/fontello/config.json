@@ -269,6 +269,18 @@
       "css": "history",
       "code": 61914,
       "src": "fontawesome"
+    },
+    {
+      "uid": "eeec3208c90b7b48e804919d0d2d4a41",
+      "css": "upload",
+      "code": 59419,
+      "src": "fontawesome"
+    },
+    {
+      "uid": "9a76bc135eac17d2c8b8ad4a5774fc87",
+      "css": "download",
+      "code": 59420,
+      "src": "fontawesome"
     }
   ]
 }
