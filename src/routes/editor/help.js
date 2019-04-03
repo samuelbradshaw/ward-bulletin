@@ -16,10 +16,16 @@ const Help = () => {
           editor.
         </Body>
         <Body>
-          Changes you make do not appear for everyone else until you tap the
-          Publish button on the toolbar at the buttom of the screen. If you make
-          a mistake, you can tap the Undo button. The Logout button is only used
-          if you have multiple accounts.
+          Several options, including this help screen, are available from the
+          sidebar menu which you can open with the <i class="icon-menu" />{" "}
+          button at the upper/right.
+        </Body>
+        <Title>Publish</Title>
+        <Body>
+          When you have finished making changes to the bulletin, tap the{" "}
+          <i class="icon-upload-cloud" />
+          Publish button in the sidebar menu to upload the bulletin. Changes you
+          make do not appear for everyone else until you publish.
         </Body>
         <Title>Sections</Title>
         <Body>
@@ -28,7 +34,7 @@ const Help = () => {
           icon to the right of the section name to show the section toolbar. Use
           the toolbar to add, delete, or move the section up or down. Tap the{" "}
           <i class="icon-angle-down" /> indicator to hide the section while
-          editing so it's easier to edit other sections that are lower.
+          editing so it's easier to see other sections.
         </Body>
         <Title>Items</Title>
         <Body>
@@ -82,10 +88,52 @@ const Help = () => {
         <Title>Printing</Title>
         <Body>
           To print, press the <i class="icon-print" />
-          Print button or select Print from your web browser menu. By default,
-          the bulletin will print in 2 columns. Be sure to select landscape mode
-          when printing. To adjust the margins, open the settings by pressing
-          the <i class="icon-cog" /> button and set the center and edge margins.
+          Print button in the sidebar menu or select Print from your web browser
+          menu. By default, the bulletin will print in 2 columns. Be sure to
+          select landscape mode when printing. To adjust the margins, open the
+          settings by pressing the <i class="icon-cog" /> button in the sidebar
+          menu and set the center and edge margins.
+          <Title>Sidebar Menu Items</Title>
+        </Body>
+        The following items are avilable in the sidebar menu.
+        <Body />
+        <Body>
+          <b>Undo/Redo</b>: Undo or redo changes to the bulletin
+        </Body>
+        <Body>
+          <b>Publish</b>: Publish changes online so others can download
+        </Body>
+        <Body>
+          <b>Reload</b>: Reload the bulletin to load the last published version.
+          Use this to start over or to download changes someone else has made.
+        </Body>
+        <Body>
+          <b>Recent Bulletins</b>: Download a bulletin that was published within
+          the past several weeks.
+        </Body>
+        <Body>
+          <b>Print</b>: Print the bulletin. By default, the bulletin will print
+          in 2 columns. Be sure to select landscape mode when printing.
+        </Body>
+        <Body>
+          <b>Save Template</b>: Save one or more sections of the bulletin for
+          later use. It's useful to save various versions of the Program section
+          that are different from the normal program such as Fast and Testimony
+          Meeting, Primary Program, Christmas program, etc.
+        </Body>
+        <Body>
+          <b>Load Template</b>: Load a template that has been saved. Loading a
+          template will overwrite all sections that were saved.
+        </Body>
+        <Body>
+          <b>Help</b>: This screen
+        </Body>
+        <Body>
+          <b>Settings</b>: Various settings for this bulletin
+        </Body>
+        <Body>
+          <b>Logout</b>: If you are managaging multiple bulletins, you can log
+          out to log in as a different user.
         </Body>
         <p />
       </div>
