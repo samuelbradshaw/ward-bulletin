@@ -75,7 +75,7 @@ export default class Locate extends Component {
     }
     return (
       <Page title="Locate" showLoader={showLoader} message="Locating Bulletin">
-        {content}
+        <div class="w3-content">{content}</div>
       </Page>
     );
   }

@@ -64,7 +64,7 @@ export default class EditorView extends Component {
         tabIndex="-1"
         style={{ outline: "none" }}
       >
-        <div class="w3-content">{sections}</div>
+        <div>{sections}</div>
 
         {modal === "media" && (
           <Modal close={() => this.setState({ modal: null })}>

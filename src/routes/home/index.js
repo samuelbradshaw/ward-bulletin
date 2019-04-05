@@ -42,7 +42,7 @@ class Home extends Component {
     return (
       <Page title="Ward Bulletin App" sidebarItems={sidebarItems} isHome>
         <div
-          class="w3-light-grey w3-container"
+          class="w3-light-grey w3-content w3-container"
           style={{ paddingBottom: "300px" }}
         >
           <h5 class={style.h5}>Find Ward Bulletin</h5>

@@ -13,7 +13,7 @@ export default class Search extends Component {
 
   render({}, { wards }) {
     let content = (
-      <div>
+      <div class="w3-content">
         <div class="w3-padding">
           <p class="w3-text-grey">Ward name:</p>
           <input
