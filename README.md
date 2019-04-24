@@ -1,54 +1,22 @@
-# bulletin
+<https://wardbulletin.app>
 
-## CLI Commands
+# Ward Bulletin App
 
-```bash
-# install dependencies
-npm install
+### Overview
 
-# serve with hot reload at localhost:8080
-npm run dev
+Ward Bulletin App is a PWA (progressive web app) for displaying and editing church bulletins/programs. It is optimized for sacrament meetings and announcements for members of The Church of Jesus Christ of Latter-day Saints, but can be used as a program for any meeting.
 
-# build for production with minification
-npm run build	# or preact build --no-prerender
+### Contributions
 
-# test the production build locally
-npm run serve
+Contributions to the app are welcome if you would like to make a pull request. Queries can be sent to: <wardbulletinapp@gmail.com>
 
-# serve functions locally
-firebase serve --only functions
+### Developer Details
 
-# deploy all: bulletin and media websites and functions
-firebase deploy
+The app is built on Preact (a lightweight version of React) and W3.css for styling. Both libraries are very lightweight, so the app loads quickly.
 
-# deploy website to Firebase (after build)
-firebase deploy --only hosting:bulletin
+The backend is based on Firebase:
 
-# deploy media library website
-firebase deploy --only hosting:media
-
-# deploy functions (from "functions" folder)
-firebase deploy --only functions
-
-# generate src/assets/hymns.json file
-node tools/generate-hymns.js
-
-# generate media-library files to media-library folder
-node tools/generate-media.js
-
-# run tests with jest and preact-render-spy
-npm run test
-```
-
-# copy Green Ward to Sample Ward
-
-for dev:
-curl "http://localhost.charlesproxy.com:5000/ward-bulletin-9b31d/us-central1/greenToDemo"
-for production:
-curl "https://us-central1-ward-bulletin-9b31d.cloudfunctions.net/greenToDemo"
-
-For detailed explanation on how things work, checkout the [CLI Readme](https://github.com/developit/preact-cli/blob/master/README.md).
-
-## Fonts
-
-Generate myfont file at http://fontello.com/. See directions at https://github.com/fontello/fontello/wiki/How-to-save-and-load-projects for loading and saving project
+- Firebase Hosting - serving the website
+- Cloud Functions - add account, save bulletin, load/save templates, get recent bulletins
+- Storage - bulletin data
+- Authentication - login in for editors
