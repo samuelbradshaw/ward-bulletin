@@ -319,7 +319,9 @@ export default class EditorMain extends Component {
 
   save() {
     // save in local storage
-    prefs.set(prefs.draftBulletin, this.state.data);
+    if (!this.props.editdemo) {
+      prefs.set(prefs.draftBulletin, this.state.data);
+    }
   }
 
   undo() {
@@ -348,9 +350,9 @@ export default class EditorMain extends Component {
     let historyname = `${date.getFullYear()}-${(date.getMonth() + 1)
       .toString()
       .padStart(2, "0")}-${date
-      .getDate()
-      .toString()
-      .padStart(2, "0")}`;
+        .getDate()
+        .toString()
+        .padStart(2, "0")}`;
 
     firebase
       .auth()
