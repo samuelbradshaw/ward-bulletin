@@ -89,6 +89,10 @@ export default class EditorView extends Component {
   }
 
   handleKeyEvent(event) {
+    if (document.activeElement.tabIndex >= 0) {
+      return; // focused item is an input element
+    }
+
     // up, down delete
     let item = this.state.selectedItem;
     if (item) {
@@ -140,6 +144,10 @@ export default class EditorView extends Component {
   };
 
   clipboardEvent(event) {
+    if (document.activeElement.tabIndex >= 0) {
+      return; // focused item is an input element
+    }
+
     console.log("Clipboard event", JSON.stringify(event));
     let item = this.state.selectedItem;
     const section = this.state.section;
