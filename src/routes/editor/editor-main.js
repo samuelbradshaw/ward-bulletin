@@ -370,7 +370,7 @@ export default class EditorMain extends Component {
         setTimeout(
           () =>
             alert(`The ${this.state.data.settings.name} bulletin is now live!`),
-          10
+          100
         );
       })
       .catch(error => {
