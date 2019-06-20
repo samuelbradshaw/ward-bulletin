@@ -85,6 +85,10 @@ const Help = () => {
           image. To enter a link, select the text that will be the link, then
           tap the Link button to enter the URL.
         </Body>
+        <Title>Markdown</Title>
+        <Body>
+          Enter styled text using the <a href="https://www.markdownguide.org/" target="_blank">Markdown</a> format.
+        </Body>
         <Title>Printing</Title>
         <Body>
           To print, press the <i class="icon-print" />

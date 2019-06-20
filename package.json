@@ -30,6 +30,7 @@
   "dependencies": {
     "firebase": "^5.8.6",
     "firebaseui": "^3.5.2",
+    "marked": "^0.6.2",
     "mini-platform-detect": "^0.1.0",
     "node-fetch": "^2.3.0",
     "preact": "^8.4.2",

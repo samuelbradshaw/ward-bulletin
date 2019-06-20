@@ -208,6 +208,7 @@ let createLine = item => {
 
     case "article":
     case "styledtext":
+    case "markdown":
       let { heading, body } = item;
       line1 = heading && <div class={`${style.heading} bulletin-${type}-heading`}>{heading}</div>;
       line2 = <div dangerouslySetInnerHTML={{ __html: body }} />;

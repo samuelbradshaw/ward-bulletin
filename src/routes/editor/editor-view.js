@@ -270,7 +270,7 @@ export default class EditorView extends Component {
           <span
             class={`${
               section.hidden ? "icon-angle-up" : "icon-angle-down"
-            } w3-xlarge`}
+              } w3-xlarge`}
             style={{ alignSelf: "center" }}
             onClick={e => {
               this.props.update({
@@ -287,7 +287,7 @@ export default class EditorView extends Component {
           <i
             class={`icon-menu w3-margin-left ${
               this.state.selectedSection == section ? "w3-text-theme" : ""
-            }`}
+              }`}
             style={{ alignSelf: "center", marginRight: 8 }}
           />
         </div>
@@ -469,7 +469,7 @@ export default class EditorView extends Component {
                 <input
                   class={`w3-border w3-border-theme w3-round ${
                     style.numberinput
-                  }`}
+                    }`}
                   type="number"
                   placeholder="Hymn Number"
                   value={item.hymn}
@@ -587,7 +587,6 @@ export default class EditorView extends Component {
               style={{ width: "100%" }}
               value={item.data}
               onInput={event => {
-                this.skipRender = true;
                 this.updateNoRender({
                   type: "update",
                   value: event.target.value,
@@ -656,6 +655,41 @@ export default class EditorView extends Component {
                 };
                 this.skipRender = true;
                 this.props.change(props);
+              }}
+            />
+          </div>
+        );
+        color = "w3-border-pink";
+        break;
+
+      case "markdown":
+        content = (
+          <div>
+            <HidingLabel name="Markdown" />
+
+            <textarea
+              class="w3-border w3-border-theme"
+              rows="10"
+              style={{ width: "100%" }}
+              value={item.markdown}
+              onInput={event => {
+                let marked = require("marked");
+                let markdown = event.target.value;
+                let html = marked(markdown);
+                this.updateNoRender([{
+                  type: "update",
+                  value: event.target.value,
+                  attr: "markdown",
+                  index,
+                  section
+                },
+                {
+                  type: "update",
+                  value: html,
+                  attr: "body",
+                  index,
+                  section
+                }]);
               }}
             />
           </div>
@@ -791,7 +825,7 @@ export default class EditorView extends Component {
           <i
             class={`icon-menu toolbar-toggle ${
               this.state.selectedItem == item ? "w3-text-theme" : ""
-            }`}
+              }`}
             style={{ alignSelf: "center", marginLeft: 4 }}
           />
         </div>
@@ -976,7 +1010,12 @@ export default class EditorView extends Component {
       ["Image", "image", ["cover"]],
       ["Columns", "columns", ["program"]],
       ["Pagebreak", "pagebreak", []],
-      ["Gap", "gap", []]
+      ["Gap", "gap", []],
+      [
+        "Markdown",
+        "markdown",
+        ["cover, program, announcements", "information"]
+      ],
     ];
 
     let type = section.type;
@@ -1135,6 +1174,10 @@ export default class EditorView extends Component {
 
       case "event":
         item = { day: "", date: "", time: "", event: "" };
+        break;
+
+      case "markdown":
+        item = { body: "", markdown: "" }
         break;
     }
     item.type = type;
