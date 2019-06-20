@@ -35,9 +35,3 @@
   display: flex;
   width: 100%;
 }
-
-.heading {
-  font-weight: 700;
-  text-decoration-line: underline;
-  margin-top: 4px;
-}

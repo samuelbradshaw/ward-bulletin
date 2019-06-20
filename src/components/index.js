@@ -255,7 +255,7 @@ let TextInput = ({ title, ...rest }) => {
     <input
       class={`${
         style.textinput
-      } w3-border w3-border-theme w3-round bottommargin`}
+        } w3-border w3-border-theme w3-round bottommargin`}
       type="text"
       value={title}
       {...rest}
@@ -285,8 +285,8 @@ let Label = ({ name }) => (
   <label class={`${style.label} w3-block`}>{name}</label>
 );
 
-let Button = ({ children, ...rest }) => (
-  <button {...rest} class="w3-btn w3-theme w3-round w3-border">
+let Button = ({ danger, children, ...rest }) => (
+  <button {...rest} class={`w3-btn ${danger ? "w3-red" : "w3-theme"} w3-round w3-border`}>
     {children}
   </button>
 );

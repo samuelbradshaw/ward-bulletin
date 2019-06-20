@@ -3,11 +3,16 @@ import style from "./style";
 import prefs from "../../data/prefs";
 import { route } from "preact-router";
 import printCheck from "../../misc/print-check";
+import { setStyleCSS } from "../../misc/helper";
+import styleCSS from "./bulletin-style.txt";
 
 export default class BulletinView extends Component {
   state = { hymn: null };
 
   render({ data, hideSections }) {
+    // setup styles
+    setStyleCSS(data.settings.style || styleCSS, "bulletin-styles");
+
     if (printCheck.printing && data.settings.printColumns != 1) {
       // printing
       return this.renderPrint(data);
@@ -23,7 +28,7 @@ export default class BulletinView extends Component {
       }
     }
     return (
-      <div class={style.bulletin + " w3-container w3-white"}>{sections}</div>
+      <div class={style.bulletin + " w3-container w3-white bulletin-body"}>{sections}</div>
     );
   }
 
@@ -141,7 +146,7 @@ let createLine = item => {
       break;
 
     case "name":
-      line1 = nameLine(label, name);
+      line1 = nameLine(label, name, type);
       break;
 
     case "image":
@@ -158,15 +163,15 @@ let createLine = item => {
       break;
 
     case "hymn":
-      line1 = nameLine(label, item.hymn);
-      line2 = centerLine(title, "italic");
+      line1 = nameLine(label, item.hymn, type);
+      line2 = <div class="bulletin-hymn-title">{title}</div>
       onClick = event => viewHymn(item);
       itemStyle = { cursor: "pointer" };
       break;
 
     case "music":
-      line1 = nameLine(label, name);
-      line2 = centerLine(title, "italic");
+      line1 = nameLine(label, name, type);
+      line2 = <div class="bulletin-music-title">{title} </div>
       break;
 
     case "columns":
@@ -204,7 +209,7 @@ let createLine = item => {
     case "article":
     case "styledtext":
       let { heading, body } = item;
-      line1 = heading && <div class={style.heading}>{heading}</div>;
+      line1 = heading && <div class={`${style.heading} bulletin-${type}-heading`}>{heading}</div>;
       line2 = <div dangerouslySetInnerHTML={{ __html: body }} />;
       break;
 
@@ -220,11 +225,11 @@ let createLine = item => {
     case "event":
       let { day, weekday, time, event } = item;
       line1 = (
-        <tr>
-          <td class="padding-tiny-lr w3-right-align">{day}</td>
-          <td class="padding-tiny-lr">{weekday}</td>
-          <td class="padding-tiny-lr w3-right-align">{time}</td>
-          <td class="padding-tiny-lr">{event}</td>
+        <tr class="bulletin-event">
+          <td class="padding-tiny-lr w3-right-align bulletin-event-day">{day}</td>
+          <td class="padding-tiny-lr bulletin-event-weekday">{weekday}</td>
+          <td class="padding-tiny-lr w3-right-align bulletin-event-time">{time}</td>
+          <td class="padding-tiny-lr bulletin-event-event">{event}</td>
         </tr>
       );
       return line1;
@@ -233,7 +238,7 @@ let createLine = item => {
 
   return (
     <div
-      class={"bulletin-item " + style.entry}
+      class={`bulletin-item ${style.entry} bulletin-${type}`}
       style={itemStyle}
       onClick={onClick}
     >
@@ -247,8 +252,8 @@ function justifyStyle(alignType) {
   return alignType === "left"
     ? "flex-start"
     : alignType === "right"
-    ? "flex-end"
-    : "center";
+      ? "flex-end"
+      : "center";
 }
 
 function alignLine(title, styleType, alignType, size) {
@@ -269,17 +274,13 @@ function alignLine(title, styleType, alignType, size) {
   );
 }
 
-function centerLine(title, styleType) {
-  return alignLine(title, styleType, "center");
-}
-
-function nameLine(label, name) {
+function nameLine(label, name, type) {
   let leader = prefs.get(prefs.leaderChar).repeat(200);
   return (
     <div class={style.line}>
-      <span class={style.left}>{label}</span>
+      <span class={`${style.left} bulletin-${type}-left`}>{label}</span>
       <span leader={leader} class={style.dots} />
-      <span class={style.right}>{name}</span>
+      <span class={`${style.right} bulletin-${type}-right`}>{name}</span>
     </div>
   );
 }

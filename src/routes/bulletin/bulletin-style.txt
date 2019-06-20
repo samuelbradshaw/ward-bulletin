@@ -1,0 +1,118 @@
+/* Overall style for bulletin */
+.bulletin-body {
+	font-family:Verdana,arial,sans-serif;
+	font-weight:400;
+	font-size:15px;
+	line-height:1.5;
+	background-color:#fff;
+	color:#000;
+	margin-top:0px;
+	margin-bottom:0px;
+	margin-left:0px;
+	margin-right:0px;
+}
+
+/* Title */
+.bulletin-title {
+	font-weight: bold;
+	font-size: 1.3em;
+}
+
+/* Date */
+.bulletin-date {
+	font-style: italic;
+}
+
+/* Name */
+.bulletin-name {
+}
+
+.bulletin-name-left {
+}
+
+.bulletin-name-right {
+}
+
+/* Image */
+.bulletin-image {
+}
+
+/* Hymn */
+.bulletin-hymn {
+}
+
+.bulletin-hymn-left {
+}
+
+.bulletin-hymn-right {
+}
+
+.bulletin-hymn-title {
+	font-style: italic;
+	text-align: center;
+	width:100%;
+}
+
+/* Music */
+.bulletin-music {
+}
+
+.bulletin-music-left {
+}
+
+.bulletin-music-right {
+}
+
+.bulletin-music-title {
+	font-style: italic;
+	text-align: center;
+	width:100%;
+}
+
+/* Columns */
+.bulletin-columns {
+}
+
+/* Article */
+.bulletin-article {
+}
+
+.bulletin-article-heading {
+  font-weight: 700;
+  text-decoration-line: underline;
+  margin-top: 4px;
+}
+
+/* Styled Text */
+.bulletin-styledtext {
+}
+
+.bulletin-styledtext-heading {
+  font-weight: 700;
+  text-decoration-line: underline;
+  margin-top: 4px;
+}
+
+/* Page Break */
+.bulletin-pagebreak {
+}
+
+/* Gap */
+.bulletin-gap {
+}
+
+/* Event */
+.bulletin-event {
+}
+
+.bulletin-event-day {
+}
+
+.bulletin-event-weekday {
+}
+
+.bulletin-event-time {
+}
+
+.bulletin-event-event {
+}

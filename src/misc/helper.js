@@ -1,5 +1,5 @@
 // Close the dropdown menu if the user clicks outside of it
-window.onclick = function(event) {
+window.onclick = function (event) {
   if (!event.target.matches(".dropdown")) {
     hideDropdowns();
   }
@@ -60,4 +60,22 @@ function getAutoDate(autoDate = "Sunday") {
   return date;
 }
 
-export { shadeColor, hideDropdowns, getAutoDate };
+function setStyleCSS(css, id) {
+  let style = document.getElementById(id);
+
+  if (!style) {
+    // style doesn't exist, create new style
+    style = document.createElement('style');
+    style.id = id;
+    document.head.append(style);
+    style.innerHTML = css;
+    return;
+  }
+
+  if (style.innerHTML !== css) {
+    // don't update style unless it has changed
+    style.innerHTML = css;
+  }
+}
+
+export { shadeColor, hideDropdowns, getAutoDate, setStyleCSS };
