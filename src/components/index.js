@@ -300,8 +300,15 @@ function toggleMenu(menuId) {
   }
 }
 
-function showLoader(display, text) {
-  document.getElementById("page-loader").style.display = display;
+function showLoader(show, text) {
+  let loader = document.getElementById("page-loader");
+  if (show) {
+    loader.classList.remove("w3-hide");
+    loader.style.display = "block";
+  }
+  else {
+    loader.classList.add("w3-hide");
+  }
   document.getElementById("loader-message-container").style.display = text
     ? "block"
     : "none";
@@ -309,8 +316,8 @@ function showLoader(display, text) {
 }
 
 let loader = {
-  show: text => showLoader("block", text),
-  hide: () => showLoader("none")
+  show: text => showLoader(true, text),
+  hide: () => showLoader(false)
 };
 
 function setThemeColor(color) {
