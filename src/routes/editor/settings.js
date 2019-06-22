@@ -178,7 +178,11 @@ class LoginSettings extends Component {
   constructor(props) {
     super(props);
     let user = firebase.auth().currentUser;
-    this.email = user.email;
+    if (user) {
+      this.email = user.email;
+    } else {
+      this.email = "No email address";
+    }
   }
 
   render() {
