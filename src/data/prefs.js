@@ -1,10 +1,11 @@
 let defaults = {
   recents: [],
   "leader-char": " .",
+  "theme-background-color": "system-default",
   "theme-color": "blue",
   "hide-labels": false,
   "home-screen-prompt-time": 0,
-  "use-hymns-app": false
+  "hymn-app": "ward-bulletin",
 };
 
 let prefs = {
@@ -15,15 +16,16 @@ let prefs = {
   draftId: "draft-id",
   recents: "recents",
   leaderChar: "leader-char",
+  themeBackgroundColor: "theme-background-color",
   themeColor: "theme-color",
   hideLabels: "hide-labels",
   homeScreenPromptTime: "home-screen-prompt-time",
-  useHymnsApp: "use-hymns-app",
+  hymnApp: "hymn-app",
 
   get: function(key) {
     let data, dataString;
     if (typeof window !== "undefined") {
-      // avoid pre-rendierng error
+      // avoid pre-rendering error
       dataString = localStorage.getItem(key);
     }
     if (dataString === undefined || dataString === null) {
@@ -36,14 +38,14 @@ let prefs = {
 
   set: function(key, value) {
     if (typeof window !== "undefined") {
-      // avoid pre-rending error
+      // avoid pre-rendering error
       localStorage.setItem(key, JSON.stringify(value));
     }
   },
 
   clear: function(key) {
     if (typeof window !== "undefined") {
-      // avoid pre-rending error
+      // avoid pre-rendering error
       localStorage.removeItem(key);
     }
   }

@@ -27,8 +27,18 @@ export default class BulletinView extends Component {
         sections.push(addSection(section.data));
       }
     }
+    var themeBackgroundColor = prefs.get(prefs.themeBackgroundColor);
+    if (themeBackgroundColor == "light") {
+      var w3class = "w3-white";
+    } else if (themeBackgroundColor == "dark") {
+      var w3class = "w3-black";
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      var w3class = "w3-black";
+    } else {
+      var w3class = "w3-white";
+    }
     return (
-      <div class={style.bulletin + " w3-container w3-white bulletin-body"}>{sections}</div>
+      <div class={style.bulletin + " w3-container " + w3class + " bulletin-body"}>{sections}</div>
     );
   }
 
@@ -287,13 +297,20 @@ function nameLine(label, name, type) {
 }
 
 function viewHymn({ uri, hymn }) {
-  if (prefs.get(prefs.useHymnsApp)) {
-    var iOS = navigator.userAgent.match(/(iPad|iPhone|iPod)/g) ? true : false;
-    var Android = navigator.userAgent.match(/Android/g) ? true : false;
+  var hymnApp = prefs.get(prefs.hymnApp);
+  var iOS = navigator.userAgent.match(/(iPad|iPhone|iPod)/g) ? true : false;
+  var Android = navigator.userAgent.match(/Android/g) ? true : false;
+  if (hymnApp == "sacred-music") {
     if (iOS || Android) {
-      window.location.href = `ldsmusic://content/manual/hymns/${uri}`;
+      window.location.href = `sacredmusic://content/manual/hymns/${uri}`;
     } else {
-      window.open(`https://www.lds.org/music/library/hymns/${uri}`);
+      window.open(`https://www.churchofjesuschrist.org/music/library/hymns/${uri}`);
+    }
+  } else if (hymnApp == "gospel-library") {
+    if (iOS || Android) {
+      window.location.href = `gospellibrary://content/manual/hymns/${uri}`;
+    } else {
+      window.open(`https://www.churchofjesuschrist.org/study/manual/hymns/${uri}`);
     }
   } else {
     route(`/hymn/${hymn}`);

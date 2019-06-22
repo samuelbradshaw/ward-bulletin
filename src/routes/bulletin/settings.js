@@ -11,13 +11,16 @@ const Settings = ({ update }) => {
         <LeaderMenu update={update} />
         <p />
       </div>
-      <div class="w3-card w3-container">
+      <div class="w3-card w3-container w3-margin-top">
         <h5>When Tapping on a Hymn:</h5>
         <HymnMenu update={update} />
         <p />
       </div>
       <div class="w3-card w3-container w3-margin-top">
-        <h5>App Color Theme</h5>
+        <h5>Theme</h5>
+        <BackgroundColorMenu update={update} />
+        <p />
+        <h5>Accent Color</h5>
         <ColorMenu />
         <p />
       </div>
@@ -26,11 +29,11 @@ const Settings = ({ update }) => {
 };
 
 let LeaderMenu = ({ update }) => {
-  let leaders = [" .", " -", "  "];
+  let leaders = [" .", "..", " -", "  "];
   let leaderChar = prefs.get(prefs.leaderChar);
   return (
     <RadioButtons
-      items={[". . . .", "- - - -", "None"]}
+      items={[". . . .", "........", "- - - -", "None"]}
       selected={leaders.indexOf(leaderChar)}
       select={index => {
         prefs.set(prefs.leaderChar, leaders[index]);
@@ -41,13 +44,29 @@ let LeaderMenu = ({ update }) => {
 };
 
 let HymnMenu = ({ update }) => {
-  let useHymnsApp = prefs.get(prefs.useHymnsApp);
+  let hymnApps = ["ward-bulletin", "gospel-library", "sacred-music"];
+  let hymnApp = prefs.get(prefs.hymnApp);
   return (
     <RadioButtons
-      items={["View in this app", "Open in LDS Hymns app"]}
-      selected={useHymnsApp ? 1 : 0}
+      items={["View in this app", "Open in Gospel Library", "Open in Sacred Music"]}
+      selected={hymnApps.indexOf(hymnApp)}
       select={index => {
-        prefs.set(prefs.useHymnsApp, index === 1);
+        prefs.set(prefs.hymnApp, hymnApps[index]);
+        update();
+      }}
+    />
+  );
+};
+
+let BackgroundColorMenu = ({ update }) => {
+  let themeBackgroundColors = ["light", "dark", "system-default"];
+  let themeBackgroundColor = prefs.get(prefs.themeBackgroundColor);
+  return (
+    <RadioButtons
+      items={["Light", "Dark", "System default"]}
+      selected={themeBackgroundColors.indexOf(themeBackgroundColor)}
+      select={index => {
+        prefs.set(prefs.themeBackgroundColor, themeBackgroundColors[index]);
         update();
       }}
     />

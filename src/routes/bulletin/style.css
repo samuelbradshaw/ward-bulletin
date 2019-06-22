@@ -29,6 +29,7 @@
   padding: 0 3px;
   text-overflow: clip;
   content: attr(leader);
+  word-break: break-word;
 }
 
 .align {
