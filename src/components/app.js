@@ -26,7 +26,7 @@ export default class App extends Component {
   state = { printing: false };
 
   componentWillMount() {
-    let color = prefs.get(prefs.themeColor);
+    let color = prefs.get(prefs.themeAccentColor);
     if (color && color !== "blue") {
       setThemeColor(color);
     }

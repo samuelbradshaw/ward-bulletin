@@ -21,7 +21,7 @@ const Settings = ({ update }) => {
         <BackgroundColorMenu update={update} />
         <p />
         <h5>Accent Color</h5>
-        <ColorMenu />
+        <AccentColorMenu />
         <p />
       </div>
     </div>
@@ -73,7 +73,7 @@ let BackgroundColorMenu = ({ update }) => {
   );
 };
 
-const ColorMenu = () => {
+const AccentColorMenu = () => {
   const colorsArray = [
     ["blue", "#2196F3"],
     ["amber", "#ffc107"],
@@ -124,7 +124,7 @@ const ColorMenu = () => {
         }}
         title={name.replace("-", " ")}
         onClick={e => {
-          prefs.set(prefs.themeColor, name);
+          prefs.set(prefs.themeAccentColor, name);
           setThemeColor(name);
           e.stopPropagation();
         }}
@@ -136,4 +136,4 @@ const ColorMenu = () => {
 };
 
 export default Settings;
-export { ColorMenu };
+export { AccentColorMenu };
